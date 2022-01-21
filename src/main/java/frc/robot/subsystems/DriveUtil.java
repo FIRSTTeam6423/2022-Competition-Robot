@@ -76,7 +76,7 @@ public class DriveUtil extends SubsystemBase {
         if (isNegative){
           rotation *= -1;
         }
-        differentialDrive.curvatureDrive(RobotContainer.getLeftXboxTrigger() - RobotContainer.getRightXboxTrigger(), -RobotContainer.getLeftXboxX(), true);}
+        differentialDrive.curvatureDrive(RobotContainer.getLeftXboxTrigger() - RobotContainer.getRightXboxTrigger(), rotation, true);}
         }    
 
     private void setDriveControls(){
