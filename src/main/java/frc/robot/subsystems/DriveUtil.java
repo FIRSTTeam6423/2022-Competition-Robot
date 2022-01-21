@@ -69,6 +69,13 @@ public class DriveUtil extends SubsystemBase {
         differentialDrive.tankDrive(RobotContainer.getLeftXboxY(), RobotContainer.getRightXboxY());
         } else if (RobotContainer.driveType.getSelected().equals(RobotContainer.curvature)) {
         // If we are in CURVATURE mode, use the curvature mode
+        double rotation = RobotContainer.getLeftXboxX();
+        boolean isNegative = rotation < 0;
+        
+        rotation *= rotation;
+        if (isNegative){
+          rotation *= -1;
+        }
         differentialDrive.curvatureDrive(RobotContainer.getLeftXboxTrigger() - RobotContainer.getRightXboxTrigger(), -RobotContainer.getLeftXboxX(), true);}
         }    
 
