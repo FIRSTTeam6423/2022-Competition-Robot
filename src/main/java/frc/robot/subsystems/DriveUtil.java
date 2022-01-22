@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -27,10 +28,10 @@ public class DriveUtil extends SubsystemBase {
     private double damp;
 
     public DriveUtil() {
-        leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY);
-        leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY);
-        rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY);
-        rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY);
+        leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
+        leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
+        rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
+        rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
 
         // Set secondaries to follow primaries
         leftSecondary.follow(leftPrimary);
