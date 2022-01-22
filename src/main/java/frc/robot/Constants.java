@@ -16,10 +16,10 @@ public final class Constants {
         /** 
          * DriveUtil Constants
          */
-        public static final int LEFT_PRIMARY = 2;
-        public static final int LEFT_SECONDARY = 3;
-        public static final int RIGHT_PRIMARY = 4;
-        public static final int RIGHT_SECONDARY = 5;
+        public static final int LEFT_PRIMARY = 4;
+        public static final int LEFT_SECONDARY = 1;
+        public static final int RIGHT_PRIMARY = 5;
+        public static final int RIGHT_SECONDARY = 2;
 
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;
