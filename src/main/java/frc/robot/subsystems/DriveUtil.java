@@ -64,10 +64,10 @@ public class DriveUtil extends SubsystemBase {
         setDriveControls();
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
         // If we're in ARCADE mode, use arcadeDrive
-        differentialDrive.arcadeDrive(RobotContainer.getRightXboxY(), -RobotContainer.getRightXboxX());
+        differentialDrive.arcadeDrive(-RobotContainer.getLeftXboxX(), RobotContainer.getRightXboxY());
         } else if (RobotContainer.driveType.getSelected().equals(RobotContainer.tank)) {
         // If we're in TANK mode, use tankDrive
-        differentialDrive.tankDrive(RobotContainer.getLeftXboxY(), RobotContainer.getRightXboxY());
+        differentialDrive.tankDrive(RobotContainer.getLeftXboxY(), -RobotContainer.getRightXboxY());
         } else {
         // If we are in CURVATURE mode, use the curvature mode
         double rotation = RobotContainer.getLeftXboxX();
@@ -77,7 +77,9 @@ public class DriveUtil extends SubsystemBase {
         if (isNegative){
           rotation *= -1;
         }
-        differentialDrive.curvatureDrive(RobotContainer.getLeftXboxTrigger() - RobotContainer.getRightXboxTrigger(), rotation, true);}
+        rotation *= 0.75;
+
+        differentialDrive.curvatureDrive(-rotation, RobotContainer.getLeftXboxTrigger() - RobotContainer.getRightXboxTrigger(), true);}
       }
         
     private void setDriveControls(){
