@@ -19,8 +19,8 @@ import frc.robot.RobotContainer;
 
 public class DriveUtil extends SubsystemBase {
     // Motor controllers
-    private CANSparkMax leftSecondary, rightSecondary;
-    private CANSparkMax leftPrimary, rightPrimary;
+    private WPI_VictorSPX leftSecondary, rightSecondary;
+    private WPI_TalonSRX leftPrimary, rightPrimary;
 
     // Drive controller
     private DifferentialDrive differentialDrive;
@@ -28,10 +28,10 @@ public class DriveUtil extends SubsystemBase {
     private double damp;
 
     public DriveUtil() {
-        leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
-        leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
-        rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
-        rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
+        leftPrimary = new WPI_TalonSRX(Constants.LEFT_PRIMARY);
+        leftSecondary = new WPI_VictorSPX(Constants.LEFT_SECONDARY);
+        rightPrimary = new WPI_TalonSRX(Constants.RIGHT_PRIMARY);
+        rightSecondary = new WPI_VictorSPX(Constants.RIGHT_SECONDARY);
 
         // Set secondaries to follow primaries
         leftSecondary.follow(leftPrimary);
