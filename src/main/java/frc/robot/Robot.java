@@ -7,13 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorMatch;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,18 +18,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  
-  /**
-   * Change the I2C port below to match the connection of your color sensor
-   */
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-
-  /**
-   * A Rev Color Sensor V3 object is constructed with an I2C port as a 
-   * parameter. The device will be automatically initialized with default 
-   * parameters.
-   */
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -58,29 +39,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    Color detectedColor = m_colorSensor.getColor();
-
-    /**
-     * The sensor returns a raw IR value of the infrared light detected.
-     */
-    double IR = m_colorSensor.getIR();
-
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
-
-    if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
-      SmartDashboard.putString("color detected", "RED");
-    } else if (detectedColor.blue > 0.3){
-      SmartDashboard.putString("color detected", "BLUE");
-    } else {
-      SmartDashboard.putString("color detected", "NO COLOR DETECTED");
-    }
-
-    int proximity = m_colorSensor.getProximity();
-
-    SmartDashboard.putNumber("Proximity", proximity);
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic

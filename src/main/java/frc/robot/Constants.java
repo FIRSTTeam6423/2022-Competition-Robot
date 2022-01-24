@@ -21,6 +21,16 @@ public final class Constants {
         public static final int RIGHT_PRIMARY = 5;
         public static final int RIGHT_SECONDARY = 2;
 
+        /**
+         * CargoUtil Constants
+         */
+        public static final int BALL_MAGNET = 6;
+        public static final int INDEXER = 7;
+        public static final int SHOOTER = 8;
+
+        public static final double BALL_MAGNET_OUTPUT = 0.4;
+        public static final double INDEXER_OUTPUT = 0.4;
+
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;
 
