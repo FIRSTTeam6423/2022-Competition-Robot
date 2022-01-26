@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
+import frc.robot.commands.OperateClimb;
 import frc.robot.commands.OperateColorSensor;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.subsystems.ClimbUtil;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,9 +27,11 @@ public class RobotContainer {
 
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
+  private final ClimbUtil climbUtil = new ClimbUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
   private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoUtil);
+  private final OperateClimb operateClimb = new OperateClimb(climbUtil);
 
   public static XboxController operator;
 
@@ -83,6 +87,7 @@ public class RobotContainer {
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
     cargoUtil.setDefaultCommand(operateColorSensor);
+    climbUtil.setDefaultCommand(operateClimb);
   }
 
   public static double getLeftXboxX(){
@@ -109,4 +114,35 @@ public class RobotContainer {
     return operator.getRightTriggerAxis();
   }
 
+  public static boolean getAButton(){
+    return operator.getAButton();
+  }
+
+  public static boolean getBButton(){
+    return operator.getBButton();
+  }
+
+  public static boolean getXButton(){
+    return operator.getXButton();
+  }
+
+  public static boolean getYButton(){
+    return operator.getYButton();
+  }
+
+  public static boolean getLeftBumper(){
+    return operator.getLeftBumper();
+  }
+
+  public static boolean getRightBumper(){
+    return operator.getRightBumper();
+  }
+
+  public static boolean getLeftStickButton(){
+    return operator.getLeftStickButton();
+  }  
+
+  public static boolean getRightStickButton(){
+    return operator.getRightStickButton();
+  }  
 }
