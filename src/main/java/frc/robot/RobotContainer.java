@@ -37,9 +37,6 @@ public class RobotContainer {
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
 
-  public final static Byte pro = 0;
-  public final static Byte noob = 1;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -49,13 +46,7 @@ public class RobotContainer {
     driveType.setDefaultOption("Arcade", arcade);
     driveType.addOption("Tank", tank);
     driveType.addOption("Curvature", curvature);
-    SmartDashboard.putData("Drive Type", driveType);
-
-    noobMode = new SendableChooser<>();
-    noobMode.setDefaultOption("Pro", pro);
-    noobMode.addOption("Noob", noob);
-    SmartDashboard.putData("Drive Mode", noobMode);
-    
+    SmartDashboard.putData("Drive Type", driveType);    
     
     // Configure the button bindings
     configureButtonBindings();
