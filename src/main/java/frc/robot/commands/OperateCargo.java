@@ -10,6 +10,7 @@ public class OperateCargo extends CommandBase{
     public OperateCargo(CargoUtil du){
         // Use addRequirements() here to declare subsystem dependencies.
         this.cargoUtil = du;
+        addRequirements(this.cargoUtil);
     }
 
     // Called when the command is initially scheduled.

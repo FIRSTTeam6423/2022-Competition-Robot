@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
 import frc.robot.commands.OperateClimb;
-import frc.robot.commands.OperateColorSensor;
+import frc.robot.commands.OperateSensor;
+import frc.robot.commands.OperateCargo;
 import frc.robot.subsystems.DriveUtil;
+import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
 
@@ -28,10 +30,12 @@ public class RobotContainer {
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
   private final ClimbUtil climbUtil = new ClimbUtil();
+  private final SensorUtil sensorUtil = new SensorUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoUtil);
+  private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
   private final OperateClimb operateClimb = new OperateClimb(climbUtil);
+  private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
 
   public static XboxController operator;
 
@@ -86,8 +90,9 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoUtil.setDefaultCommand(operateColorSensor);
+    sensorUtil.setDefaultCommand(operateSensor);
     climbUtil.setDefaultCommand(operateClimb);
+    cargoUtil.setDefaultCommand(operateCargo);
   }
 
   public static double getLeftXboxX(){
