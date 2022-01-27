@@ -13,12 +13,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CargoUtil extends SubsystemBase{
     //Shooter controllers
-    private WPI_TalonSRX ballMagnet, indexer;
+    private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
     private CANSparkMax shooter;
 
     public CargoUtil() {
         ballMagnet = new WPI_TalonSRX(Constants.BALL_MAGNET);
-        indexer = new WPI_TalonSRX(Constants.INDEXER);
+        lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
+        highIndexer = new WPI_TalonSRX(Constants.HIGH_INDEXER);
         shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
     }
     
@@ -31,11 +32,13 @@ public class CargoUtil extends SubsystemBase{
     }
 
     public void OperateIndexer(){
-        indexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
+        lowIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
+        highIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
     public void StopIndexer(){
-        indexer.set(ControlMode.PercentOutput, 0);
+        lowIndexer.set(ControlMode.PercentOutput, 0);
+        highIndexer.set(ControlMode.PercentOutput, 0);
     }
 
     public void OperateShooter(){

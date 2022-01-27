@@ -25,8 +25,9 @@ public final class Constants {
          * CargoUtil Constants
          */
         public static final int BALL_MAGNET = 6;
-        public static final int INDEXER = 7;
-        public static final int SHOOTER = 8;
+        public static final int LOW_INDEXER = 7;
+        public static final int HIGH_INDEXER = 8;
+        public static final int SHOOTER = 9;
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 0.4;
