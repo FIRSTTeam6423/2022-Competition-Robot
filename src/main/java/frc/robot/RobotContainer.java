@@ -50,12 +50,6 @@ public class RobotContainer {
     driveType.addOption("Tank", tank);
     driveType.addOption("Curvature", curvature);
     SmartDashboard.putData("Drive Type", driveType);
-
-    noobMode = new SendableChooser<>();
-    noobMode.setDefaultOption("Pro", pro);
-    noobMode.addOption("Noob", noob);
-    SmartDashboard.putData("Drive Mode", noobMode);
-    
     
     // Configure the button bindings
     configureButtonBindings();
