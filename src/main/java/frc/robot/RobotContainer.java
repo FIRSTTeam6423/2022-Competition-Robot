@@ -6,9 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.OperateDrive;
+import frc.robot.commands.OperateColorSensor;
+import frc.robot.subsystems.DriveUtil;
+import frc.robot.subsystems.CargoUtil;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,14 +22,38 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final DriveUtil driveUtil = new DriveUtil();
+  private final CargoUtil cargoUtil = new CargoUtil();
+
+  private final OperateDrive operateDrive = new OperateDrive(driveUtil);
+  private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoUtil);
+
+  public static XboxController operator;
+
+  public static SendableChooser<Byte> driveType;
+  public static SendableChooser<Byte> noobMode;
+  public final static Byte arcade = 0;
+  public final static Byte tank = 1;
+  public final static Byte curvature = 2;
+
+  public final static Byte pro = 0;
+  public final static Byte noob = 1;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    operator = new XboxController(Constants.XBOX);
+
+    driveType = new SendableChooser<>();
+    driveType.setDefaultOption("Arcade", arcade);
+    driveType.addOption("Tank", tank);
+    driveType.addOption("Curvature", curvature);
+    SmartDashboard.putData("Drive Type", driveType);
+    
     // Configure the button bindings
     configureButtonBindings();
+    configureDefaultCommands();
   }
 
   /**
@@ -43,6 +71,36 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
+
+  private void configureDefaultCommands(){
+    driveUtil.setDefaultCommand(operateDrive);
+    cargoUtil.setDefaultCommand(operateColorSensor);
+  }
+
+  public static double getLeftXboxX(){
+    return operator.getLeftX();
+  }
+
+  public static double getLeftXboxY(){
+    return operator.getLeftY();
+  }
+
+  public static double getRightXboxX(){
+    return operator.getRightX();
+  }
+
+  public static double getRightXboxY(){
+    return operator.getRightY();
+  }
+
+  public static double getLeftXboxTrigger(){
+    return operator.getLeftTriggerAxis();
+  }
+
+  public static double getRightXboxTrigger(){
+    return operator.getRightTriggerAxis();
+  }
+
 }
