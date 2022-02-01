@@ -11,11 +11,14 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.kauailabs.navx.frc.*;
+import edu.wpi.first.wpilibj.SPI;
 
 public class SensorUtil extends SubsystemBase{
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    private AHRS gyro = new AHRS(SPI.Port.kMXP);
     Color detectedColor = m_colorSensor.getColor();
     int proximity = m_colorSensor.getProximity();
 
@@ -48,5 +51,16 @@ public class SensorUtil extends SubsystemBase{
         } else {
             SmartDashboard.putString("ball detected", "NO BALLs DETECTED");
         }
+    }
+
+    public void detectGyro(){
+        SmartDashboard.putNumber("Rate", gyro.getRate());
+        SmartDashboard.putNumber("Yaw", gyro.getYaw());
+        SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Roll", gyro.getRoll());
+        SmartDashboard.putNumber("Heading", gyro.getCompassHeading());
+        SmartDashboard.putNumber("LinearWorldAccelX", gyro.getWorldLinearAccelX());
+        SmartDashboard.putNumber("LinearWorldAccelY", gyro.getWorldLinearAccelY());
+        SmartDashboard.putNumber("LinearWorldAccelZ", gyro.getWorldLinearAccelZ());
     }
 }

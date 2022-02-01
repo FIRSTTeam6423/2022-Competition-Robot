@@ -22,6 +22,7 @@ public class OperateSensor extends CommandBase{
     public void execute() {
         sensorUtil.detectBallColor();
         sensorUtil.detectBall();
+        sensorUtil.detectGyro();
     }
 
     // Called once the command ends or is interrupted.
