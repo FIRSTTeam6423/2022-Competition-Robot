@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants;
+import frc.robot.enums.CargoState;
 
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
@@ -17,7 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CargoUtil extends SubsystemBase{
     //Shooter controllers
-    private WPI_TalonSRX ballMagnet, indexer;
+    private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
+    private CargoState state = CargoState.IDLE;
     private CANSparkMax shooter;
 
     //Color detector
@@ -28,7 +30,8 @@ public class CargoUtil extends SubsystemBase{
 
     public CargoUtil() {
         ballMagnet = new WPI_TalonSRX(Constants.BALL_MAGNET);
-        indexer = new WPI_TalonSRX(Constants.INDEXER);
+        lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
+        highIndexer = new WPI_TalonSRX(Constants.HIGH_INDEXER);
         shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
     }
     
@@ -40,17 +43,44 @@ public class CargoUtil extends SubsystemBase{
         ballMagnet.set(ControlMode.PercentOutput, 0);
     }
 
-    public void OperateIndexer(){
-        indexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
+    public void OperateLowIndexer(){
+        lowIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
-    public void StopIndexer(){
-        indexer.set(ControlMode.PercentOutput, 0);
+    public void OperateHighIndexer(){
+        highIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
-    public void OperateShooter(){
+    public void StopLowIndexer(){
+        lowIndexer.set(ControlMode.PercentOutput, 0);
 
     }
+    public void StopHighIndexer(){
+        highIndexer.set(ControlMode.PercentOutput, 0);
+    }
+
+
+    public void OperateShooter(){}
+
+    public void SetState(CargoState newState){
+        state = newState;
+
+    }
+    public void OperateCargo(){
+        switch(state){
+            case INTAKE:
+                OperateBallMagnet();
+                OperateLowIndexer();
+                StopHighIndexer();
+                break;
+            case INDEX:
+                StopBallMagent();
+                
+                break;
+        }
+
+    }
+    
 
     /**
      * Constantly check the rgb values read by the color sensor
