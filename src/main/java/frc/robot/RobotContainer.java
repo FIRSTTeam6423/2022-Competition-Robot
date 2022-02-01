@@ -38,6 +38,7 @@ public class RobotContainer {
   private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
   private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
 
+  public static XboxController driver;
   public static XboxController operator;
 
   /**
@@ -59,7 +60,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    operator = new XboxController(Constants.XBOX);
+    operator = new XboxController(Constants.XBOX_OPERATOR);
+    driver = new XboxController(Constants.XBOX_DRIVER);
 
     driveType = new SendableChooser<>();
     driveType.setDefaultOption("Arcade", arcade);
@@ -126,59 +128,116 @@ public class RobotContainer {
      cargoUtil.setDefaultCommand(operateCargo);
   }
 
-  public static double getLeftXboxX(){
+  public static double getDriverLeftXboxX(){
+    return driver.getLeftX();
+  }
+
+  public static double getDriverLeftXboxY(){
+    return driver.getLeftY();
+  }
+
+  public static double getDriverRightXboxX(){
+    return driver.getRightX();
+  }
+
+  public static double getDriverRightXboxY(){
+    return driver.getRightY();
+  }
+
+  public static double getDriverLeftXboxTrigger(){
+    return driver.getLeftTriggerAxis();
+  }
+
+  public static double getDriverRightXboxTrigger(){
+    return driver.getRightTriggerAxis();
+  }
+
+  public static boolean getDriverAButton(){
+    return driver.getAButton();
+  }
+
+  public static boolean getDriverBButton(){
+    return driver.getBButton();
+  }
+
+  public static boolean getDriverXButton(){
+    return driver.getXButton();
+  }
+
+  public static boolean getDriverYButton(){
+    return driver.getYButton();
+  }
+
+  public static boolean getDriverLeftBumper(){
+    return driver.getLeftBumper();
+  }
+
+  public static boolean getDriverRightBumper(){
+    return driver.getRightBumper();
+  }
+
+  public static boolean getDriverLeftStickButton(){
+    return driver.getLeftStickButton();
+  }  
+
+  public static boolean getDriverRightStickButton(){
+    return driver.getRightStickButton();
+  } 
+
+
+  public static double getOperatorLeftXboxX(){
     return operator.getLeftX();
   }
 
-  public static double getLeftXboxY(){
+  public static double getOperatorLeftXboxY(){
     return operator.getLeftY();
   }
 
-  public static double getRightXboxX(){
+  public static double getOperatorRightXboxX(){
     return operator.getRightX();
   }
 
-  public static double getRightXboxY(){
+  public static double getOperatorRightXboxY(){
     return operator.getRightY();
   }
 
-  public static double getLeftXboxTrigger(){
+  public static double getOperatorLeftXboxTrigger(){
     return operator.getLeftTriggerAxis();
   }
 
-  public static double getRightXboxTrigger(){
+  public static double getOperatorRightXboxTrigger(){
     return operator.getRightTriggerAxis();
   }
 
-  public static boolean getAButton(){
+  public static boolean getOperatorAButton(){
     return operator.getAButton();
   }
 
-  public static boolean getBButton(){
+  public static boolean getOperatorBButton(){
     return operator.getBButton();
   }
 
-  public static boolean getXButton(){
+  public static boolean getOperatorXButton(){
     return operator.getXButton();
   }
 
-  public static boolean getYButton(){
+  public static boolean getOperatorYButton(){
     return operator.getYButton();
   }
 
-  public static boolean getLeftBumper(){
+  public static boolean getOperatorLeftBumper(){
     return operator.getLeftBumper();
   }
 
-  public static boolean getRightBumper(){
+  public static boolean getOperatorRightBumper(){
     return operator.getRightBumper();
   }
 
-  public static boolean getLeftStickButton(){
+  public static boolean getOperatorLeftStickButton(){
     return operator.getLeftStickButton();
   }  
 
-  public static boolean getRightStickButton(){
+  public static boolean getOperatorRightStickButton(){
     return operator.getRightStickButton();
   }  
 }
