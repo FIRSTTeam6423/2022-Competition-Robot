@@ -19,8 +19,7 @@ import frc.robot.RobotContainer;
 
 public class DriveUtil extends SubsystemBase {
     // Motor controllers
-    private WPI_VictorSPX leftSecondary, rightSecondary;
-    private WPI_TalonSRX leftPrimary, rightPrimary;
+    private CANSparkMax leftSecondary, rightSecondary, leftPrimary, rightPrimary;
 
     // Drive controller
     private DifferentialDrive differentialDrive;
@@ -28,10 +27,10 @@ public class DriveUtil extends SubsystemBase {
     private double damp;
 
     public DriveUtil() {
-        leftPrimary = new WPI_TalonSRX(Constants.LEFT_PRIMARY);
-        leftSecondary = new WPI_VictorSPX(Constants.LEFT_SECONDARY);
-        rightPrimary = new WPI_TalonSRX(Constants.RIGHT_PRIMARY);
-        rightSecondary = new WPI_VictorSPX(Constants.RIGHT_SECONDARY);
+      leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
+      leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
+      rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
+      rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
 
         // Set secondaries to follow primaries
         leftSecondary.follow(leftPrimary);
@@ -61,13 +60,12 @@ public class DriveUtil extends SubsystemBase {
      * @param rightY the right controller's Y (left-right) value
      */
     public void driveRobot() {
-        setDriveControls();
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
         // If we're in ARCADE mode, use arcadeDrive
-        differentialDrive.arcadeDrive(-RobotContainer.getLeftXboxX(), RobotContainer.getRightXboxY());
+        differentialDrive.arcadeDrive(RobotContainer.getLeftXboxX(), -RobotContainer.getRightXboxY());
         } else if (RobotContainer.driveType.getSelected().equals(RobotContainer.tank)) {
         // If we're in TANK mode, use tankDrive
-        differentialDrive.tankDrive(RobotContainer.getLeftXboxY(), -RobotContainer.getRightXboxY());
+        differentialDrive.tankDrive(-RobotContainer.getLeftXboxY(), RobotContainer.getRightXboxY());
         } else {
         // If we are in CURVATURE mode, use the curvature mode
         double rotation = RobotContainer.getLeftXboxX();
@@ -79,24 +77,13 @@ public class DriveUtil extends SubsystemBase {
         }
         rotation *= 0.75;
 
-        differentialDrive.curvatureDrive(-rotation, RobotContainer.getLeftXboxTrigger() - RobotContainer.getRightXboxTrigger(), true);}
-      }
-        
-    private void setDriveControls(){
-        if (RobotContainer.noobMode.getSelected().equals(RobotContainer.pro)) {
-          this.damp = 1.0;
-        }
-        if (RobotContainer.noobMode.getSelected().equals(RobotContainer.noob)) {
-          this.damp = 0.6;
-        }
-        
+        differentialDrive.curvatureDrive(rotation, -RobotContainer.getLeftXboxTrigger() + RobotContainer.getRightXboxTrigger(), true);}
       }
     
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
-        SmartDashboard.putString("Driver Mode  ::  ", RobotContainer.noobMode.getSelected().toString());
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
     }
 }

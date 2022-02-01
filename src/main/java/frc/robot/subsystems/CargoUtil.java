@@ -51,13 +51,12 @@ public class CargoUtil extends SubsystemBase{
     public void OperateShooter(){
 
     }
-
-    /**
+    /** 
      * Constantly check the rgb values read by the color sensor
      * If they match the values of red cargo, display "RED" on the dashboard
      * If they match the values of blue cargo, display "BLUE" on the dashboard
      * If the rgb values match neither types of cargo, display "NO COLOR DETECTED" on the dashboard
-     */
+    */
     public void detectBallColor(){
         if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
             SmartDashboard.putString("color detected", "RED");
