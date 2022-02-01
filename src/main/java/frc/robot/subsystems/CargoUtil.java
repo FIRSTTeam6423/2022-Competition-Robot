@@ -11,6 +11,8 @@ import frc.robot.Constants;
 import frc.robot.enums.CargoState;
 
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.SparkMaxPIDController;
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -21,6 +23,7 @@ public class CargoUtil extends SubsystemBase{
     private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
     private CargoState state = CargoState.IDLE;
     private CANSparkMax shooter;
+    private SparkMaxPIDController shooterPIDController; 
 
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -33,6 +36,12 @@ public class CargoUtil extends SubsystemBase{
         lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
         highIndexer = new WPI_TalonSRX(Constants.HIGH_INDEXER);
         shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
+        shooterPIDController = shooter.getPIDController();
+
+        shooterPIDController.setP(Constants.SHOOTER_P);
+        shooterPIDController.setI(Constants.SHOOTER_I);
+        shooterPIDController.setD(Constants.SHOOTER_D);
+        shooterPIDController.setFF(Constants.SHOOTER_F);
     }
     
     public void OperateBallMagnet(){
@@ -60,7 +69,13 @@ public class CargoUtil extends SubsystemBase{
     }
 
 
-    public void OperateShooter(){}
+    public void OperateShooter(){
+        shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public void StopShooter(){
+        shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
+    }
 
     public void SetState(CargoState newState){
         state = newState;
@@ -72,10 +87,31 @@ public class CargoUtil extends SubsystemBase{
                 OperateBallMagnet();
                 OperateLowIndexer();
                 StopHighIndexer();
+                StopShooter();
                 break;
             case INDEX:
+                OperateLowIndexer();
+                StopHighIndexer();
                 StopBallMagent();
-                
+                StopShooter();
+                break;
+            case SPINUP:
+                StopLowIndexer();
+                StopHighIndexer();
+                StopBallMagent();
+                OperateShooter();
+                break;
+            case SHOOT:
+                StopLowIndexer();
+                StopBallMagent();
+                OperateHighIndexer();
+                OperateShooter();
+                break;
+            case IDLE:
+                StopLowIndexer();
+                StopHighIndexer();
+                StopShooter();
+                StopBallMagent();
                 break;
         }
 

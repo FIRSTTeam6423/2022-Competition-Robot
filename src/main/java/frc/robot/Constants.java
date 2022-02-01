@@ -31,6 +31,12 @@ public final class Constants {
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 0.4;
+        public static final double SHOOTER_RPM = 3000.0;
+
+        public static final double SHOOTER_P = 0.0;
+        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_D = 0.0;
+        public static final double SHOOTER_F = 0.0;
 
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;
