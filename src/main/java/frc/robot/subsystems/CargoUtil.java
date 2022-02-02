@@ -133,4 +133,12 @@ public class CargoUtil extends SubsystemBase{
             SmartDashboard.putString("color detected", "NO COLOR DETECTED");
         }
     }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        /** This is normally where we send important values to the SmartDashboard */
+        SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
+    }
+
 }
+
