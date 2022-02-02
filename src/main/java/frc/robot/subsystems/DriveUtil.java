@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +15,7 @@ import frc.robot.RobotContainer;
 
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
+    private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
     private DifferentialDrive differentialDrive;
 
     // init motor controllers, set secondaries to follow and init DifferentialDrive controller
@@ -22,6 +24,11 @@ public class DriveUtil extends SubsystemBase {
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
         rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
         rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
+
+        leftPrimaryEncoder = leftPrimary.getEncoder();
+        leftSecondaryEncoder = leftSecondary.getEncoder();
+        rightPrimaryEncoder = rightPrimary.getEncoder();
+        rightSecondaryEncoder = rightSecondary.getEncoder();
 
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
@@ -85,5 +92,11 @@ public class DriveUtil extends SubsystemBase {
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Driver Mode  ::  ", RobotContainer.noobMode.getSelected().toString());
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
+        
+        SmartDashboard.putNumber("Left Primary Encoder Ticks  ::  ", leftPrimaryEncoder.getPosition());
+        SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
+        SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
+        SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
+
     }
 }
