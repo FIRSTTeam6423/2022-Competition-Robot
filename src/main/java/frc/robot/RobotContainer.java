@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
 import frc.robot.commands.OperateColorSensor;
+import frc.robot.commands.OperateCargo;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
 
@@ -24,10 +25,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final DriveUtil driveUtil = new DriveUtil();
-  private final CargoUtil cargoUtil = new CargoUtil();
+  private final CargoUtil cargoColorUtil = new CargoUtil();
+  private final CargoUtil cargoShootUtil = new CargoUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoUtil);
+  private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoColorUtil);
+  private final OperateCargo operateCargo = new OperateCargo(cargoShootUtil);
 
   public static XboxController operator;
 
@@ -76,7 +79,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoUtil.setDefaultCommand(operateColorSensor);
+    cargoColorUtil.setDefaultCommand(operateColorSensor);
+    cargoShootUtil.setDefaultCommand(operateCargo);
   }
 
   public static double getLeftXboxX(){
