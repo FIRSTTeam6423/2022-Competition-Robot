@@ -10,6 +10,7 @@ public class OperateCargo extends CommandBase{
     public OperateCargo(CargoUtil du){
         // Use addRequirements() here to declare subsystem dependencies.
         this.cargoUtil = du;
+        addRequirements(this.cargoUtil);
     }
 
     // Called when the command is initially scheduled.
@@ -19,13 +20,17 @@ public class OperateCargo extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        cargoUtil.OperateCargo();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         cargoUtil.StopBallMagent();
-        cargoUtil.StopIndexer();
+        cargoUtil.StopLowIndexer();
+        cargoUtil.StopHighIndexer();
+
+
     }
 
     // Returns true when the command should end.
