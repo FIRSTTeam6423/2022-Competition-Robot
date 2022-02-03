@@ -47,7 +47,7 @@ public class CargoUtil extends SubsystemBase{
         shooterPIDController.setD(Constants.SHOOTER_D);
         shooterPIDController.setFF(Constants.SHOOTER_F);
 
-        limitSwitch = new DigitalInput(1);
+        limitSwitch = new DigitalInput(Constants.LIMIT_SWTICH);
     }
     
     public void OperateBallMagnet(){
