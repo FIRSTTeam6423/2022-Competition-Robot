@@ -10,10 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateColorSensor;
+import frc.robot.commands.OperateSensor;
 import frc.robot.commands.OperateCargo;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.subsystems.SensorUtil;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,11 +26,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final DriveUtil driveUtil = new DriveUtil();
-  private final CargoUtil cargoColorUtil = new CargoUtil();
+  private final SensorUtil sensorUtil = new SensorUtil();
   private final CargoUtil cargoShootUtil = new CargoUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoColorUtil);
+  private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
   private final OperateCargo operateCargo = new OperateCargo(cargoShootUtil);
 
   public static XboxController operator;
@@ -79,7 +80,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoColorUtil.setDefaultCommand(operateColorSensor);
+    sensorUtil.setDefaultCommand(operateSensor);
     cargoShootUtil.setDefaultCommand(operateCargo);
   }
 

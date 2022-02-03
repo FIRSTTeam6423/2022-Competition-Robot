@@ -12,6 +12,7 @@ import frc.robot.enums.CargoState;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +32,9 @@ public class CargoUtil extends SubsystemBase{
     Color detectedColor = m_colorSensor.getColor();
     int proximity = m_colorSensor.getProximity();
 
+    //Limit switch
+    private DigitalInput limitSwitch;
+
     public CargoUtil() {
         ballMagnet = new WPI_TalonSRX(Constants.BALL_MAGNET);
         lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
@@ -42,6 +46,8 @@ public class CargoUtil extends SubsystemBase{
         shooterPIDController.setI(Constants.SHOOTER_I);
         shooterPIDController.setD(Constants.SHOOTER_D);
         shooterPIDController.setFF(Constants.SHOOTER_F);
+
+        limitSwitch = new DigitalInput(1);
     }
     
     public void OperateBallMagnet(){
@@ -84,16 +90,40 @@ public class CargoUtil extends SubsystemBase{
     public void OperateCargo(){
         switch(state){
             case INTAKE:
-                OperateBallMagnet();
-                OperateLowIndexer();
-                StopHighIndexer();
-                StopShooter();
+                //Red ball detected
+                if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+                    StopLowIndexer();
+                    StopHighIndexer();
+                    StopBallMagent();
+                    StopShooter();
+                //Blue ball detected
+                } else if (detectedColor.blue > 0.3){    
+                    StopLowIndexer();
+                    StopHighIndexer();
+                    StopBallMagent();
+                    StopShooter();
+                //No ball detected
+                } else {
+                    OperateBallMagnet();
+                    OperateLowIndexer();
+                    StopHighIndexer();
+                    StopShooter();
+                }
                 break;
             case INDEX:
-                OperateLowIndexer();
-                StopHighIndexer();
-                StopBallMagent();
-                StopShooter();
+                //Ball detected
+                if (limitSwitch.get()){
+                    StopLowIndexer();
+                    StopHighIndexer();
+                    StopBallMagent();
+                    StopShooter();
+                //No ball detected
+                } else {
+                    OperateLowIndexer();
+                    StopHighIndexer();
+                    StopBallMagent();
+                    StopShooter();
+                }
                 break;
             case SPINUP:
                 StopLowIndexer();
@@ -117,22 +147,6 @@ public class CargoUtil extends SubsystemBase{
 
     }
     
-
-    /**
-     * Constantly check the rgb values read by the color sensor
-     * If they match the values of red cargo, display "RED" on the dashboard
-     * If they match the values of blue cargo, display "BLUE" on the dashboard
-     * If the rgb values match neither types of cargo, display "NO COLOR DETECTED" on the dashboard
-     */
-    public void detectBallColor(){
-        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
-            SmartDashboard.putString("color detected", "RED");
-        } else if (detectedColor.blue > 0.3){
-            SmartDashboard.putString("color detected", "BLUE");
-        } else {
-            SmartDashboard.putString("color detected", "NO COLOR DETECTED");
-        }
-    }
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
