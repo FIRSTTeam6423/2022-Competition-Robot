@@ -6,7 +6,7 @@ import frc.robot.subsystems.CargoUtil;
 public class OperateCargo extends CommandBase{
     private CargoUtil cargoUtil;
 
-    /**Creates a new OperateCargo */
+    /**Creates a new OperateCargo*/
     public OperateCargo(CargoUtil du){
         // Use addRequirements() here to declare subsystem dependencies.
         this.cargoUtil = du;
