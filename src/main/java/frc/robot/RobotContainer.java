@@ -73,6 +73,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
+    System.out.println("Autocommand works :)");
     return driveFor5SecondsCommand;
   }
 

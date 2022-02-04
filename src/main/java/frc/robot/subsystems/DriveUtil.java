@@ -17,6 +17,7 @@ public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
     private DifferentialDrive differentialDrive;
+    private double setPoint;
 
     // init motor controllers, set secondaries to follow and init DifferentialDrive controller
     public DriveUtil() {
@@ -100,6 +101,20 @@ public class DriveUtil extends SubsystemBase {
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
+    }
+
+    public double autoMoveDistance(double distance){
+        double sensorPosition = leftPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH;
+        double error = distance - sensorPosition;
+        double output = error * Constants.DRIVER_P;
+
+        return output;
+    }
+
+    public double getPosition(){
+        double sensorPosition = leftPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH;
+
+        return sensorPosition;
     }
     
     @Override
