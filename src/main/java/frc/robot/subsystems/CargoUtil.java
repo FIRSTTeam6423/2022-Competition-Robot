@@ -29,25 +29,25 @@ public class CargoUtil extends SubsystemBase{
     int proximity = m_colorSensor.getProximity();
 
     public CargoUtil() {
-        //ballMagnet = new WPI_TalonSRX(Constants.BALL_MAGNET);
-        //indexer = new WPI_TalonSRX(Constants.INDEXER);
-        //shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
+        ballMagnet = new WPI_TalonSRX(Constants.BALL_MAGNET);
+        indexer = new WPI_TalonSRX(Constants.INDEXER);
+        shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
     }
     
     public void OperateBallMagnet(){
-        //ballMagnet.set(ControlMode.PercentOutput, Constants.BALL_MAGNET_OUTPUT);
+        ballMagnet.set(ControlMode.PercentOutput, Constants.BALL_MAGNET_OUTPUT);
     }
 
     public void StopBallMagent(){
-        //ballMagnet.set(ControlMode.PercentOutput, 0);
+        ballMagnet.set(ControlMode.PercentOutput, 0);
     }
 
     public void OperateIndexer(){
-        //indexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
+        indexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
     public void StopIndexer(){
-        //indexer.set(ControlMode.PercentOutput, 0);
+        indexer.set(ControlMode.PercentOutput, 0);
     }
 
     public void OperateShooter(){
@@ -61,12 +61,12 @@ public class CargoUtil extends SubsystemBase{
      * If the rgb values match neither types of cargo, display "NO COLOR DETECTED" on the dashboard
      */
     public void detectBallColor(){
-        //if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
-        //    SmartDashboard.putString("color detected", "RED");
-        //} else if (detectedColor.blue > 0.3){
-        //    SmartDashboard.putString("color detected", "BLUE");
-        //} else {
-        //    SmartDashboard.putString("color detected", "NO COLOR DETECTED");
-        //}
+        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+            SmartDashboard.putString("color detected", "RED");
+        } else if (detectedColor.blue > 0.3){
+            SmartDashboard.putString("color detected", "BLUE");
+        } else {
+            SmartDashboard.putString("color detected", "NO COLOR DETECTED");
+        }
     }
 }
