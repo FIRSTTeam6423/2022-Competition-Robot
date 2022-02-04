@@ -9,27 +9,29 @@ public class driveForDistance extends CommandBase{
 
     
     public driveForDistance(DriveUtil du, double distanceToDrive) {
-        this.distanceToDrive = distanceToDrive;
+        this.distanceToDrive = driveUtildistanceToDrive;
         this.driveUtil = du;
         addRequirements(this.driveUtil);
-
     }
 
     @Override
     public void initialize() {
+
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveUtil.tankDrive(driveUtil.autoMoveDistance(5), -driveUtil.autoMoveDistance(5));
+        driveUtil.operateDistance(distanceToDrive);
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        driveUtil.stopDistance();
+    }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return driveUtil.getPosition() > distanceToDrive;
     }
 }

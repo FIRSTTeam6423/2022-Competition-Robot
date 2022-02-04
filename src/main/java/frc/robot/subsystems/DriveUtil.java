@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import com.revrobotics.SparkMaxPIDController;
 
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
@@ -19,13 +20,17 @@ public class DriveUtil extends SubsystemBase {
 
     // Drive controller
     private DifferentialDrive differentialDrive;
-    private double setPoint;
+
+    private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
 
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
         rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
         rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
+
+        leftDriverPIDController = leftPrimary.getPIDController();
+        rightDriverPIDController = rightPrimary.getPIDController();
 
         leftPrimaryEncoder = leftPrimary.getEncoder();
         leftSecondaryEncoder = leftSecondary.getEncoder();
@@ -39,6 +44,16 @@ public class DriveUtil extends SubsystemBase {
 
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
+
+        leftDriverPIDController.setP(Constants.DRIVER_P);
+        leftDriverPIDController.setI(Constants.DRIVER_I);
+        leftDriverPIDController.setD(Constants.DRIVER_D);
+        leftDriverPIDController.setFF(Constants.DRIVER_F);
+
+        rightDriverPIDController.setP(Constants.DRIVER_P);
+        rightDriverPIDController.setI(Constants.DRIVER_I);
+        rightDriverPIDController.setD(Constants.DRIVER_D);
+        rightDriverPIDController.setFF(Constants.DRIVER_F);
 
         // Invert secondaries (since they're on the opposite side of the robot)
         //leftSecondary.setInverted(true);
@@ -104,12 +119,17 @@ public class DriveUtil extends SubsystemBase {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
 
-    public double autoMoveDistance(double distance){
-        double sensorPosition = leftPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH;
-        double error = distance - sensorPosition;
-        double output = error * Constants.DRIVER_P;
+    public void operateDistance(double distance){
+        double leftSensorPosition = leftPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH; 
+        double rightSensorPosition = rightPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH;
+        
+        leftDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
+        rightDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
+    }
 
-        return output;
+    public void stopDistance(){
+        leftDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
+        rightDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
     public double getPosition(){
