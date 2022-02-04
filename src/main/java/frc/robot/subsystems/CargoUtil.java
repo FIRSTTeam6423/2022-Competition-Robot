@@ -172,6 +172,5 @@ public class CargoUtil extends SubsystemBase{
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
     }
-
 }
 

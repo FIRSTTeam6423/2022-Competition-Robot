@@ -20,7 +20,6 @@ public class DriveUtil extends SubsystemBase {
     // Drive controller
     private DifferentialDrive differentialDrive;
 
-    // init motor controllers, set secondaries to follow and init DifferentialDrive controller
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
