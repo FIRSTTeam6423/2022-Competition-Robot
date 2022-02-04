@@ -18,7 +18,9 @@ public class SensorUtil extends SubsystemBase{
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
     Color detectedColor = m_colorSensor.getColor();
     int proximity = m_colorSensor.getProximity();
 

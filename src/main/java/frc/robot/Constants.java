@@ -16,10 +16,12 @@ public final class Constants {
         /** 
          * DriveUtil Constants
          */
-        public static final int LEFT_PRIMARY = 4;
-        public static final int LEFT_SECONDARY = 1;
-        public static final int RIGHT_PRIMARY = 5;
-        public static final int RIGHT_SECONDARY = 2;
+        public static final int LEFT_PRIMARY = 1;
+        public static final int LEFT_SECONDARY = 2;
+        public static final int RIGHT_PRIMARY = 3;
+        public static final int RIGHT_SECONDARY = 4;
+
+        public static final double TICKS_PER_INCH = 2267.4512;
 
         /**
          * CargoUtil Constants
@@ -28,9 +30,16 @@ public final class Constants {
         public static final int LOW_INDEXER = 7;
         public static final int HIGH_INDEXER = 8;
         public static final int SHOOTER = 9;
+        public static final int LIMIT_SWTICH = 0;
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 0.4;
+        public static final double SHOOTER_RPM = 3000.0;
+
+        public static final double SHOOTER_P = 0.0;
+        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_D = 0.0;
+        public static final double SHOOTER_F = 0.0;
 
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;
