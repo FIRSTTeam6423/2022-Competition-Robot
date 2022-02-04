@@ -21,14 +21,15 @@ public final class Constants {
         public static final int RIGHT_PRIMARY = 3;
         public static final int RIGHT_SECONDARY = 4;
 
+        public static final double TICKS_PER_INCH = 2267.4512;
+
         /**
          * CargoUtil Constants
          */
         public static final int BALL_MAGNET = 6;
         public static final int LOW_INDEXER = 7;
         public static final int HIGH_INDEXER = 8;
-        public static final int SHOOTER = 8;
-        
+        public static final int SHOOTER = 9;
         public static final int LIMIT_SWTICH = 0;
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
@@ -46,9 +47,10 @@ public final class Constants {
         /**
          * Controller Input Device Mapping
          */
-        public static final int LEFT_STICK = 2;
-        public static final int RIGHT_STICK = 1;
-        public static final int XBOX = 0;
+        //public static final int LEFT_STICK = 2;
+        //public static final int RIGHT_STICK = 1;
+        public static final int XBOX_DRIVER = 0;
+        public static final int XBOX_OPERATOR = 1;
 
         /**
          * Controller Button Mapping

@@ -29,6 +29,8 @@ public class CargoUtil extends SubsystemBase{
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+
+    
     Color detectedColor = m_colorSensor.getColor();
     int proximity = m_colorSensor.getProximity();
 
@@ -170,6 +172,5 @@ public class CargoUtil extends SubsystemBase{
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
     }
-
 }
 
