@@ -26,10 +26,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final DriveUtil driveUtil = new DriveUtil();
-  private final CargoUtil cargoUtil = new CargoUtil();
+  private final SensorUtil sensorUtil = new SensorUtil();
+  private final CargoUtil cargoShootUtil = new CargoUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateColorSensor operateColorSensor = new OperateColorSensor(cargoUtil);
+  private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
+  private final OperateCargo operateCargo = new OperateCargo(cargoShootUtil);
 
   public static XboxController operator;
 
@@ -49,7 +51,7 @@ public class RobotContainer {
     driveType.setDefaultOption("Arcade", arcade);
     driveType.addOption("Tank", tank);
     driveType.addOption("Curvature", curvature);
-    SmartDashboard.putData("Drive Type", driveType);    
+    SmartDashboard.putData("Drive Type", driveType);
     
     // Configure the button bindings
     configureButtonBindings();
@@ -78,7 +80,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    //cargoUtil.setDefaultCommand(operateColorSensor);
+    sensorUtil.setDefaultCommand(operateSensor);
+    cargoShootUtil.setDefaultCommand(operateCargo);
   }
 
   public static double getLeftXboxX(){
