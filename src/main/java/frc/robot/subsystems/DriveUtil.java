@@ -16,10 +16,11 @@ import frc.robot.RobotContainer;
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
+
+    // Drive controller
     private DifferentialDrive differentialDrive;
     private double setPoint;
 
-    // init motor controllers, set secondaries to follow and init DifferentialDrive controller
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
@@ -120,7 +121,6 @@ public class DriveUtil extends SubsystemBase {
     @Override
     public void periodic() {
         /** This is normally where we send important values to the SmartDashboard */
-
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
         leftPrimaryEncoder.setPositionConversionFactor(4096);
         leftSecondaryEncoder.setPositionConversionFactor(4096);

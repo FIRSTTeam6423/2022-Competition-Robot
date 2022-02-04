@@ -1,15 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.CargoUtil;
+import frc.robot.subsystems.SensorUtil;
 
-public class OperateColorSensor extends CommandBase{
-    private CargoUtil cargoUtil;
+public class OperateSensor extends CommandBase{
+    private SensorUtil sensorUtil;
     
     /**Creates a new OperateCargo */
-    public OperateColorSensor(CargoUtil du){
+    public OperateSensor(SensorUtil du){
         // Use addRequirements() here to declare subsystem dependencies.
-        this.cargoUtil = du;
+        this.sensorUtil = du;
+        addRequirements(this.sensorUtil);
     }
 
     // Called when the command is initially scheduled.
@@ -19,7 +20,9 @@ public class OperateColorSensor extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        cargoUtil.detectBallColor();
+        sensorUtil.detectBallColor();
+        sensorUtil.detectBall();
+        sensorUtil.detectGyro();
     }
 
     // Called once the command ends or is interrupted.
