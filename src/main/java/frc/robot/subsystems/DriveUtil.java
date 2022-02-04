@@ -90,12 +90,22 @@ public class DriveUtil extends SubsystemBase {
             differentialDrive.curvatureDrive(-rotation, xboxLeftTrigger - xboxRightTrigger, true);
         }
     }
+
+    /**
+     * Wrapper for the tankdrive funtion
+     * Used for autos
+     * 
+     * @param leftSpeed  value passed into leftSpeed parameter of tankDrive function
+     * @param rightSpeed value passed into rightSpeed parameter of tankDrive function
+     */
+    public void tankDrive(double leftSpeed, double rightSpeed) {
+        differentialDrive.tankDrive(leftSpeed, rightSpeed);
+    }
     
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
-        //SmartDashboard.putString("Driver Mode  ::  ", RobotContainer.noobMode.getSelected().toString());
+
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
         leftPrimaryEncoder.setPositionConversionFactor(4096);
         leftSecondaryEncoder.setPositionConversionFactor(4096);
