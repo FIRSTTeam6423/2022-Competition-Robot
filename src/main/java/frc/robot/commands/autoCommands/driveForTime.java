@@ -11,10 +11,9 @@ import frc.robot.subsystems.DriveUtil;
 public class driveForTime extends CommandBase {
     DriveUtil driveUtil;
     Timer timer;
-
     int timeToDrive;
 
-    /** Creates a new driveForTime. */
+    
     public driveForTime(DriveUtil du, int timeToDrive) {
         this.timeToDrive = timeToDrive;
         this.driveUtil = du;
@@ -22,7 +21,7 @@ public class driveForTime extends CommandBase {
 
         timer = new Timer();
     }
-    
+
     @Override
     public void initialize() {
         timer.start();

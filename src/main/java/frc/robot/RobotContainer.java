@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
+import frc.robot.commands.autoCommands.driveForTime;
 import frc.robot.commands.OperateColorSensor;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.commands.autoCommands.driveForTime;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +38,7 @@ public class RobotContainer {
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
+  public driveForTime driveFor5SecondsCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -51,6 +54,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     configureDefaultCommands();
+
+    driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
   }
 
   /**
@@ -68,7 +73,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return driveFor5SecondsCommand;
   }
 
   private void configureDefaultCommands(){
