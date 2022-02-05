@@ -57,12 +57,12 @@ public class DriveUtil extends SubsystemBase {
      * move.
      */
     public void driveRobot() {
-        double xboxLeftStickX = RobotContainer.getLeftXboxX();
-        double xboxLeftStickY = RobotContainer.getLeftXboxY();
-        double xboxRightStickY = RobotContainer.getRightXboxY();
+        double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
+        double xboxLeftStickY = RobotContainer.getDriverLeftXboxY();
+        double xboxRightStickY = RobotContainer.getDriverRightXboxY();
 
-        double xboxLeftTrigger = RobotContainer.getLeftXboxTrigger();
-        double xboxRightTrigger = RobotContainer.getRightXboxTrigger();
+        double xboxLeftTrigger = RobotContainer.getDriverLeftXboxTrigger();
+        double xboxRightTrigger = RobotContainer.getDriverRightXboxTrigger();
 
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
