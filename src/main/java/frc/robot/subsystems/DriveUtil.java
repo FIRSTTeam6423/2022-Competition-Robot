@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.*;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -23,6 +25,9 @@ public class DriveUtil extends SubsystemBase {
 
     // Drive controller
     private DifferentialDrive differentialDrive;
+
+    //Gyro
+    private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     private double damp;
 
@@ -80,6 +85,14 @@ public class DriveUtil extends SubsystemBase {
         differentialDrive.curvatureDrive(rotation, -RobotContainer.getDriverLeftXboxTrigger() + RobotContainer.getDriverRightXboxTrigger(), true);}
       }
     
+    public void tankDrive(double leftSpeed, double rightSpeed) {
+        differentialDrive.tankDrive(leftSpeed, rightSpeed);
+    }
+    
+    public double getHeading(){
+        return gyro.getYaw();
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run

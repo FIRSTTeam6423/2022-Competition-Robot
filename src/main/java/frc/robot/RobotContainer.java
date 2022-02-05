@@ -21,6 +21,7 @@ import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
 import frc.robot.commands.autoCommands.driveForTime;
+import frc.robot.commands.autoCommands.driveForAngle;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -56,6 +57,7 @@ public class RobotContainer {
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
   public driveForTime driveFor5SecondsCommand;
+  public driveForAngle turn90DegreesCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -74,6 +76,7 @@ public class RobotContainer {
     configureDefaultCommands();
 
     driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
+    turn90DegreesCommand = new driveForAngle(driveUtil, 90);
   }
 
   /**
@@ -115,7 +118,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return driveFor5SecondsCommand;
+    return turn90DegreesCommand;
   }
 
   private void configureDefaultCommands(){
