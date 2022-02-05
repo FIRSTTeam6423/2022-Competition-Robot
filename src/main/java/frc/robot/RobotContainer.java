@@ -20,7 +20,7 @@ import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
-import frc.robot.commands.autoCommands.driveForTime;
+import frc.robot.commands.autoCommands.driveForDistance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -56,6 +56,7 @@ public class RobotContainer {
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
   public driveForTime driveFor5SecondsCommand;
+  public driveForDistance driveFor60InchesCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -74,6 +75,7 @@ public class RobotContainer {
     configureDefaultCommands();
 
     driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
+    driveFor60InchesCommand = new driveForDistance(driveUtil, 60);
   }
 
   /**
@@ -116,13 +118,13 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     System.out.println("Autocommand works :)");
-    return driveFor5SecondsCommand;
+    return driveFor60InchesCommand;
   }
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
     sensorUtil.setDefaultCommand(operateSensor);
-     cargoUtil.setDefaultCommand(operateCargo);
+    cargoUtil.setDefaultCommand(operateCargo);
   }
 
   public static double getDriverLeftXboxX(){

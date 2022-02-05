@@ -42,6 +42,11 @@ public class DriveUtil extends SubsystemBase {
         rightPrimaryEncoder.setPosition(0);
         rightSecondaryEncoder.setPosition(0);
 
+        leftPrimaryEncoder.setPositionConversionFactor(4096);
+        leftSecondaryEncoder.setPositionConversionFactor(4096);
+        rightPrimaryEncoder.setPositionConversionFactor(4096);
+        rightSecondaryEncoder.setPositionConversionFactor(4096);
+
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
 
@@ -73,12 +78,12 @@ public class DriveUtil extends SubsystemBase {
      * move.
      */
     public void driveRobot() {
-        double xboxLeftStickX = RobotContainer.getLeftXboxX();
-        double xboxLeftStickY = RobotContainer.getLeftXboxY();
-        double xboxRightStickY = RobotContainer.getRightXboxY();
+        double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
+        double xboxLeftStickY = RobotContainer.getDriverLeftXboxY();
+        double xboxRightStickY = RobotContainer.getDriverRightXboxY();
 
-        double xboxLeftTrigger = RobotContainer.getLeftXboxTrigger();
-        double xboxRightTrigger = RobotContainer.getRightXboxTrigger();
+        double xboxLeftTrigger = RobotContainer.getDriverLeftXboxTrigger();
+        double xboxRightTrigger = RobotContainer.getDriverRightXboxTrigger();
 
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
@@ -120,11 +125,8 @@ public class DriveUtil extends SubsystemBase {
     }
 
     public void operateDistance(double distance){
-        double leftSensorPosition = leftPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH; 
-        double rightSensorPosition = rightPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH;
-        
-        leftDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
-        rightDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
+        leftDriverPIDController.setReference(distance / 4096, CANSparkMax.ControlType.kPosition);
+        rightDriverPIDController.setReference(distance / 4096, CANSparkMax.ControlType.kPosition);
     }
 
     public void stopDistance(){
@@ -132,11 +134,12 @@ public class DriveUtil extends SubsystemBase {
         rightDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
-    public double getPosition(){
-        double sensorPosition = leftPrimaryEncoder.getPosition()/Constants.TICKS_PER_INCH;
+
+    public double getPosition() {
+        double sensorPosition = leftPrimaryEncoder.getPosition();
 
         return sensorPosition;
-    }
+    }   
     
     @Override
     public void periodic() {
