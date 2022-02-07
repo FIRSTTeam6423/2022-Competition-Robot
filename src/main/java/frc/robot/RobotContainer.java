@@ -21,6 +21,7 @@ import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
 import frc.robot.commands.autoCommands.driveForDistance;
+import frc.robot.commands.autoCommands.driveForDistanceNoPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,6 +58,7 @@ public class RobotContainer {
   public final static Byte curvature = 2;
   public driveForTime driveFor5SecondsCommand;
   public driveForDistance driveFor60InchesCommand;
+  public driveForDistanceNoPID drive60InchesNoPIDCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,6 +78,7 @@ public class RobotContainer {
 
     driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
     driveFor60InchesCommand = new driveForDistance(driveUtil, 60);
+    drive60InchesNoPIDCommand = new driveForDistanceNoPID(driveUtil, 60);
   }
 
   /**
@@ -118,7 +121,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     System.out.println("Autocommand works :)");
-    return driveFor60InchesCommand;
+    return drive60InchesNoPIDCommand;
   }
 
   private void configureDefaultCommands(){
