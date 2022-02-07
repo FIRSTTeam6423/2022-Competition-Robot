@@ -17,6 +17,7 @@ import com.revrobotics.SparkMaxPIDController;
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
+    public double setpoint;
 
     // Drive controller
     private DifferentialDrive differentialDrive;
@@ -50,6 +51,8 @@ public class DriveUtil extends SubsystemBase {
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
 
+        rightPrimary.setInverted(true);
+
         leftDriverPIDController.setP(Constants.DRIVER_P);
         leftDriverPIDController.setI(Constants.DRIVER_I);
         leftDriverPIDController.setD(Constants.DRIVER_D);
@@ -59,6 +62,8 @@ public class DriveUtil extends SubsystemBase {
         rightDriverPIDController.setI(Constants.DRIVER_I);
         rightDriverPIDController.setD(Constants.DRIVER_D);
         rightDriverPIDController.setFF(Constants.DRIVER_F);
+
+        setpoint = 0;
 
         // Invert secondaries (since they're on the opposite side of the robot)
         //leftSecondary.setInverted(true);
@@ -125,8 +130,9 @@ public class DriveUtil extends SubsystemBase {
     }
 
     public void operateDistance(double distance){
-        leftDriverPIDController.setReference(distance / 4096, CANSparkMax.ControlType.kPosition);
-        rightDriverPIDController.setReference(distance / 4096, CANSparkMax.ControlType.kPosition);
+        leftDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
+        rightDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
+        setpoint = distance;
     }
 
     public void stopDistance(){
@@ -134,11 +140,26 @@ public class DriveUtil extends SubsystemBase {
         rightDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
+    public boolean getMoving(){
+        return leftPrimary.get() > 0.1 && rightSecondary.get() > 0.1;
+    }
 
-    public double getPosition() {
-        double sensorPosition = leftPrimaryEncoder.getPosition();
+    public double getPosition(){
+        double sensorPosition = (leftPrimaryEncoder.getPosition() + rightPrimaryEncoder.getPosition())/2;
 
         return sensorPosition;
+    }
+
+    public double getleftPosition() {
+        double leftSensorPosition = leftPrimaryEncoder.getPosition();
+
+        return leftSensorPosition;
+    }   
+
+    public double getrightPosition() {
+        double rightSensorPosition = rightPrimaryEncoder.getPosition();
+
+        return rightSensorPosition;
     }   
     
     @Override
@@ -153,6 +174,7 @@ public class DriveUtil extends SubsystemBase {
         SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
+        SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
 
     }
 }

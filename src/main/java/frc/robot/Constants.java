@@ -23,10 +23,11 @@ public final class Constants {
 
         public static final double TICKS_PER_INCH = 2267.4512;
 
-        public static final double DRIVER_P = 0.1;
+        public static final double DRIVER_P = 0.00075;
         public static final double DRIVER_I = 0.0;
         public static final double DRIVER_D = 0.0;
         public static final double DRIVER_F = 0.0;
+        public static final double DRIVER_DEADBAND = 500;
 
         /**
          * CargoUtil Constants
