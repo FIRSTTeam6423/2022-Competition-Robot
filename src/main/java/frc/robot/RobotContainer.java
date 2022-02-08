@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
 import frc.robot.commands.OperateSensor;
 import frc.robot.commands.OperateCargo;
-import frc.robot.commands.autoCommands.driveForTime;
+import frc.robot.commands.autoCommands.DriveForTime;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
-import frc.robot.commands.autoCommands.driveForDistance;
-import frc.robot.commands.autoCommands.driveForDistanceNoPID;
+import frc.robot.commands.autoCommands.DriveForDistance;
+import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -56,9 +56,9 @@ public class RobotContainer {
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
-  public driveForTime driveFor5SecondsCommand;
-  public driveForDistance driveFor60InchesCommand;
-  public driveForDistanceNoPID drive60InchesNoPIDCommand;
+  public DriveForTime driveFor5SecondsCommand;
+  public DriveForDistance driveFor60InchesCommand;
+  public DriveForDistanceNoPID drive60InchesNoPIDCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,9 +76,9 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
-    driveFor60InchesCommand = new driveForDistance(driveUtil, 60);
-    drive60InchesNoPIDCommand = new driveForDistanceNoPID(driveUtil, 60);
+    driveFor5SecondsCommand = new DriveForTime(driveUtil, 5);
+    driveFor60InchesCommand = new DriveForDistance(driveUtil, 60);
+    drive60InchesNoPIDCommand = new DriveForDistanceNoPID(driveUtil, 60);
   }
 
   /**

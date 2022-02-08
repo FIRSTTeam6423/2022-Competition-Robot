@@ -4,13 +4,13 @@ import frc.robot.subsystems.DriveUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 
-public class driveForDistanceNoPID extends CommandBase {
+public class DriveForDistanceNoPID extends CommandBase {
     private DriveUtil driveUtil;
     private double targetTicks;
     private boolean forward;
     private boolean done = false;
 
-    public driveForDistanceNoPID(DriveUtil driveUtil, double distanceToDrive) {
+    public DriveForDistanceNoPID(DriveUtil driveUtil, double distanceToDrive) {
         this.driveUtil = driveUtil;
         this.targetTicks = distanceToDrive * Constants.TICKS_PER_INCH;
         addRequirements(this.driveUtil);

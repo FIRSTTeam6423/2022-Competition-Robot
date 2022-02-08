@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveUtil;
 
-public class driveForDistance extends CommandBase{
+public class DriveForDistance extends CommandBase{
     DriveUtil driveUtil;
     double distanceToDrive;
     private double encoderSetpoint;
     
-    public driveForDistance(DriveUtil du, double distanceToDrive) {
+    public DriveForDistance(DriveUtil du, double distanceToDrive) {
         this.driveUtil = du;
         this.distanceToDrive = distanceToDrive * Constants.TICKS_PER_INCH;
         addRequirements(this.driveUtil);
