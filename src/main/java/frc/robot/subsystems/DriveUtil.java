@@ -17,7 +17,8 @@ import frc.robot.RobotContainer;
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary;
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
-    public double setpoint, rotation;
+    // public double setpoint;
+    public double rotation;
 
     // Drive controller
     private DifferentialDrive differentialDrive;
@@ -79,7 +80,7 @@ public class DriveUtil extends SubsystemBase {
         // rightDriverPIDController.setD(Constants.DRIVER_D);
         // rightDriverPIDController.setFF(Constants.DRIVER_F);
 
-        setpoint = 0;
+        // setpoint = 0;
 
         // Invert secondaries (since they're on the opposite side of the robot)
         // leftSecondary.setInverted(true);
@@ -246,7 +247,7 @@ public class DriveUtil extends SubsystemBase {
         SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
-        SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
+        // SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
 
     }
 }
