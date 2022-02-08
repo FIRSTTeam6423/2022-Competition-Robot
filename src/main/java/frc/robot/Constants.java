@@ -21,13 +21,15 @@ public final class Constants {
         public static final int RIGHT_PRIMARY = 3;
         public static final int RIGHT_SECONDARY = 4;
 
+        public static final double AUTO_DRIVE_SPEED = 0.2;
+
         public static final double TICKS_PER_INCH = 2267.4512;
 
-        public static final double DRIVER_P = 0.00075;
-        public static final double DRIVER_I = 0.0;
-        public static final double DRIVER_D = 0.0;
-        public static final double DRIVER_F = 0.0;
-        public static final double DRIVER_DEADBAND = 500;
+        // public static final double DRIVER_P = 0.00075;
+        // public static final double DRIVER_I = 0.0;
+        // public static final double DRIVER_D = 0.0;
+        // public static final double DRIVER_F = 0.0;
+        // public static final double DRIVER_DEADBAND = 500;
 
         /**
          * CargoUtil Constants

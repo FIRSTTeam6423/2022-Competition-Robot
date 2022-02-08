@@ -1,9 +1,8 @@
 package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.DriveUtil;
 import frc.robot.Constants;
+import frc.robot.subsystems.DriveUtil;
 
 public class driveForDistance extends CommandBase{
     DriveUtil driveUtil;
@@ -34,7 +33,11 @@ public class driveForDistance extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return !driveUtil.getMoving() && driveUtil.getleftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getleftPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND
-        && driveUtil.getrightPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getrightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND;
+        /**
+         * This command won't work since PID logic was commented out.
+         */
+        return true;
+        // return !driveUtil.getMoving() && driveUtil.getLeftEncoder() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getLeftEncoder() < encoderSetpoint + Constants.DRIVER_DEADBAND
+        // && driveUtil.getRightEncoder() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getRightEncoder() < encoderSetpoint + Constants.DRIVER_DEADBAND;
     }
 }

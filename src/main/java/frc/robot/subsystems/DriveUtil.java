@@ -5,24 +5,25 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import com.revrobotics.SparkMaxPIDController;
 
 public class DriveUtil extends SubsystemBase {
-    private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
+    private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary;
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
-    public double setpoint;
+    public double setpoint, rotation;
 
     // Drive controller
     private DifferentialDrive differentialDrive;
 
-    private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
+    // private SparkMaxPIDController leftDriverPIDController,
+    // rightDriverPIDController;
 
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
@@ -30,8 +31,8 @@ public class DriveUtil extends SubsystemBase {
         rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
         rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
 
-        leftDriverPIDController = leftPrimary.getPIDController();
-        rightDriverPIDController = rightPrimary.getPIDController();
+        // leftDriverPIDController = leftPrimary.getPIDController();
+        // rightDriverPIDController = rightPrimary.getPIDController();
 
         leftPrimaryEncoder = leftPrimary.getEncoder();
         leftSecondaryEncoder = leftSecondary.getEncoder();
@@ -43,31 +44,46 @@ public class DriveUtil extends SubsystemBase {
         rightPrimaryEncoder.setPosition(0);
         rightSecondaryEncoder.setPosition(0);
 
-        leftPrimaryEncoder.setPositionConversionFactor(4096);
-        leftSecondaryEncoder.setPositionConversionFactor(4096);
-        rightPrimaryEncoder.setPositionConversionFactor(4096);
-        rightSecondaryEncoder.setPositionConversionFactor(4096);
+        /**
+         * Conversion factor was 4096 before, from this CD forum thread setting
+         * conversion factor to 42 gets this to effectively report ticks rather than
+         * rotation units. This is untested but seems like the right approach.
+         * https://www.chiefdelphi.com/t/neo-motor-encoder-ticks-per-roataion/347126/2
+         */
+        leftPrimaryEncoder.setPositionConversionFactor(42);
+        leftSecondaryEncoder.setPositionConversionFactor(42);
+        rightPrimaryEncoder.setPositionConversionFactor(42);
+        rightSecondaryEncoder.setPositionConversionFactor(42);
 
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
 
         rightPrimary.setInverted(true);
 
-        leftDriverPIDController.setP(Constants.DRIVER_P);
-        leftDriverPIDController.setI(Constants.DRIVER_I);
-        leftDriverPIDController.setD(Constants.DRIVER_D);
-        leftDriverPIDController.setFF(Constants.DRIVER_F);
+        /**
+         * Having PID on the drive base isn't necessarily needed, especially for normal
+         * match play. PID could help move the robot a precise distance in a short
+         * amount of time. The same can be achieved without PID by instead driving the
+         * robot slower and using encoder ticks. It may be a good idea to get distance
+         * driving functional without PID before introducing that - you may find not
+         * having PID works well enough!
+         */
 
-        rightDriverPIDController.setP(Constants.DRIVER_P);
-        rightDriverPIDController.setI(Constants.DRIVER_I);
-        rightDriverPIDController.setD(Constants.DRIVER_D);
-        rightDriverPIDController.setFF(Constants.DRIVER_F);
+        // leftDriverPIDController.setP(Constants.DRIVER_P);
+        // leftDriverPIDController.setI(Constants.DRIVER_I);
+        // leftDriverPIDController.setD(Constants.DRIVER_D);
+        // leftDriverPIDController.setFF(Constants.DRIVER_F);
+
+        // rightDriverPIDController.setP(Constants.DRIVER_P);
+        // rightDriverPIDController.setI(Constants.DRIVER_I);
+        // rightDriverPIDController.setD(Constants.DRIVER_D);
+        // rightDriverPIDController.setFF(Constants.DRIVER_F);
 
         setpoint = 0;
 
         // Invert secondaries (since they're on the opposite side of the robot)
-        //leftSecondary.setInverted(true);
-        //rightSecondary.setInverted(true);
+        // leftSecondary.setInverted(true);
+        // rightSecondary.setInverted(true);
 
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     }
@@ -83,38 +99,58 @@ public class DriveUtil extends SubsystemBase {
      * move.
      */
     public void driveRobot() {
-        double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
-        double xboxLeftStickY = RobotContainer.getDriverLeftXboxY();
-        double xboxRightStickY = RobotContainer.getDriverRightXboxY();
+        /**
+         * Creating multiple double objects in a periodic method (driveRobot is called
+         * 100 times per second) can overwork the JVM garbage collection process.
+         * Since most of these are only accessed once, call the get method directly
+         * rather than creating doubles and referencing them.
+         */
+        // double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
+        // double xboxLeftStickY = RobotContainer.getDriverLeftXboxY();
+        // double xboxRightStickY = RobotContainer.getDriverRightXboxY();
 
-        double xboxLeftTrigger = RobotContainer.getDriverLeftXboxTrigger();
-        double xboxRightTrigger = RobotContainer.getDriverRightXboxTrigger();
+        // double xboxLeftTrigger = RobotContainer.getDriverLeftXboxTrigger();
+        // double xboxRightTrigger = RobotContainer.getDriverRightXboxTrigger();
 
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
-            differentialDrive.arcadeDrive(-xboxLeftStickX, xboxRightStickY);
+            differentialDrive.arcadeDrive(-RobotContainer.getDriverLeftXboxX(), RobotContainer.getDriverRightXboxY());
 
-        // tank drive
+            // tank drive
         } else if (RobotContainer.driveType.getSelected().equals(RobotContainer.tank)) {
-            differentialDrive.tankDrive(xboxLeftStickY, -xboxRightStickY);
+            differentialDrive.tankDrive(RobotContainer.getDriverLeftXboxY(), -RobotContainer.getDriverRightXboxY());
 
-        // curvature drive
+            // curvature drive
         } else {
             // squaring the rotational input for additional precision;
             // although while differentialDrive should do it for us
             // drivers requested another one because turning felt imprecise
             // to them; according to them it helped
-            double rotation = xboxLeftStickX;
+
+            /**
+             * Suggested to move `rotation` to a class variable rather than redefining it
+             * every method call. Same reason as mentioned above for xbox values - it can
+             * overwork the JVM garbage collector.
+             */
+            rotation = RobotContainer.getDriverLeftXboxX();
             boolean isNegative = rotation < 0;
-        
+
             rotation *= rotation;
-            
+
             if (isNegative)
                 rotation *= -1;
 
             rotation *= 0.75;
 
-            differentialDrive.curvatureDrive(-rotation, xboxLeftTrigger - xboxRightTrigger, true);
+            /**
+             * Moved `rotation` to the second parameter slot. curvatureDrive has a method
+             * signature of `double xSpeed, double zRotation, boolean allowTurnInPlace`.
+             * Unless this `rotation` value isn't a rotation value, it likely belongs in the
+             * second parameter slot.
+             */
+            differentialDrive.curvatureDrive(
+                    RobotContainer.getDriverLeftXboxTrigger() - RobotContainer.getDriverRightXboxTrigger(), -rotation,
+                    true);
         }
     }
 
@@ -123,53 +159,62 @@ public class DriveUtil extends SubsystemBase {
      * Used for autos
      * 
      * @param leftSpeed  value passed into leftSpeed parameter of tankDrive function
-     * @param rightSpeed value passed into rightSpeed parameter of tankDrive function
+     * @param rightSpeed value passed into rightSpeed parameter of tankDrive
+     *                   function
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
 
-    public void operateDistance(double distance){
-        leftDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
-        rightDriverPIDController.setReference(distance, CANSparkMax.ControlType.kPosition);
-        setpoint = distance;
+    public void resetEncoders() {
+        leftPrimaryEncoder.setPosition(0);
+        leftSecondaryEncoder.setPosition(0);
+        rightPrimaryEncoder.setPosition(0);
+        rightSecondaryEncoder.setPosition(0);
     }
 
-    public void stopDistance(){
-        leftDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
-        rightDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
+    public void operateDistance(double distance) {
+        // leftDriverPIDController.setReference(distance,
+        // CANSparkMax.ControlType.kPosition);
+        // rightDriverPIDController.setReference(distance,
+        // CANSparkMax.ControlType.kPosition);
+        // setpoint = distance;
     }
 
-    public boolean getMoving(){
+    public void stopDistance() {
+        // leftDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
+        // rightDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
+    }
+
+    public boolean getMoving() {
         return leftPrimary.get() > 0.1 && rightSecondary.get() > 0.1;
     }
 
-    public double getPosition(){
-        double sensorPosition = (leftPrimaryEncoder.getPosition() + rightPrimaryEncoder.getPosition())/2;
-
-        return sensorPosition;
+    public double getPosition() {
+        return (leftPrimaryEncoder.getPosition() + rightPrimaryEncoder.getPosition()) / 2;
     }
 
-    public double getleftPosition() {
-        double leftSensorPosition = leftPrimaryEncoder.getPosition();
+    public double getLeftEncoder() {
+        return leftPrimaryEncoder.getPosition();
+    }
 
-        return leftSensorPosition;
-    }   
+    public double getRightEncoder() {
+        return rightPrimaryEncoder.getPosition();
+    }
 
-    public double getrightPosition() {
-        double rightSensorPosition = rightPrimaryEncoder.getPosition();
-
-        return rightSensorPosition;
-    }   
-    
     @Override
     public void periodic() {
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
-        leftPrimaryEncoder.setPositionConversionFactor(4096);
-        leftSecondaryEncoder.setPositionConversionFactor(4096);
-        rightPrimaryEncoder.setPositionConversionFactor(4096);
-        rightSecondaryEncoder.setPositionConversionFactor(4096);
+
+        /**
+         * This shouldn't go in a periodic method! This method is called 100 times per
+         * second - there is no need to set the conversion factor periodically.
+         */
+        // leftPrimaryEncoder.setPositionConversionFactor(4096);
+        // leftSecondaryEncoder.setPositionConversionFactor(4096);
+        // rightPrimaryEncoder.setPositionConversionFactor(4096);
+        // rightSecondaryEncoder.setPositionConversionFactor(4096);
         SmartDashboard.putNumber("Left Primary Encoder Ticks  ::  ", leftPrimaryEncoder.getPosition());
         SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
