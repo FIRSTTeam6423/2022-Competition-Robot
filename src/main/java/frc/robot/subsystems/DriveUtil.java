@@ -247,6 +247,7 @@ public class DriveUtil extends SubsystemBase {
         SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
+        SmartDashboard.putString("Current DriveUtil Command  ::  ", getCurrentCommand() == null ? "None" : getCurrentCommand().getName());
         // SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
 
     }
