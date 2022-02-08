@@ -166,6 +166,13 @@ public class DriveUtil extends SubsystemBase {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
 
+    /**
+     * It's very useful to reset encoders while doing distance calculations to
+     * ensure you're getting accurate measurements. It also saves you from having to
+     * calculate deltas. Also, encoders can "walk" over time, meaning their readings
+     * become less accurate with the real measurement. Resetting helps avoid all
+     * those issues.
+     */
     public void resetEncoders() {
         leftPrimaryEncoder.setPosition(0);
         leftSecondaryEncoder.setPosition(0);
@@ -186,10 +193,30 @@ public class DriveUtil extends SubsystemBase {
         // rightDriverPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
+    /**
+     * Not sure of the benefit of this method. A command being considered done
+     * shouldn't be dependent on the speed a motor is spinning at. Think of a motor
+     * like an "output" rather than an "input" in a computer. You can't watch a
+     * YouTube video with only a keyboard. Similarly, you shouldn't get "readings"
+     * from a motor. If you need an "input" regarding motors, that's what encoders
+     * and gyros are for!
+     */
     public boolean getMoving() {
         return leftPrimary.get() > 0.1 && rightSecondary.get() > 0.1;
     }
 
+    /**
+     * Averaging encoder readings is good on one hand because it accounts for any
+     * inconsistencies in the hardware. However, this assumes the encoders are in
+     * sync with each other. If the left is 10 ticks ahead of the right (powered on
+     * sooner, left drive train skipped when going over a bump), this measurement is
+     * much less realistic. Calling `resetEncoders()` would help with that. However,
+     * it's much more advisable to instead read from one encoder.
+     * 
+     * Having two encoders on a robot like this is more for having a backup than
+     * actively using both. If you ever need to keep the robot driving straight, use
+     * a gyro instead.
+     */
     public double getPosition() {
         return (leftPrimaryEncoder.getPosition() + rightPrimaryEncoder.getPosition()) / 2;
     }
