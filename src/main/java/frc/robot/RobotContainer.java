@@ -78,10 +78,10 @@ public class RobotContainer {
     configureDefaultCommands();
 
     //driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
-    turn90DegreesCommand = new driveForAngle(driveUtil, 90);
+    //turn90DegreesCommand = new driveForAngle(driveUtil, 90);
 
-    chooser.setDefaultOption("Turn 90 Degrees", new driveForAngle(driveUtil, 90));
-    chooser.addOption("Turn 60 Degrees", new driveForAngle(driveUtil, 60));
+    chooser.setDefaultOption("Turn 90 Degrees Left", new driveForAngle(driveUtil, sensorUtil, -90));
+    chooser.addOption("Turn 60 Degrees Right", new driveForAngle(driveUtil, sensorUtil, 60));
     SmartDashboard.putData("Autonomous Command", chooser);
   }
 

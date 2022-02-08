@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.*;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 public class SensorUtil extends SubsystemBase{
     //Color detector
@@ -20,6 +21,7 @@ public class SensorUtil extends SubsystemBase{
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
 
     Color detectedColor = m_colorSensor.getColor();
     int proximity = m_colorSensor.getProximity();
@@ -29,6 +31,8 @@ public class SensorUtil extends SubsystemBase{
 
     public SensorUtil(){
         limitSwitch = new DigitalInput(1);
+        gyro.calibrate();
+        gyro.reset();
     }
 
     /**
@@ -64,5 +68,17 @@ public class SensorUtil extends SubsystemBase{
         SmartDashboard.putNumber("LinearWorldAccelX", gyro.getWorldLinearAccelX());
         SmartDashboard.putNumber("LinearWorldAccelY", gyro.getWorldLinearAccelY());
         SmartDashboard.putNumber("LinearWorldAccelZ", gyro.getWorldLinearAccelZ());
+    }
+
+    public double getHeading(){
+        return gyro.getYaw();
+    }
+
+    public void resetGyro(){
+        gyro.reset();
+    }
+
+    public void calibrateGyro(){
+        gyro.calibrate();
     }
 }

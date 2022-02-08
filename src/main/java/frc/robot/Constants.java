@@ -21,7 +21,7 @@ public final class Constants {
         public static final int RIGHT_PRIMARY = 3;
         public static final int RIGHT_SECONDARY = 4;
 
-        public static final double AUTO_TURN_SPEED = 0.4;
+        public static final double AUTO_TURN_SPEED = 0.25;
 
         public static final double TICKS_PER_INCH = 2267.4512;
 

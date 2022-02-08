@@ -26,9 +26,6 @@ public class DriveUtil extends SubsystemBase {
     // Drive controller
     private DifferentialDrive differentialDrive;
 
-    //Gyro
-    private AHRS gyro = new AHRS(SPI.Port.kMXP);
-
     private double damp;
 
     public DriveUtil() {
@@ -46,9 +43,6 @@ public class DriveUtil extends SubsystemBase {
         // Invert secondaries (since they're on the opposite side of the robot)
         //leftSecondary.setInverted(true);
         //rightSecondary.setInverted(true);
-
-        gyro.calibrate();
-        gyro.reset();
 
         // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
@@ -90,18 +84,6 @@ public class DriveUtil extends SubsystemBase {
     
     public void tankDrive(double leftSpeed, double rightSpeed) {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
-    }
-    
-    public double getHeading(){
-        return gyro.getYaw();
-    }
-
-    public void resetGyro(){
-        gyro.reset();
-    }
-
-    public void calibrateGyro(){
-        gyro.calibrate();
     }
 
     @Override
