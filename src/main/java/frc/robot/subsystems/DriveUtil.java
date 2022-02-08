@@ -47,6 +47,9 @@ public class DriveUtil extends SubsystemBase {
         //leftSecondary.setInverted(true);
         //rightSecondary.setInverted(true);
 
+        gyro.calibrate();
+        gyro.reset();
+
         // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     }
@@ -91,6 +94,14 @@ public class DriveUtil extends SubsystemBase {
     
     public double getHeading(){
         return gyro.getYaw();
+    }
+
+    public void resetGyro(){
+        gyro.reset();
+    }
+
+    public void calibrateGyro(){
+        gyro.calibrate();
     }
 
     @Override

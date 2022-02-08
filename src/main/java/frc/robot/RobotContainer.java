@@ -59,6 +59,8 @@ public class RobotContainer {
   public driveForTime driveFor5SecondsCommand;
   public driveForAngle turn90DegreesCommand;
 
+  private SendableChooser<Command> chooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -75,8 +77,12 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
+    //driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
     turn90DegreesCommand = new driveForAngle(driveUtil, 90);
+
+    chooser.setDefaultOption("Turn 90 Degrees", new driveForAngle(driveUtil, 90));
+    chooser.addOption("Turn 60 Degrees", new driveForAngle(driveUtil, 60));
+    SmartDashboard.putData("Autonomous Command", chooser);
   }
 
   /**
@@ -118,7 +124,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return turn90DegreesCommand;
+    System.out.println(chooser.getSelected());
+    return chooser.getSelected();
   }
 
   private void configureDefaultCommands(){
