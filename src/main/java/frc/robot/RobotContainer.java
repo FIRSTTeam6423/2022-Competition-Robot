@@ -60,6 +60,8 @@ public class RobotContainer {
   public driveForDistance driveFor60InchesCommand;
   public driveForDistanceNoPID drive60InchesNoPIDCommand;
 
+  private SendableChooser<Command> chooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -78,7 +80,16 @@ public class RobotContainer {
 
     driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
     driveFor60InchesCommand = new driveForDistance(driveUtil, 60);
-    drive60InchesNoPIDCommand = new driveForDistanceNoPID(driveUtil, 60);
+
+    chooser.addOption("Drive 24 Inches Forward No PID", new driveForDistanceNoPID(driveUtil, 24));
+    chooser.setDefaultOption("Drive 60 Inches Forward No PID", new driveForDistanceNoPID(driveUtil, 60));
+    chooser.addOption("Drive 120 Inches Forward No PID", new driveForDistanceNoPID(driveUtil, 120));
+
+    chooser.addOption("Drive 24 Inches Backward No PID", new driveForDistanceNoPID(driveUtil, -24));
+    chooser.setDefaultOption("Drive 60 Backward Forward No PID", new driveForDistanceNoPID(driveUtil, -60));
+    chooser.addOption("Drive 120 Inches Backward No PID", new driveForDistanceNoPID(driveUtil, -120));
+
+    SmartDashboard.putData("Autonomous Command", chooser);
   }
 
   /**
@@ -120,8 +131,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    System.out.println("Autocommand works :)");
-    return drive60InchesNoPIDCommand;
+    return chooser.getSelected();
   }
 
   private void configureDefaultCommands(){

@@ -161,15 +161,18 @@ public class DriveUtil extends SubsystemBase {
 
         return rightSensorPosition;
     }   
+
+    public void resetEndconder(){
+        leftPrimaryEncoder.setPosition(0);
+        leftSecondaryEncoder.setPosition(0);
+        rightPrimaryEncoder.setPosition(0);
+        rightSecondaryEncoder.setPosition(0);
+    }
     
     @Override
     public void periodic() {
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
-        leftPrimaryEncoder.setPositionConversionFactor(4096);
-        leftSecondaryEncoder.setPositionConversionFactor(4096);
-        rightPrimaryEncoder.setPositionConversionFactor(4096);
-        rightSecondaryEncoder.setPositionConversionFactor(4096);
         SmartDashboard.putNumber("Left Primary Encoder Ticks  ::  ", leftPrimaryEncoder.getPosition());
         SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());

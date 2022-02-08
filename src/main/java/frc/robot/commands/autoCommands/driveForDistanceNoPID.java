@@ -6,24 +6,44 @@ import frc.robot.Constants;
 
 public class driveForDistanceNoPID extends CommandBase{
     DriveUtil driveUtil;
-    double distanceToDrive;
     private double encoderSetpoint;
+    private boolean forward;
+    private boolean done;
     
     public driveForDistanceNoPID(DriveUtil du, double distanceToDrive) {
         this.driveUtil = du;
-        this.distanceToDrive = distanceToDrive * Constants.TICKS_PER_INCH;
+        this.encoderSetpoint = distanceToDrive * Constants.TICKS_PER_INCH;
         addRequirements(this.driveUtil);
     }
 
     @Override
     public void initialize() {
-        encoderSetpoint = driveUtil.getPosition() + distanceToDrive;
+        done = false;
+
+        driveUtil.resetEndconder();
+
+        if (encoderSetpoint > 0){
+            forward = true;
+        } else {
+            forward = false;
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveUtil.tankDrive(0.2, 0.2);
+        if (Math.abs(driveUtil.getleftPosition()) >= Math.abs(encoderSetpoint) - Constants.DRIVER_DEADBAND
+            && Math.abs(driveUtil.getleftPosition()) <= Math.abs(encoderSetpoint) + Constants.DRIVER_DEADBAND){
+            driveUtil.tankDrive(0, 0);
+            done = true;
+            return;
+        }
+
+        if (forward){
+            driveUtil.tankDrive(Constants.AUTO_DRIVE_SPEED, -Constants.AUTO_DRIVE_SPEED);
+        } else {
+            driveUtil.tankDrive(-Constants.AUTO_DRIVE_SPEED, Constants.AUTO_DRIVE_SPEED);
+        }
     }
 
     @Override
@@ -33,7 +53,6 @@ public class driveForDistanceNoPID extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return !driveUtil.getMoving() && driveUtil.getleftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getleftPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND
-        && driveUtil.getrightPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getrightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND;
+        return done;
     }
 }
