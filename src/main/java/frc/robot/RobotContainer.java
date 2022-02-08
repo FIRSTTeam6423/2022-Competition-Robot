@@ -15,12 +15,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
 import frc.robot.commands.OperateSensor;
 import frc.robot.commands.OperateCargo;
-import frc.robot.commands.autoCommands.DriveForTime;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
-import frc.robot.commands.autoCommands.DriveForDistance;
 import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
 
 /**
@@ -56,9 +54,17 @@ public class RobotContainer {
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
-  public DriveForTime driveFor5SecondsCommand;
-  public DriveForDistance driveFor60InchesCommand;
-  public DriveForDistanceNoPID drive60InchesNoPIDCommand;
+
+  /**
+   * It isn't necessary to create class-scope Command objects for your autonomous
+   * commands. You can instead use a SendableChooser to store your autonomous
+   * options. Then, the drive team selects which command to run through the
+   * SmartDashboard.
+   */
+  // public DriveForTime driveFor5SecondsCommand;
+  // public DriveForDistance driveFor60InchesCommand;
+  // public DriveForDistanceNoPID drive60InchesNoPIDCommand;
+  private SendableChooser<Command> chooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,9 +82,17 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    driveFor5SecondsCommand = new DriveForTime(driveUtil, 5);
-    driveFor60InchesCommand = new DriveForDistance(driveUtil, 60);
-    drive60InchesNoPIDCommand = new DriveForDistanceNoPID(driveUtil, 60);
+    /**
+     * The first line sets the default command to "Drive 60 Inchse No PID". If the
+     * driver dosen't make any changes, this is what will run. They can also select
+     * "Drive for 120 Inches No PID". You can add as many options as you'd like.
+     */
+    chooser.setDefaultOption("Drive 60 Inches No PID", new DriveForDistanceNoPID(driveUtil, 60));
+    chooser.addOption("Drive for 120 Inches No PID", new DriveForDistanceNoPID(driveUtil, 120));
+    SmartDashboard.putData("Autonomous Command", chooser);
+    // driveFor5SecondsCommand = new DriveForTime(driveUtil, 5);
+    // driveFor60InchesCommand = new DriveForDistance(driveUtil, 60);
+    // drive60InchesNoPIDCommand = new DriveForDistanceNoPID(driveUtil, 60);
   }
 
   /**
@@ -121,7 +135,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     System.out.println("Autocommand works :)");
-    return drive60InchesNoPIDCommand;
+    // return drive60InchesNoPIDCommand;
+    /**
+     * Rather than hard-coding the command that will be run, you can get the chosen
+     * command from the SendableChooser.
+     */
+    return chooser.getSelected();
   }
 
   private void configureDefaultCommands(){
