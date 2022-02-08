@@ -8,7 +8,7 @@ public class DriveForDistanceNoPID extends CommandBase {
     private DriveUtil driveUtil;
     private double targetTicks;
     private boolean forward;
-    private boolean done = false;
+    private boolean done;
 
     public DriveForDistanceNoPID(DriveUtil driveUtil, double distanceToDrive) {
         this.driveUtil = driveUtil;
@@ -18,6 +18,11 @@ public class DriveForDistanceNoPID extends CommandBase {
 
     @Override
     public void initialize() {
+        // Done must be initialized to false here rather than up on line 11.
+        // If this command is run more than once per robot boot (i.e. during testing), the done value needs to be reset after it was previously run.
+        // This would never happen in a match, since autonomous commands are only run once.
+        // However, during testing, you could need to run a command multiple times to test it. This is an edge case we have to handle!
+        done = false;
         // This method in DriveUtil sets the position of the encoders to 0.
         // This assures you the encoder values start from 0, and you don't have to adjust for the starting position.
         driveUtil.resetEncoders();
