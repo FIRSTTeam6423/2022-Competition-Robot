@@ -20,8 +20,8 @@ import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
-import frc.robot.commands.autoCommands.driveForTime;
-import frc.robot.commands.autoCommands.driveForAngle;
+import frc.robot.commands.autoCommands.driveForDistance;
+import frc.robot.commands.autoCommands.driveForDistanceNoPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,7 +57,8 @@ public class RobotContainer {
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
   public driveForTime driveFor5SecondsCommand;
-  public driveForAngle turn90DegreesCommand;
+  public driveForDistance driveFor60InchesCommand;
+  public driveForDistanceNoPID drive60InchesNoPIDCommand;
 
   private SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -77,11 +78,17 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    //driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
-    //turn90DegreesCommand = new driveForAngle(driveUtil, 90);
+    driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
+    driveFor60InchesCommand = new driveForDistance(driveUtil, 60);
 
-    chooser.setDefaultOption("Turn 90 Degrees Left", new driveForAngle(driveUtil, sensorUtil, -90));
-    chooser.addOption("Turn 60 Degrees Right", new driveForAngle(driveUtil, sensorUtil, 60));
+    chooser.addOption("Drive 24 Inches Forward No PID", new driveForDistanceNoPID(driveUtil, 24));
+    chooser.setDefaultOption("Drive 60 Inches Forward No PID", new driveForDistanceNoPID(driveUtil, 60));
+    chooser.addOption("Drive 120 Inches Forward No PID", new driveForDistanceNoPID(driveUtil, 120));
+
+    chooser.addOption("Drive 24 Inches Backward No PID", new driveForDistanceNoPID(driveUtil, -24));
+    chooser.setDefaultOption("Drive 60 Backward Forward No PID", new driveForDistanceNoPID(driveUtil, -60));
+    chooser.addOption("Drive 120 Inches Backward No PID", new driveForDistanceNoPID(driveUtil, -120));
+
     SmartDashboard.putData("Autonomous Command", chooser);
   }
 
@@ -124,14 +131,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    System.out.println(chooser.getSelected());
     return chooser.getSelected();
   }
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
     sensorUtil.setDefaultCommand(operateSensor);
-     cargoUtil.setDefaultCommand(operateCargo);
+    cargoUtil.setDefaultCommand(operateCargo);
   }
 
   public static double getDriverLeftXboxX(){
