@@ -4,10 +4,16 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.*;
+import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,24 +30,13 @@ public class DriveUtil extends SubsystemBase {
 
     private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
 
+    private double damp;
+
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
         rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
         rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
-
-        leftDriverPIDController = leftPrimary.getPIDController();
-        rightDriverPIDController = rightPrimary.getPIDController();
-
-        leftPrimaryEncoder = leftPrimary.getEncoder();
-        leftSecondaryEncoder = leftSecondary.getEncoder();
-        rightPrimaryEncoder = rightPrimary.getEncoder();
-        rightSecondaryEncoder = rightSecondary.getEncoder();
-
-        leftPrimaryEncoder.setPosition(0);
-        leftSecondaryEncoder.setPosition(0);
-        rightPrimaryEncoder.setPosition(0);
-        rightSecondaryEncoder.setPosition(0);
 
         leftPrimaryEncoder.setPositionConversionFactor(4096);
         leftSecondaryEncoder.setPositionConversionFactor(4096);
@@ -65,22 +60,28 @@ public class DriveUtil extends SubsystemBase {
 
         setpoint = 0;
 
-        // Invert secondaries (since they're on the opposite side of the robot)
-        //leftSecondary.setInverted(true);
-        //rightSecondary.setInverted(true);
+        // Set secondaries to follow primaries
+        leftSecondary.follow(leftPrimary);
+        rightSecondary.follow(rightPrimary);
 
+        damp = 0.0;
+
+        // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     }
 
     /**
-     * Main function for driving the robot.
+     * Drive the robot based on the driveMode class parameter.
+     * If in TANK mode, use leftX and rightX values.
+     * If in ARCADE mode, use rightX and rightY values.
      * 
-     * Gets driver inputs in the function rather then
-     * having inputs passed in as parameters.
+     * The DifferentialDrive class will square inputs for us.
+     * Squaring inputs results in less sensitive inputs.
      * 
-     * Drives in either arcade, tank or curvature drive mode
-     * and uses the appropriate differential drive function to
-     * move.
+     * @param leftX the left controller's X (forward-backward) value
+     * @param leftY the left controller's Y (left-right) value
+     * @param rightX the right controller's X (forward-backward) value
+     * @param rightY the right controller's Y (left-right) value
      */
     public void driveRobot() {
         double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
@@ -92,39 +93,25 @@ public class DriveUtil extends SubsystemBase {
 
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
-            differentialDrive.arcadeDrive(-xboxLeftStickX, xboxRightStickY);
-
-        // tank drive
+        // If we're in ARCADE mode, use arcadeDrive
+        differentialDrive.arcadeDrive(RobotContainer.getDriverLeftXboxX(), -RobotContainer.getDriverRightXboxY());
         } else if (RobotContainer.driveType.getSelected().equals(RobotContainer.tank)) {
-            differentialDrive.tankDrive(xboxLeftStickY, -xboxRightStickY);
-
-        // curvature drive
+        // If we're in TANK mode, use tankDrive
+        differentialDrive.tankDrive(-RobotContainer.getDriverLeftXboxY(), RobotContainer.getDriverRightXboxY());
         } else {
-            // squaring the rotational input for additional precision;
-            // although while differentialDrive should do it for us
-            // drivers requested another one because turning felt imprecise
-            // to them; according to them it helped
-            double rotation = xboxLeftStickX;
-            boolean isNegative = rotation < 0;
+        // If we are in CURVATURE mode, use the curvature mode
+        double rotation = RobotContainer.getDriverLeftXboxX();
+        boolean isNegative = rotation < 0;
         
-            rotation *= rotation;
-            
-            if (isNegative)
-                rotation *= -1;
-
-            rotation *= 0.75;
-
-            differentialDrive.curvatureDrive(-rotation, xboxLeftTrigger - xboxRightTrigger, true);
+        rotation *= rotation;
+        if (isNegative){
+          rotation *= -1;
         }
-    }
+        rotation *= 0.75;
 
-    /**
-     * Wrapper for the tankdrive funtion
-     * Used for autos
-     * 
-     * @param leftSpeed  value passed into leftSpeed parameter of tankDrive function
-     * @param rightSpeed value passed into rightSpeed parameter of tankDrive function
-     */
+        differentialDrive.curvatureDrive(rotation, -RobotContainer.getDriverLeftXboxTrigger() + RobotContainer.getDriverRightXboxTrigger(), true);}
+      }
+    
     public void tankDrive(double leftSpeed, double rightSpeed) {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
@@ -171,6 +158,7 @@ public class DriveUtil extends SubsystemBase {
     
     @Override
     public void periodic() {
+        // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
         SmartDashboard.putNumber("Left Primary Encoder Ticks  ::  ", leftPrimaryEncoder.getPosition());
@@ -178,6 +166,6 @@ public class DriveUtil extends SubsystemBase {
         SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
         SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
         SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
-
     }
 }
+
