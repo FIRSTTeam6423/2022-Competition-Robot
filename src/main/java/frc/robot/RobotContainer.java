@@ -20,6 +20,7 @@ import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
+import frc.robot.commands.autoCommands.driveForBox;
 import frc.robot.commands.autoCommands.driveForDistance;
 import frc.robot.commands.autoCommands.driveForDistanceNoPID;
 
@@ -35,7 +36,7 @@ public class RobotContainer {
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
   private final ClimbUtil climbUtil = new ClimbUtil();
-  private final SensorUtil sensorUtil = new SensorUtil();
+  public static final SensorUtil sensorUtil = new SensorUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
   private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
@@ -88,6 +89,8 @@ public class RobotContainer {
     chooser.addOption("Drive 24 Inches Backward No PID", new driveForDistanceNoPID(driveUtil, -24));
     chooser.setDefaultOption("Drive 60 Backward Forward No PID", new driveForDistanceNoPID(driveUtil, -60));
     chooser.addOption("Drive 120 Inches Backward No PID", new driveForDistanceNoPID(driveUtil, -120));
+
+    chooser.addOption("Drive in box", new driveForBox(driveUtil, 36));
 
     SmartDashboard.putData("Autonomous Command", chooser);
   }
