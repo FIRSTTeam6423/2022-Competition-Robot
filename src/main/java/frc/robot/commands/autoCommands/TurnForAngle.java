@@ -3,7 +3,6 @@ package frc.robot.commands.autoCommands;
 import frc.robot.subsystems.DriveUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class TurnForAngle extends CommandBase {
     private DriveUtil driveUtil;
@@ -23,8 +22,8 @@ public class TurnForAngle extends CommandBase {
         // This assures you the encoder values start from 0, and you don't have to adjust for the starting position.
         // Determine whether we're supposed to drive forward or backward based on the sign of the targetTicks value.
         // If the value is positive, drive forward. If negative, drive backward!
-        RobotContainer.calibrateGyro();
-        RobotContainer.resetGyro();
+        driveUtil.calibrateGyro();
+        driveUtil.resetGyro();
 
         if (targetAngle < 0) {
             right = false;
@@ -42,7 +41,7 @@ public class TurnForAngle extends CommandBase {
         // we're done! Set `done = true` and turn the motors off.
         // We only need to check the left encoder since we're driving straight.
         // If you're turning, you would use the gyro to measure that properly.
-        if (Math.abs(RobotContainer.getGyroHeading()) >= Math.abs(targetAngle)) {
+        if (Math.abs(driveUtil.getHeading()) >= Math.abs(targetAngle)) {
             driveUtil.tankDrive(0, 0);
             done = true;
             return;
@@ -50,14 +49,14 @@ public class TurnForAngle extends CommandBase {
         if (right) {
             // Drive the robot using a constant speed set in Constants
             // It's useful to use a Constant value since you can easily change it while testing!
-            if (Math.abs(RobotContainer.getGyroHeading()) >= Math.abs(targetAngle) - Constants.AUTO_TURN_SPEED_DAMPENING){
+            if (Math.abs(driveUtil.getHeading()) >= Math.abs(targetAngle) - Constants.AUTO_TURN_SPEED_DAMPENING){
                 driveUtil.tankDrive(Constants.AUTO_TURN_SPEED * Constants.AUTO_TURN_SPEED_DAMPENING, Constants.AUTO_TURN_SPEED * Constants.AUTO_TURN_SPEED_DAMPENING);
             } else {
                 driveUtil.tankDrive(Constants.AUTO_TURN_SPEED, Constants.AUTO_TURN_SPEED);
             }
         } else {
             // If we're driving backwards, multiply the Constants value by -1!
-            if (Math.abs(RobotContainer.getGyroHeading()) >= Math.abs(targetAngle) - Constants.AUTO_TURN_SPEED_DAMPENING){
+            if (Math.abs(driveUtil.getHeading()) >= Math.abs(targetAngle) - Constants.AUTO_TURN_SPEED_DAMPENING){
                 driveUtil.tankDrive(-Constants.AUTO_TURN_SPEED * Constants.AUTO_TURN_SPEED_DAMPENING, -Constants.AUTO_TURN_SPEED * Constants.AUTO_TURN_SPEED_DAMPENING);
             } else {
                 driveUtil.tankDrive(-Constants.AUTO_TURN_SPEED, -Constants.AUTO_TURN_SPEED);

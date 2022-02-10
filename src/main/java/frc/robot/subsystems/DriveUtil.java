@@ -14,10 +14,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.revrobotics.SparkMaxPIDController;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
+
+    private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
     public double setpoint;
 
     // Drive controller
@@ -146,6 +151,29 @@ public class DriveUtil extends SubsystemBase {
         leftSecondaryEncoder.setPosition(0);
         rightPrimaryEncoder.setPosition(0);
         rightSecondaryEncoder.setPosition(0);
+    }
+
+    public double getHeading(){
+        return gyro.getYaw();
+    }
+
+    public void resetGyro(){
+        gyro.reset();
+    }
+
+    public void calibrateGyro(){
+        gyro.calibrate();
+    }
+
+    public void detectGyro(){
+        SmartDashboard.putNumber("Rate", gyro.getRate());
+        SmartDashboard.putNumber("Yaw", gyro.getYaw());
+        SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Roll", gyro.getRoll());
+        SmartDashboard.putNumber("Heading", gyro.getCompassHeading());
+        SmartDashboard.putNumber("LinearWorldAccelX", gyro.getWorldLinearAccelX());
+        SmartDashboard.putNumber("LinearWorldAccelY", gyro.getWorldLinearAccelY());
+        SmartDashboard.putNumber("LinearWorldAccelZ", gyro.getWorldLinearAccelZ());
     }
     
     @Override

@@ -21,6 +21,8 @@ public class OperateCargo extends CommandBase{
     @Override
     public void execute() {
         cargoUtil.OperateCargo();
+        cargoUtil.detectBallColor();
+        cargoUtil.detectBall();
     }
 
     // Called once the command ends or is interrupted.

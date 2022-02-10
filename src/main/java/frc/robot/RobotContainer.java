@@ -13,11 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateSensor;
 import frc.robot.commands.OperateCargo;
 import frc.robot.commands.autoCommands.DriveForTime;
 import frc.robot.subsystems.DriveUtil;
-import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
 import frc.robot.commands.autoCommands.DrivBoxPattern;
@@ -36,10 +34,8 @@ public class RobotContainer {
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
   private final ClimbUtil climbUtil = new ClimbUtil();
-  private static final SensorUtil sensorUtil = new SensorUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
   private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
 
   private static XboxController driver;
@@ -133,20 +129,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    sensorUtil.setDefaultCommand(operateSensor);
     cargoUtil.setDefaultCommand(operateCargo);
-  }
-
-  public static double getGyroHeading(){
-    return sensorUtil.getHeading();
-  }
-
-  public static void resetGyro(){
-    sensorUtil.resetGyro();
-  }
-
-  public static void calibrateGyro(){
-    sensorUtil.calibrateGyro();
   }
 
   public static double getDriverLeftXboxX(){

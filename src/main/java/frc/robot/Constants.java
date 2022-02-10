@@ -41,7 +41,7 @@ public final class Constants {
         public static final int LOW_INDEXER = 7;
         public static final int HIGH_INDEXER = 8;
         public static final int SHOOTER = 9;
-        public static final int LIMIT_SWTICH = 0;
+        public static final int LIMIT_SWTICH = 1;
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 0.4;
