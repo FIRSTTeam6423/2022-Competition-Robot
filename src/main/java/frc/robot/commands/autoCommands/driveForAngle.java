@@ -52,8 +52,8 @@ public class driveForAngle extends CommandBase {
         if (right) {
             // Drive the robot using a constant speed set in Constants
             // It's useful to use a Constant value since you can easily change it while testing!
-            if (Math.abs(sensorUtil.getHeading()) >= Math.abs(targetAngle) - 10){
-                driveUtil.tankDrive(Constants.AUTO_TURN_SPEED - 0.5, Constants.AUTO_TURN_SPEED - 0.5);
+            if (Math.abs(sensorUtil.getHeading()) >= Math.abs(targetAngle) - 15){
+                driveUtil.tankDrive(Constants.AUTO_TURN_SPEED * 0.6, Constants.AUTO_TURN_SPEED * 0.6);
             } else {
                 driveUtil.tankDrive(Constants.AUTO_TURN_SPEED, Constants.AUTO_TURN_SPEED);
             }
