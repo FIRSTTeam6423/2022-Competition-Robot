@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -37,6 +38,14 @@ public class DriveUtil extends SubsystemBase {
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
         rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
         rightSecondary = new CANSparkMax(Constants.RIGHT_SECONDARY, MotorType.kBrushless);
+
+        leftPrimaryEncoder = leftPrimary.getEncoder();
+        leftSecondaryEncoder = leftSecondary.getEncoder();
+        rightPrimaryEncoder = rightPrimary.getEncoder();
+        rightSecondaryEncoder = rightSecondary.getEncoder();
+
+        leftDriverPIDController = leftPrimary.getPIDController();
+        rightDriverPIDController = rightPrimary.getPIDController();
 
         leftPrimaryEncoder.setPositionConversionFactor(4096);
         leftSecondaryEncoder.setPositionConversionFactor(4096);
@@ -113,7 +122,7 @@ public class DriveUtil extends SubsystemBase {
       }
     
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        differentialDrive.tankDrive(leftSpeed, rightSpeed);
+        differentialDrive.tankDrive(leftSpeed, -rightSpeed);
     }
 
     public void operateDistance(double distance){
