@@ -4,17 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.*;
-import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,8 +24,6 @@ public class DriveUtil extends SubsystemBase {
     private DifferentialDrive differentialDrive;
 
     private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
-
-    private double damp;
 
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
@@ -73,8 +65,6 @@ public class DriveUtil extends SubsystemBase {
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
 
-        damp = 0.0;
-
         // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     }
@@ -93,13 +83,6 @@ public class DriveUtil extends SubsystemBase {
      * @param rightY the right controller's Y (left-right) value
      */
     public void driveRobot() {
-        double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
-        double xboxLeftStickY = RobotContainer.getDriverLeftXboxY();
-        double xboxRightStickY = RobotContainer.getDriverRightXboxY();
-
-        double xboxLeftTrigger = RobotContainer.getDriverLeftXboxTrigger();
-        double xboxRightTrigger = RobotContainer.getDriverRightXboxTrigger();
-
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
         // If we're in ARCADE mode, use arcadeDrive

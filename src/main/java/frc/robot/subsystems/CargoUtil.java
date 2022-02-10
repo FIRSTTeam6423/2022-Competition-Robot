@@ -2,11 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants;
 import frc.robot.enums.CargoState;
 
@@ -32,7 +30,7 @@ public class CargoUtil extends SubsystemBase{
 
     
     Color detectedColor = m_colorSensor.getColor();
-    int proximity = m_colorSensor.getProximity();
+    //int proximity = m_colorSensor.getProximity();
 
     //Limit switch
     private DigitalInput limitSwitch;
@@ -52,40 +50,40 @@ public class CargoUtil extends SubsystemBase{
         limitSwitch = new DigitalInput(Constants.LIMIT_SWTICH);
     }
     
-    public void OperateBallMagnet(){
+    public void operateBallMagnet(){
         ballMagnet.set(ControlMode.PercentOutput, Constants.BALL_MAGNET_OUTPUT);
     }
 
-    public void StopBallMagent(){
+    public void stopBallMagent(){
         ballMagnet.set(ControlMode.PercentOutput, 0);
     }
 
-    public void OperateLowIndexer(){
+    public void operateLowIndexer(){
         lowIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
-    public void OperateHighIndexer(){
+    public void operateHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
-    public void StopLowIndexer(){
+    public void stopLowIndexer(){
         lowIndexer.set(ControlMode.PercentOutput, 0);
 
     }
-    public void StopHighIndexer(){
+    public void stopHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, 0);
     }
 
 
-    public void OperateShooter(){
+    public void operateShooter(){
         shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void StopShooter(){
+    public void stopShooter(){
         shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void SetState(CargoState newState){
+    public void setState(CargoState newState){
         state = newState;
 
     }
@@ -95,56 +93,56 @@ public class CargoUtil extends SubsystemBase{
             case INTAKE:
                 //Red ball detected
                 if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
-                    StopLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
+                    stopLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
                 //Blue ball detected
                 } else if (detectedColor.blue > 0.3){    
-                    StopLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
+                    stopLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
                 //No ball detected
                 } else {
-                    OperateBallMagnet();
-                    OperateLowIndexer();
-                    StopHighIndexer();
-                    StopShooter();
+                    operateBallMagnet();
+                    operateLowIndexer();
+                    stopHighIndexer();
+                    stopShooter();
                 }
                 break;
             case INDEX:
                 //Ball detected
                 if (limitSwitch.get()){
-                    StopLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
+                    stopLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
                 //No ball detected
                 } else {
-                    OperateLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
+                    operateLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
                 }
                 break;
             case SPINUP:
-                StopLowIndexer();
-                StopHighIndexer();
-                StopBallMagent();
-                OperateShooter();
+                stopLowIndexer();
+                stopHighIndexer();
+                stopBallMagent();
+                operateShooter();
                 break;
             case SHOOT:
-                StopLowIndexer();
-                StopBallMagent();
-                OperateHighIndexer();
-                OperateShooter();
+                stopLowIndexer();
+                stopBallMagent();
+                operateHighIndexer();
+                operateShooter();
                 break;
             case IDLE:
-                StopLowIndexer();
-                StopHighIndexer();
-                StopShooter();
-                StopBallMagent();
+                stopLowIndexer();
+                stopHighIndexer();
+                stopShooter();
+                stopBallMagent();
                 break;
         }
     }

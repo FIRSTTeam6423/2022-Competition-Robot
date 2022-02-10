@@ -26,9 +26,9 @@ public class OperateCargo extends CommandBase{
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        cargoUtil.StopBallMagent();
-        cargoUtil.StopLowIndexer();
-        cargoUtil.StopHighIndexer();
+        cargoUtil.stopBallMagent();
+        cargoUtil.stopLowIndexer();
+        cargoUtil.stopHighIndexer();
 
 
     }
