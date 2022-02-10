@@ -59,7 +59,11 @@ public class driveForAngle extends CommandBase {
             }
         } else {
             // If we're driving backwards, multiply the Constants value by -1!
-            driveUtil.tankDrive(Constants.AUTO_TURN_SPEED * -1, Constants.AUTO_TURN_SPEED * -1);
+            if (Math.abs(sensorUtil.getHeading()) >= Math.abs(targetAngle) - 15){
+                driveUtil.tankDrive(-Constants.AUTO_TURN_SPEED * 0.6, -Constants.AUTO_TURN_SPEED * 0.6);
+            } else {
+                driveUtil.tankDrive(-Constants.AUTO_TURN_SPEED, -Constants.AUTO_TURN_SPEED);
+            }
         }
     }
 

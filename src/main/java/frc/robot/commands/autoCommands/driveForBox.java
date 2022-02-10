@@ -19,11 +19,11 @@ public class driveForBox extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new driveForDistanceNoPID(du, sideLength),
-      new driveForAngle(du, RobotContainer.sensorUtil, 90),
+      new driveForAngle(du, RobotContainer.sensorUtil, -90),
       new driveForDistanceNoPID(du, sideLength),
-      new driveForAngle(du, RobotContainer.sensorUtil, 90),
+      new driveForAngle(du, RobotContainer.sensorUtil, -90),
       new driveForDistanceNoPID(du, sideLength),
-      new driveForAngle(du, RobotContainer.sensorUtil, 90),
+      new driveForAngle(du, RobotContainer.sensorUtil, -90),
       new driveForDistanceNoPID(du, sideLength)
     );
   }
