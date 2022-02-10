@@ -4,34 +4,31 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.*;
-import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.revrobotics.SparkMaxPIDController;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 public class DriveUtil extends SubsystemBase {
     private CANSparkMax leftPrimary, leftSecondary, rightPrimary, rightSecondary; 
     private RelativeEncoder leftPrimaryEncoder, leftSecondaryEncoder, rightPrimaryEncoder, rightSecondaryEncoder;
+
+    private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
     public double setpoint;
 
     // Drive controller
     private DifferentialDrive differentialDrive;
 
     private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
-
-    private double damp;
 
     public DriveUtil() {
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
@@ -73,8 +70,6 @@ public class DriveUtil extends SubsystemBase {
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
 
-        damp = 0.0;
-
         // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
     }
@@ -93,13 +88,6 @@ public class DriveUtil extends SubsystemBase {
      * @param rightY the right controller's Y (left-right) value
      */
     public void driveRobot() {
-        double xboxLeftStickX = RobotContainer.getDriverLeftXboxX();
-        double xboxLeftStickY = RobotContainer.getDriverLeftXboxY();
-        double xboxRightStickY = RobotContainer.getDriverRightXboxY();
-
-        double xboxLeftTrigger = RobotContainer.getDriverLeftXboxTrigger();
-        double xboxRightTrigger = RobotContainer.getDriverRightXboxTrigger();
-
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
         // If we're in ARCADE mode, use arcadeDrive
@@ -163,6 +151,29 @@ public class DriveUtil extends SubsystemBase {
         leftSecondaryEncoder.setPosition(0);
         rightPrimaryEncoder.setPosition(0);
         rightSecondaryEncoder.setPosition(0);
+    }
+
+    public double getHeading(){
+        return gyro.getYaw();
+    }
+
+    public void resetGyro(){
+        gyro.reset();
+    }
+
+    public void calibrateGyro(){
+        gyro.calibrate();
+    }
+
+    public void detectGyro(){
+        SmartDashboard.putNumber("Rate", gyro.getRate());
+        SmartDashboard.putNumber("Yaw", gyro.getYaw());
+        SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Roll", gyro.getRoll());
+        SmartDashboard.putNumber("Heading", gyro.getCompassHeading());
+        SmartDashboard.putNumber("LinearWorldAccelX", gyro.getWorldLinearAccelX());
+        SmartDashboard.putNumber("LinearWorldAccelY", gyro.getWorldLinearAccelY());
+        SmartDashboard.putNumber("LinearWorldAccelZ", gyro.getWorldLinearAccelZ());
     }
     
     @Override

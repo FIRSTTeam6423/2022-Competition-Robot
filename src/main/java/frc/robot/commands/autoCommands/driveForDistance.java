@@ -4,12 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.Constants;
 
-public class driveForDistance extends CommandBase{
+public class DriveForDistance extends CommandBase{
     DriveUtil driveUtil;
     double distanceToDrive;
     private double encoderSetpoint;
+    private boolean done;
     
-    public driveForDistance(DriveUtil du, double distanceToDrive) {
+    public DriveForDistance(DriveUtil du, double distanceToDrive) {
         this.driveUtil = du;
         this.distanceToDrive = distanceToDrive * Constants.TICKS_PER_INCH;
         addRequirements(this.driveUtil);
@@ -17,12 +18,21 @@ public class driveForDistance extends CommandBase{
 
     @Override
     public void initialize() {
+        done = false;
         encoderSetpoint = driveUtil.getPosition() + distanceToDrive;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        if (!driveUtil.getMoving() && driveUtil.getleftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
+            driveUtil.getleftPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND && 
+            driveUtil.getrightPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
+            driveUtil.getrightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND){
+                driveUtil.stopDistance();
+                done = true;
+                return;
+            }
         driveUtil.operateDistance(encoderSetpoint);
     }
 
@@ -33,7 +43,6 @@ public class driveForDistance extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return !driveUtil.getMoving() && driveUtil.getleftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getleftPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND
-        && driveUtil.getrightPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && driveUtil.getrightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND;
+        return done;
     }
 }

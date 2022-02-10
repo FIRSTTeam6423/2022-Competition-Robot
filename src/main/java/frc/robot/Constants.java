@@ -22,6 +22,8 @@ public final class Constants {
         public static final int RIGHT_SECONDARY = 4;
 
         public static final double AUTO_TURN_SPEED = 0.3;
+        public static final double AUTO_TURN_SPEED_DAMPENING = 0.6;
+        public static final double AUTO_TURN_SLOWDOWN_RANGE = 15;
 
         public static final double TICKS_PER_INCH = 2267.4512;
         public static final double AUTO_DRIVE_SPEED = 0.3;
@@ -39,7 +41,7 @@ public final class Constants {
         public static final int LOW_INDEXER = 7;
         public static final int HIGH_INDEXER = 8;
         public static final int SHOOTER = 9;
-        public static final int LIMIT_SWTICH = 0;
+        public static final int LIMIT_SWTICH = 1;
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 0.4;

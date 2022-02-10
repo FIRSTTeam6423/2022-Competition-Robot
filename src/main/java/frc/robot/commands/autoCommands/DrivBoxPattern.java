@@ -5,26 +5,24 @@
 package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveUtil;
-import frc.robot.subsystems.SensorUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class driveForBox extends SequentialCommandGroup {
+public class DrivBoxPattern extends SequentialCommandGroup {
   /** Creates a new Box. */
-  public driveForBox(DriveUtil du, double sideLength) {
+  public DrivBoxPattern(DriveUtil du, double sideLength) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new driveForDistanceNoPID(du, sideLength),
-      new driveForAngle(du, RobotContainer.sensorUtil, -90),
-      new driveForDistanceNoPID(du, sideLength),
-      new driveForAngle(du, RobotContainer.sensorUtil, -90),
-      new driveForDistanceNoPID(du, sideLength),
-      new driveForAngle(du, RobotContainer.sensorUtil, -90),
-      new driveForDistanceNoPID(du, sideLength)
+      new DriveForDistanceNoPID(du, sideLength),
+      new TurnForAngle(du, -90),
+      new DriveForDistanceNoPID(du, sideLength),
+      new TurnForAngle(du, -90),
+      new DriveForDistanceNoPID(du, sideLength),
+      new TurnForAngle(du, -90),
+      new DriveForDistanceNoPID(du, sideLength)
     );
   }
 }
