@@ -2,11 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants;
 import frc.robot.enums.CargoState;
 
@@ -32,7 +30,7 @@ public class CargoUtil extends SubsystemBase{
 
     
     Color detectedColor = m_colorSensor.getColor();
-    int proximity = m_colorSensor.getProximity();
+    //int proximity = m_colorSensor.getProximity();
 
     //Limit switch
     private DigitalInput limitSwitch;
@@ -52,109 +50,44 @@ public class CargoUtil extends SubsystemBase{
         limitSwitch = new DigitalInput(Constants.LIMIT_SWTICH);
     }
     
-    public void OperateBallMagnet(){
+    public void operateBallMagnet(){
         ballMagnet.set(ControlMode.PercentOutput, Constants.BALL_MAGNET_OUTPUT);
     }
 
-    public void StopBallMagent(){
+    public void stopBallMagent(){
         ballMagnet.set(ControlMode.PercentOutput, 0);
     }
 
-    public void OperateLowIndexer(){
+    public void operateLowIndexer(){
         lowIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
-    public void OperateHighIndexer(){
+    public void operateHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
-    public void StopLowIndexer(){
+    public void stopLowIndexer(){
         lowIndexer.set(ControlMode.PercentOutput, 0);
 
     }
-    public void StopHighIndexer(){
+    public void stopHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, 0);
     }
 
 
-    public void OperateShooter(){
+    public void operateShooter(){
         shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void StopShooter(){
+    public void stopShooter(){
         shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void SetState(CargoState newState){
+    public void setState(CargoState newState){
         state = newState;
 
     }
-  
-    public void OperateCargo(){
-        switch(state){
-            case INTAKE:
-                //Red ball detected
-                if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
-                    StopLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
-                //Blue ball detected
-                } else if (detectedColor.blue > 0.3){    
-                    StopLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
-                //No ball detected
-                } else {
-                    OperateBallMagnet();
-                    OperateLowIndexer();
-                    StopHighIndexer();
-                    StopShooter();
-                }
-                break;
-            case INDEX:
-                //Ball detected
-                if (limitSwitch.get()){
-                    StopLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
-                //No ball detected
-                } else {
-                    OperateLowIndexer();
-                    StopHighIndexer();
-                    StopBallMagent();
-                    StopShooter();
-                }
-                break;
-            case SPINUP:
-                StopLowIndexer();
-                StopHighIndexer();
-                StopBallMagent();
-                OperateShooter();
-                break;
-            case SHOOT:
-                StopLowIndexer();
-                StopBallMagent();
-                OperateHighIndexer();
-                OperateShooter();
-                break;
-            case IDLE:
-                StopLowIndexer();
-                StopHighIndexer();
-                StopShooter();
-                StopBallMagent();
-                break;
-        }
-    }
 
-  /** 
-     * Constantly check the rgb values read by the color sensor
-     * If they match the values of red cargo, display "RED" on the dashboard
-     * If they match the values of blue cargo, display "BLUE" on the dashboard
-     * If the rgb values match neither types of cargo, display "NO COLOR DETECTED" on the dashboard
-    */
     public void detectBallColor(){
         if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
             SmartDashboard.putString("color detected", "RED");
@@ -163,7 +96,73 @@ public class CargoUtil extends SubsystemBase{
         } else {
             SmartDashboard.putString("color detected", "NO COLOR DETECTED");
         }
+    }
 
+    public void detectBall(){
+        if (limitSwitch.get()){
+            SmartDashboard.putString("ball detected", "BALL DETECTED");
+        } else {
+            SmartDashboard.putString("ball detected", "NO BALLs DETECTED");
+        }
+    }
+  
+    public void OperateCargo(){
+        switch(state){
+            case INTAKE:
+                //Red ball detected
+                if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+                    stopLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
+                //Blue ball detected
+                } else if (detectedColor.blue > 0.3){    
+                    stopLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
+                //No ball detected
+                } else {
+                    operateBallMagnet();
+                    operateLowIndexer();
+                    stopHighIndexer();
+                    stopShooter();
+                }
+                break;
+            case INDEX:
+                //Ball detected
+                if (limitSwitch.get()){
+                    stopLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
+                //No ball detected
+                } else {
+                    operateLowIndexer();
+                    stopHighIndexer();
+                    stopBallMagent();
+                    stopShooter();
+                }
+                break;
+            case SPINUP:
+                stopLowIndexer();
+                stopHighIndexer();
+                stopBallMagent();
+                operateShooter();
+                break;
+            case SHOOT:
+                stopLowIndexer();
+                stopBallMagent();
+                operateHighIndexer();
+                operateShooter();
+                break;
+            case IDLE:
+                stopLowIndexer();
+                stopHighIndexer();
+                stopShooter();
+                stopBallMagent();
+                break;
+        }
     }
     
     @Override

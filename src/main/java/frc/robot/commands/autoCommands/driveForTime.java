@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.DriveUtil;
 
-public class driveForTime extends CommandBase {
+public class DriveForTime extends CommandBase {
     DriveUtil driveUtil;
     Timer timer;
     int timeToDrive;
 
     
-    public driveForTime(DriveUtil du, int timeToDrive) {
+    public DriveForTime(DriveUtil du, int timeToDrive) {
         this.timeToDrive = timeToDrive;
         this.driveUtil = du;
         addRequirements(this.driveUtil);
@@ -30,7 +30,8 @@ public class driveForTime extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveUtil.tankDrive(1, 1);
+        driveUtil.tankDrive(.5, -.5);
+        System.out.println("Drive for time works");
     }
 
     @Override

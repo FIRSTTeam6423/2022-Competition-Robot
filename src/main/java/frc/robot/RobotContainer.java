@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateSensor;
 import frc.robot.commands.OperateCargo;
-import frc.robot.commands.autoCommands.driveForTime;
+import frc.robot.commands.autoCommands.DriveForTime;
 import frc.robot.subsystems.DriveUtil;
-import frc.robot.subsystems.SensorUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
-import frc.robot.commands.autoCommands.driveForTime;
+import frc.robot.commands.autoCommands.DrivBoxPattern;
+import frc.robot.commands.autoCommands.DriveForDistance;
+import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -34,14 +34,12 @@ public class RobotContainer {
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
   private final ClimbUtil climbUtil = new ClimbUtil();
-  private final SensorUtil sensorUtil = new SensorUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateSensor operateSensor = new OperateSensor(sensorUtil);
   private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
 
-  public static XboxController driver;
-  public static XboxController operator;
+  private static XboxController driver;
+  private static XboxController operator;
 
   /**
    * Added a new object - JoystickButton
@@ -55,7 +53,8 @@ public class RobotContainer {
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
-  public driveForTime driveFor5SecondsCommand;
+
+  private SendableChooser<Command> chooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -73,7 +72,17 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    driveFor5SecondsCommand = new driveForTime(driveUtil, 5);
+    chooser.addOption("Drive 24 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 24));
+    chooser.setDefaultOption("Drive 60 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 60));
+    chooser.addOption("Drive 120 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 120));
+
+    chooser.addOption("Drive 24 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -24));
+    chooser.addOption("Drive 60 Backward Forward No PID", new DriveForDistanceNoPID(driveUtil, -60));
+    chooser.addOption("Drive 120 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -120));
+
+    chooser.addOption("Drive in box", new DrivBoxPattern(driveUtil, 36));
+
+    SmartDashboard.putData("Autonomous Command", chooser);
   }
 
   /**
@@ -115,13 +124,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return driveFor5SecondsCommand;
+    return chooser.getSelected();
   }
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    sensorUtil.setDefaultCommand(operateSensor);
-     cargoUtil.setDefaultCommand(operateCargo);
+    cargoUtil.setDefaultCommand(operateCargo);
   }
 
   public static double getDriverLeftXboxX(){
