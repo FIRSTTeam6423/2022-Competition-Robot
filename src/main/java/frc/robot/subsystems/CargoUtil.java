@@ -89,6 +89,8 @@ public class CargoUtil extends SubsystemBase{
     }
 
     public void detectBallColor(){
+        detectedColor = m_colorSensor.getColor();
+
         if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
             SmartDashboard.putString("color detected", "RED");
         } else if (detectedColor.blue > 0.3){
@@ -96,6 +98,7 @@ public class CargoUtil extends SubsystemBase{
         } else {
             SmartDashboard.putString("color detected", "NO COLOR DETECTED");
         }
+        SmartDashboard.putNumber("red", detectedColor.red);
     }
 
     public void detectBall(){

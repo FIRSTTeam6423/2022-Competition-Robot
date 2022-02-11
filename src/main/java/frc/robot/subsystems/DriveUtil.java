@@ -52,7 +52,7 @@ public class DriveUtil extends SubsystemBase {
         leftSecondary.follow(leftPrimary);
         rightSecondary.follow(rightPrimary);
 
-        rightPrimary.setInverted(true);
+        rightPrimary.setInverted(false);
 
         leftDriverPIDController.setP(Constants.DRIVER_P);
         leftDriverPIDController.setI(Constants.DRIVER_I);
@@ -91,7 +91,7 @@ public class DriveUtil extends SubsystemBase {
         // arcade drive
         if (RobotContainer.driveType.getSelected().equals(RobotContainer.arcade)) {
         // If we're in ARCADE mode, use arcadeDrive
-        differentialDrive.arcadeDrive(RobotContainer.getDriverLeftXboxX(), -RobotContainer.getDriverRightXboxY());
+        differentialDrive.arcadeDrive(RobotContainer.getDriverRightXboxX(), -RobotContainer.getDriverRightXboxY());
         } else if (RobotContainer.driveType.getSelected().equals(RobotContainer.tank)) {
         // If we're in TANK mode, use tankDrive
         differentialDrive.tankDrive(-RobotContainer.getDriverLeftXboxY(), RobotContainer.getDriverRightXboxY());
