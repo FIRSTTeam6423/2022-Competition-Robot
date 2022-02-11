@@ -110,7 +110,7 @@ public class DriveUtil extends SubsystemBase {
       }
     
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        differentialDrive.tankDrive(leftSpeed, -rightSpeed);
+        differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
 
     public void operateDistance(double distance){
