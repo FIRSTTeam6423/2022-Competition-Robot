@@ -110,7 +110,7 @@ public class RobotContainer {
      * Careful what you choose!
      * 
      */
-    toggleClimb = new JoystickButton(operator, Button.kY.value);
+    toggleClimb = new JoystickButton(operator, Button.kLeftBumper.value);
 
     /**
      * Could have done this any number of ways, a real command or an instant command.
