@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateCargo;
+import frc.robot.commands.OperateCargoIntake;
+import frc.robot.commands.OperateCargoShoot;
 import frc.robot.commands.autoCommands.DriveForTime;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
@@ -36,7 +37,8 @@ public class RobotContainer {
   private final ClimbUtil climbUtil = new ClimbUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
+  private final OperateCargoIntake operateCargoIntake = new OperateCargoIntake(cargoUtil);
+  private final OperateCargoShoot operateCargoShoot = new OperateCargoShoot(cargoUtil);
 
   private static XboxController driver;
   private static XboxController operator;
@@ -134,7 +136,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoUtil.setDefaultCommand(operateCargo);
+    cargoUtil.setDefaultCommand(operateCargoIntake);
+    cargoUtil.setDefaultCommand(operateCargoShoot);
   }
 
   public static double getDriverLeftXboxX(){

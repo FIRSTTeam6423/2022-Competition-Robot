@@ -122,6 +122,16 @@ public class CargoUtil extends SubsystemBase{
         return color;
     }
 
+    public boolean detectLowerBall(){
+        boolean color = false;
+        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+            color = true;
+        } else if (detectedColor.blue > 0.3){
+            color = true; 
+        }
+        return color;
+    }
+
     public void showUpperBall(){
         if (limitSwitch.get()){
             SmartDashboard.putString("ball detected", "BALL DETECTED");
