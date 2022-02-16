@@ -46,6 +46,8 @@ public final class Constants {
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 0.4;
         public static final double SHOOTER_RPM = 3000.0;
+        public static final double SHOOTER_RPM_DEADBAND = 100.0;
+        public static final double SHOOT_TIME = 0.5;
 
         public static final double SHOOTER_P = 0.0;
         public static final double SHOOTER_I = 0.0;

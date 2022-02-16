@@ -9,6 +9,7 @@ import frc.robot.Constants;
 import frc.robot.enums.CargoState;
 
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -22,6 +23,7 @@ public class CargoUtil extends SubsystemBase{
     private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
     private CargoState state = CargoState.IDLE;
     private CANSparkMax shooter;
+    private RelativeEncoder shooterEncoder;
     private SparkMaxPIDController shooterPIDController; 
 
     //Color detector
@@ -40,6 +42,7 @@ public class CargoUtil extends SubsystemBase{
         lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
         highIndexer = new WPI_TalonSRX(Constants.HIGH_INDEXER);
         shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
+        shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
 
         shooterPIDController.setP(Constants.SHOOTER_P);
@@ -52,6 +55,10 @@ public class CargoUtil extends SubsystemBase{
     
     public void operateBallMagnet(){
         ballMagnet.set(ControlMode.PercentOutput, Constants.BALL_MAGNET_OUTPUT);
+    }
+
+    public void reverseBallMagnet(){
+        ballMagnet.set(ControlMode.PercentOutput, -Constants.BALL_MAGNET_OUTPUT);
     }
 
     public void stopBallMagent(){
@@ -78,6 +85,10 @@ public class CargoUtil extends SubsystemBase{
     public void operateShooter(){
         shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
     }
+    
+    public double getShooterRPM(){
+        return shooterEncoder.getVelocity();
+    }
 
     public void stopShooter(){
         shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
@@ -88,7 +99,7 @@ public class CargoUtil extends SubsystemBase{
 
     }
 
-    public void detectBallColor(){
+    public void showLowerBallColor(){
         detectedColor = m_colorSensor.getColor();
 
         if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
@@ -101,51 +112,51 @@ public class CargoUtil extends SubsystemBase{
         SmartDashboard.putNumber("red", detectedColor.red);
     }
 
-    public void detectBall(){
+    public String detectLowerBallColor(){
+        String color = "";
+        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+            color = "RED";
+        } else if (detectedColor.blue > 0.3){
+            color = "BLUE"; 
+        }
+        return color;
+    }
+
+    public boolean detectLowerBall(){
+        boolean color = false;
+        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+            color = true;
+        } else if (detectedColor.blue > 0.3){
+            color = true; 
+        }
+        return color;
+    }
+
+    public void showUpperBall(){
         if (limitSwitch.get()){
             SmartDashboard.putString("ball detected", "BALL DETECTED");
         } else {
             SmartDashboard.putString("ball detected", "NO BALLs DETECTED");
         }
     }
+
+    public boolean detectUpperBall(){
+        return limitSwitch.get();
+    }
   
     public void OperateCargo(){
         switch(state){
             case INTAKE:
-                //Red ball detected
-                if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
-                    stopLowIndexer();
-                    stopHighIndexer();
-                    stopBallMagent();
-                    stopShooter();
-                //Blue ball detected
-                } else if (detectedColor.blue > 0.3){    
-                    stopLowIndexer();
-                    stopHighIndexer();
-                    stopBallMagent();
-                    stopShooter();
-                //No ball detected
-                } else {
-                    operateBallMagnet();
-                    operateLowIndexer();
-                    stopHighIndexer();
-                    stopShooter();
-                }
+                operateBallMagnet();
+                stopLowIndexer();
+                stopHighIndexer();
+                stopShooter();
                 break;
             case INDEX:
-                //Ball detected
-                if (limitSwitch.get()){
-                    stopLowIndexer();
-                    stopHighIndexer();
-                    stopBallMagent();
-                    stopShooter();
-                //No ball detected
-                } else {
-                    operateLowIndexer();
-                    stopHighIndexer();
-                    stopBallMagent();
-                    stopShooter();
-                }
+                operateLowIndexer();
+                stopHighIndexer();
+                stopBallMagent();
+                stopShooter();
                 break;
             case SPINUP:
                 stopLowIndexer();
@@ -165,6 +176,11 @@ public class CargoUtil extends SubsystemBase{
                 stopShooter();
                 stopBallMagent();
                 break;
+            case SPIT:
+                stopLowIndexer();
+                stopHighIndexer();
+                stopShooter();
+                reverseBallMagnet();
         }
     }
     

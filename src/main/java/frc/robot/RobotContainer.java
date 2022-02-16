@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateCargo;
+import frc.robot.commands.OperateCargoIntake;
+import frc.robot.commands.OperateCargoShoot;
 import frc.robot.commands.autoCommands.DriveForTime;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
@@ -36,7 +37,8 @@ public class RobotContainer {
   private final ClimbUtil climbUtil = new ClimbUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
+  private final OperateCargoIntake operateCargoIntake = new OperateCargoIntake(cargoUtil);
+  private final OperateCargoShoot operateCargoShoot = new OperateCargoShoot(cargoUtil);
 
   private static XboxController driver;
   private static XboxController operator;
@@ -50,15 +52,15 @@ public class RobotContainer {
 
   public static SendableChooser<Byte> driveType;
   public static SendableChooser<Byte> noobMode;
+  public static SendableChooser<String> teamColorChooser; 
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
 
-  private SendableChooser<Command> chooser = new SendableChooser<>();
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
     operator = new XboxController(Constants.XBOX_OPERATOR);
     driver = new XboxController(Constants.XBOX_DRIVER);
 
@@ -72,17 +74,22 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    chooser.addOption("Drive 24 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 24));
-    chooser.setDefaultOption("Drive 60 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 60));
-    chooser.addOption("Drive 120 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 120));
+    autoChooser.addOption("Drive 24 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 24));
+    autoChooser.setDefaultOption("Drive 60 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 60));
+    autoChooser.addOption("Drive 120 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 120));
 
-    chooser.addOption("Drive 24 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -24));
-    chooser.addOption("Drive 60 Backward Forward No PID", new DriveForDistanceNoPID(driveUtil, -60));
-    chooser.addOption("Drive 120 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -120));
+    autoChooser.addOption("Drive 24 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -24));
+    autoChooser.addOption("Drive 60 Backward Forward No PID", new DriveForDistanceNoPID(driveUtil, -60));
+    autoChooser.addOption("Drive 120 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -120));
 
-    chooser.addOption("Drive in box", new DrivBoxPattern(driveUtil, 36));
+    teamColorChooser = new SendableChooser<String>();
+    teamColorChooser.addOption("Red", "RED");
+    teamColorChooser.addOption("Blue", "BLUE");
+    SmartDashboard.putData("Team Color", teamColorChooser);
 
-    SmartDashboard.putData("Autonomous Command", chooser);
+    autoChooser.addOption("Drive in box", new DrivBoxPattern(driveUtil, 36));
+
+    SmartDashboard.putData("Autonomous Command", autoChooser);
   }
 
   /**
@@ -124,12 +131,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return chooser.getSelected();
+    return autoChooser.getSelected();
   }
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoUtil.setDefaultCommand(operateCargo);
+    cargoUtil.setDefaultCommand(operateCargoIntake);
+    cargoUtil.setDefaultCommand(operateCargoShoot);
   }
 
   public static double getDriverLeftXboxX(){
@@ -244,4 +252,8 @@ public class RobotContainer {
   public static boolean getOperatorRightStickButton(){
     return operator.getRightStickButton();
   }  
+
+  public static String getTeamColor(){
+    return teamColorChooser.getSelected();
+  }
 }
