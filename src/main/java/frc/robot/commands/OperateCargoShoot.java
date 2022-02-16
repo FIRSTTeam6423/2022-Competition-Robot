@@ -27,9 +27,8 @@ public class OperateCargoShoot extends CommandBase{
       if(rpm >= Constants.SHOOTER_RPM - Constants.SHOOTER_RPM_DEADBAND && 
         rpm <= Constants.SHOOTER_RPM + Constants.SHOOTER_RPM_DEADBAND)
       {
-        cu.setState(CargoState.SHOOT);
         if (RobotContainer.getOperatorRightBumper()){
-          cu.setState(CargoState.IDLE);
+          cu.setState(CargoState.SHOOT);
         }
       }
     }
