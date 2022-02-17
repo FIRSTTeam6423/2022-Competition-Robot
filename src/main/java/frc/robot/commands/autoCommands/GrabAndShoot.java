@@ -7,6 +7,7 @@ package frc.robot.commands.autoCommands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveUtil;
+import frc.robot.Constants;
 import frc.robot.subsystems.CargoUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -25,7 +26,7 @@ public class GrabAndShoot extends SequentialCommandGroup {
       new TurnForAngle(du, 180),
       new DriveForDistance(du, 80),
       new ParallelCommandGroup(
-        new DriveForTime(du, 3),
+        new DriveForTime(du, 3, Constants.AUTO_DRIVE_SPEED),
         new AutoSpinUp(cu)
       ),
       new AutoShoot(cu)
