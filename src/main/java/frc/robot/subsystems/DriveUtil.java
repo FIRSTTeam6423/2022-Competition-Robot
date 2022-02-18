@@ -16,7 +16,7 @@ import frc.robot.RobotContainer;
 import com.revrobotics.SparkMaxPIDController;
 import com.kauailabs.navx.frc.AHRS;
 
-//import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.SPI;
 
 public class DriveUtil extends SubsystemBase {
@@ -33,7 +33,7 @@ public class DriveUtil extends SubsystemBase {
     private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
 
     public DriveUtil() {
-        //CameraServer.startAutomaticCapture();
+        CameraServer.startAutomaticCapture();
         
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
