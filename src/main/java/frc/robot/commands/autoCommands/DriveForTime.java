@@ -12,10 +12,11 @@ public class DriveForTime extends CommandBase {
     DriveUtil driveUtil;
     Timer timer;
     int timeToDrive;
-
+    double speed;
     
-    public DriveForTime(DriveUtil du, int timeToDrive) {
+    public DriveForTime(DriveUtil du, int timeToDrive, double speed) {
         this.timeToDrive = timeToDrive;
+        this.speed = speed;
         this.driveUtil = du;
         addRequirements(this.driveUtil);
 
@@ -30,7 +31,7 @@ public class DriveForTime extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveUtil.tankDrive(.5, -.5);
+        driveUtil.tankDrive(speed, -speed);
         System.out.println("Drive for time works");
     }
 

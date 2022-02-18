@@ -16,6 +16,8 @@ import frc.robot.commands.OperateDrive;
 import frc.robot.commands.OperateCargoIntake;
 import frc.robot.commands.OperateCargoShoot;
 import frc.robot.commands.autoCommands.DriveForTime;
+import frc.robot.commands.autoCommands.GrabAndShoot;
+import frc.robot.commands.autoCommands.ShootThenLeave;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
@@ -74,20 +76,15 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    autoChooser.addOption("Drive 24 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 24));
-    autoChooser.setDefaultOption("Drive 60 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 60));
-    autoChooser.addOption("Drive 120 Inches Forward No PID", new DriveForDistanceNoPID(driveUtil, 120));
-
-    autoChooser.addOption("Drive 24 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -24));
-    autoChooser.addOption("Drive 60 Backward Forward No PID", new DriveForDistanceNoPID(driveUtil, -60));
-    autoChooser.addOption("Drive 120 Inches Backward No PID", new DriveForDistanceNoPID(driveUtil, -120));
+    autoChooser.setDefaultOption("Drive 40 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 40));
+    autoChooser.addOption("Drive 40 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -40));
+    autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
+    autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
 
     teamColorChooser = new SendableChooser<String>();
     teamColorChooser.addOption("Red", "RED");
     teamColorChooser.addOption("Blue", "BLUE");
     SmartDashboard.putData("Team Color", teamColorChooser);
-
-    autoChooser.addOption("Drive in box", new DrivBoxPattern(driveUtil, 36));
 
     SmartDashboard.putData("Autonomous Command", autoChooser);
   }
