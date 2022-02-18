@@ -15,6 +15,8 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.revrobotics.SparkMaxPIDController;
 import com.kauailabs.navx.frc.AHRS;
+
+//import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.SPI;
 
 public class DriveUtil extends SubsystemBase {
@@ -31,6 +33,8 @@ public class DriveUtil extends SubsystemBase {
     private SparkMaxPIDController leftDriverPIDController, rightDriverPIDController; 
 
     public DriveUtil() {
+        //CameraServer.startAutomaticCapture();
+        
         leftPrimary = new CANSparkMax(Constants.LEFT_PRIMARY, MotorType.kBrushless);
         leftSecondary = new CANSparkMax(Constants.LEFT_SECONDARY, MotorType.kBrushless);
         rightPrimary = new CANSparkMax(Constants.RIGHT_PRIMARY, MotorType.kBrushless);
@@ -166,14 +170,14 @@ public class DriveUtil extends SubsystemBase {
     }
 
     public void detectGyro(){
-        SmartDashboard.putNumber("Rate", gyro.getRate());
-        SmartDashboard.putNumber("Yaw", gyro.getYaw());
-        SmartDashboard.putNumber("Pitch", gyro.getPitch());
-        SmartDashboard.putNumber("Roll", gyro.getRoll());
-        SmartDashboard.putNumber("Heading", gyro.getCompassHeading());
-        SmartDashboard.putNumber("LinearWorldAccelX", gyro.getWorldLinearAccelX());
-        SmartDashboard.putNumber("LinearWorldAccelY", gyro.getWorldLinearAccelY());
-        SmartDashboard.putNumber("LinearWorldAccelZ", gyro.getWorldLinearAccelZ());
+        //SmartDashboard.putNumber("Rate", gyro.getRate());
+        //SmartDashboard.putNumber("Yaw", gyro.getYaw());
+        //SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        //SmartDashboard.putNumber("Roll", gyro.getRoll());
+        //SmartDashboard.putNumber("Heading", gyro.getCompassHeading());
+        //SmartDashboard.putNumber("LinearWorldAccelX", gyro.getWorldLinearAccelX());
+        //SmartDashboard.putNumber("LinearWorldAccelY", gyro.getWorldLinearAccelY());
+        //SmartDashboard.putNumber("LinearWorldAccelZ", gyro.getWorldLinearAccelZ());
     }
     
     @Override
@@ -181,11 +185,11 @@ public class DriveUtil extends SubsystemBase {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
-        SmartDashboard.putNumber("Left Primary Encoder Ticks  ::  ", leftPrimaryEncoder.getPosition());
-        SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
-        SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
-        SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
-        SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
+        //SmartDashboard.putNumber("Left Primary Encoder Ticks  ::  ", leftPrimaryEncoder.getPosition());
+        //SmartDashboard.putNumber("Left Secondary Encoder Ticks  ::  ", leftSecondaryEncoder.getPosition());
+        //SmartDashboard.putNumber("Right Primary Encoder Ticks  ::  ", rightPrimaryEncoder.getPosition());
+        //SmartDashboard.putNumber("Right Secondary Encoder Ticks  ::  ", rightSecondaryEncoder.getPosition());
+        //SmartDashboard.putNumber("Distance Setpoint ::  ", setpoint);
     }
 }
 
