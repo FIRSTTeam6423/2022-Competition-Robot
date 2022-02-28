@@ -57,6 +57,12 @@ public final class Constants {
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;
 
+        public static final double RED_BALL_RED_VALUE = 0.38;
+        public static final double RED_BALL_BLUE_VALUE = 0.15;
+
+        public static final double BLUE_BALL_RED_VALUE = 0.35;
+        public static final double BLUE_BALL_BLUE_VALUE = 0.17;
+
         /**
          * Controller Input Device Mapping
          */

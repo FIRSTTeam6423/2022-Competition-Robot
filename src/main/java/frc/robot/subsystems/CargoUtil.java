@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.enums.CargoState;
 
 import com.revrobotics.ColorSensorV3;
@@ -101,22 +102,27 @@ public class CargoUtil extends SubsystemBase{
 
     public void showLowerBallColor(){
         detectedColor = m_colorSensor.getColor();
+        String color = "";
+        boolean teamColorVsColor = false;
 
-        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+        if (detectedColor.red > Constants.RED_BALL_RED_VALUE && detectedColor.blue < Constants.RED_BALL_BLUE_VALUE){
             SmartDashboard.putString("color detected", "RED");
-        } else if (detectedColor.blue > 0.3){
+            color = "RED";
+        } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.red < Constants.BLUE_BALL_RED_VALUE){
             SmartDashboard.putString("color detected", "BLUE");
+            color = "BLUE";
         } else {
             SmartDashboard.putString("color detected", "NO COLOR DETECTED");
         }
-        SmartDashboard.putNumber("red", detectedColor.red);
+        teamColorVsColor = color.equals(RobotContainer.getTeamColor());
+        SmartDashboard.putBoolean("isTeamColor", teamColorVsColor);
     }
 
     public String detectLowerBallColor(){
         String color = "";
-        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+        if (detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE){
             color = "RED";
-        } else if (detectedColor.blue > 0.3){
+        } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE){
             color = "BLUE"; 
         }
         return color;
@@ -124,9 +130,9 @@ public class CargoUtil extends SubsystemBase{
 
     public boolean detectLowerBall(){
         boolean color = false;
-        if (detectedColor.red > 0.55 && detectedColor.blue < 0.1){
+        if (detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE){
             color = true;
-        } else if (detectedColor.blue > 0.3){
+        } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE){
             color = true; 
         }
         return color;
@@ -189,6 +195,8 @@ public class CargoUtil extends SubsystemBase{
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
+        showLowerBallColor();
+        showUpperBall();
     }
 }
 
