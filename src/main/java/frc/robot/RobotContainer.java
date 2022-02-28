@@ -24,6 +24,7 @@ import frc.robot.subsystems.ClimbUtil;
 import frc.robot.commands.autoCommands.DrivBoxPattern;
 import frc.robot.commands.autoCommands.DriveForDistance;
 import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
+import frc.robot.commands.autoCommands.TurnForAngle;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -80,6 +81,7 @@ public class RobotContainer {
     autoChooser.addOption("Drive 40 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -40));
     autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
     autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
+    autoChooser.addOption("Turn 90 Degrees", new TurnForAngle(driveUtil, 180));
 
     teamColorChooser = new SendableChooser<String>();
     teamColorChooser.addOption("Red", "RED");

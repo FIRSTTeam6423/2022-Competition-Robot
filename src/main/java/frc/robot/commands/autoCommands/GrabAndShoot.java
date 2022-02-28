@@ -19,17 +19,20 @@ public class GrabAndShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-        new DriveForDistance(du, 85),
-        new AutoIntake(cu)
-      ),
+      //new ParallelCommandGroup(
+        new DriveForDistanceNoPID(du, 85),
+        //new AutoIntake(cu)
+      //),
+      new DriveForDistanceNoPID(du, 0),
       new TurnForAngle(du, 180),
-      new DriveForDistance(du, 80),
-      new ParallelCommandGroup(
-        new DriveForTime(du, 3, Constants.AUTO_DRIVE_SPEED),
-        new AutoSpinUp(cu)
-      ),
-      new AutoShoot(cu)
+      new DriveForDistanceNoPID(du, 0),
+      new DriveForDistanceNoPID(du, 80),
+      new DriveForDistanceNoPID(du, 0),
+      //new ParallelCommandGroup(
+        new DriveForTime(du, 3, Constants.AUTO_DRIVE_SPEED)//,
+        //new AutoSpinUp(cu)
+      //)//,
+      //new AutoShoot(cu)
     );
   }
 }
