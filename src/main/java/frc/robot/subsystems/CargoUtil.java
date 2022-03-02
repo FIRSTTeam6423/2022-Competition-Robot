@@ -43,6 +43,9 @@ public class CargoUtil extends SubsystemBase{
         lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
         highIndexer = new WPI_TalonSRX(Constants.HIGH_INDEXER);
         shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
+
+        shooter.setInverted(true);
+
         shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
 
@@ -84,7 +87,8 @@ public class CargoUtil extends SubsystemBase{
 
 
     public void operateShooter(){
-        shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
+        //shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
+        shooter.set(0.5);
     }
     
     public double getShooterRPM(){
@@ -129,13 +133,13 @@ public class CargoUtil extends SubsystemBase{
     }
 
     public boolean detectLowerBall(){
-        boolean color = false;
+        boolean ball = false;
         if (detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE){
-            color = true;
+            ball = true;
         } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE){
-            color = true; 
+            ball = true; 
         }
-        return color;
+        return ball;
     }
 
     public void showUpperBall(){
@@ -149,44 +153,66 @@ public class CargoUtil extends SubsystemBase{
     public boolean detectUpperBall(){
         return limitSwitch.get();
     }
+
+    public CargoState returnState(){
+        return state;
+    }
   
     public void OperateCargo(){
+        double rpm = getShooterRPM();
         switch(state){
             case INTAKE:
+                if (detectLowerBall()){
+                    setState(CargoState.IDLE);
+                }
                 operateBallMagnet();
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
+                //SmartDashboard.putString("Shoot State", "Intake");
                 break;
             case INDEX:
+                if (detectUpperBall()){
+                    setState(CargoState.IDLE);
+                }
                 operateLowIndexer();
                 stopHighIndexer();
                 stopBallMagent();
                 stopShooter();
+                //SmartDashboard.putString("Shoot State", "Index");
                 break;
             case SPINUP:
                 stopLowIndexer();
                 stopHighIndexer();
                 stopBallMagent();
                 operateShooter();
+                if(rpm >= Constants.SHOOTER_RPM - Constants.SHOOTER_RPM_DEADBAND && 
+                rpm <= Constants.SHOOTER_RPM + Constants.SHOOTER_RPM_DEADBAND)
+                {
+                    setState(CargoState.SHOOT);
+                }
+                //SmartDashboard.putString("Shoot State", "Intake");
                 break;
             case SHOOT:
                 stopLowIndexer();
                 stopBallMagent();
                 operateHighIndexer();
                 operateShooter();
+                    //SmartDashboard.putString("Shoot State", "Shoot");
                 break;
             case IDLE:
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
                 stopBallMagent();
+                //SmartDashboard.putString("Shoot State", "Idle");
                 break;
             case SPIT:
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
                 reverseBallMagnet();
+                //SmartDashboard.putString("Shoot State", "Spit");
         }
     }
     
@@ -195,6 +221,7 @@ public class CargoUtil extends SubsystemBase{
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
+        SmartDashboard.putNumber("RPM", getShooterRPM());
         showLowerBallColor();
         showUpperBall();
     }
