@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
 import frc.robot.commands.OperateCargoIntake;
-import frc.robot.commands.OperateCargoShoot;
 import frc.robot.commands.autoCommands.GrabAndShoot;
 import frc.robot.commands.autoCommands.ShootThenLeave;
 import frc.robot.subsystems.DriveUtil;
@@ -40,7 +39,6 @@ public class RobotContainer {
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
   private final OperateCargoIntake operateCargoIntake = new OperateCargoIntake(cargoUtil);
-  private final OperateCargoShoot operateCargoShoot = new OperateCargoShoot(cargoUtil);
 
   private static XboxController driver;
   private static XboxController operator;

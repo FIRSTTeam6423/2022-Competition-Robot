@@ -33,7 +33,6 @@ public class CargoUtil extends SubsystemBase{
 
     
     Color detectedColor = m_colorSensor.getColor();
-    //int proximity = m_colorSensor.getProximity();
 
     //Limit switch
     private DigitalInput limitSwitch;
@@ -169,7 +168,6 @@ public class CargoUtil extends SubsystemBase{
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
-                //SmartDashboard.putString("Shoot State", "Intake");
                 break;
             case INDEX:
                 if (detectUpperBall()){
@@ -179,7 +177,6 @@ public class CargoUtil extends SubsystemBase{
                 stopHighIndexer();
                 stopBallMagent();
                 stopShooter();
-                //SmartDashboard.putString("Shoot State", "Index");
                 break;
             case SPINUP:
                 stopLowIndexer();
@@ -191,28 +188,24 @@ public class CargoUtil extends SubsystemBase{
                 {
                     setState(CargoState.SHOOT);
                 }
-                //SmartDashboard.putString("Shoot State", "Intake");
                 break;
             case SHOOT:
                 stopLowIndexer();
                 stopBallMagent();
                 operateHighIndexer();
                 operateShooter();
-                    //SmartDashboard.putString("Shoot State", "Shoot");
                 break;
             case IDLE:
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
                 stopBallMagent();
-                //SmartDashboard.putString("Shoot State", "Idle");
                 break;
             case SPIT:
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
                 reverseBallMagnet();
-                //SmartDashboard.putString("Shoot State", "Spit");
         }
     }
     

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,7 @@ import frc.robot.enums.ClimbState;
 public class ClimbUtil extends SubsystemBase{
     //Solenoid
     private Solenoid grabber;
+    private Compressor pcmCompressor;
 
     /**
      * I created an enum class because it is cleaner than using a boolean.
@@ -26,7 +28,8 @@ public class ClimbUtil extends SubsystemBase{
 
     public ClimbUtil(){
         grabber = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-        
+        pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+        pcmCompressor.enableDigital();
     }
 
     /**

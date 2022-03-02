@@ -6,7 +6,6 @@ import frc.robot.subsystems.CargoUtil;
 import frc.robot.RobotContainer;
 import frc.robot.enums.CargoState;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class OperateCargoShoot extends CommandBase{
@@ -19,8 +18,6 @@ public class OperateCargoShoot extends CommandBase{
 
     @Override
     public void initialize() {
-      //cu.setState(CargoState.SPINUP);
-      //SmartDashboard.putString("Shooter State", "Spin up");
     }
 
     @Override
@@ -32,7 +29,6 @@ public class OperateCargoShoot extends CommandBase{
         if (RobotContainer.getOperatorRightBumper()){
           cu.setState(CargoState.SHOOT);
           done = true;
-          //SmartDashboard.putString("Shooter State", "Shoot");
         }
       }
       cu.OperateCargo();
@@ -41,7 +37,6 @@ public class OperateCargoShoot extends CommandBase{
     @Override
     public void end(boolean interrupted) {
         cu.setState(CargoState.IDLE);
-        //SmartDashboard.putString("Shooter State", "idle");
     }
 
     @Override
