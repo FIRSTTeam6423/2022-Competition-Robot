@@ -28,7 +28,7 @@ public class ClimbUtil extends SubsystemBase{
 
     public ClimbUtil(){
         grabber = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-        pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+        pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
         pcmCompressor.enableDigital();
     }
 
@@ -71,7 +71,7 @@ public class ClimbUtil extends SubsystemBase{
      * Although this repeats over and over again, when dealing
      * with pneumatics it works and it is a no harm no foul approach.
      */
-    private void operateArm(){
+    public void operateArm(){
         if(state == ClimbState.ARM_BACK){
             grabber.set(false);
         }
@@ -86,7 +86,10 @@ public class ClimbUtil extends SubsystemBase{
          * Here is where we are checking the desired state and making sure it is so.
          * Additionally, we are sending state to the SmartDashboard.
          */
-        operateArm();
+        //operateArm();
         SmartDashboard.putString("Climb State :: ", getPistonState().toString());
+        SmartDashboard.putBoolean("Compressor", pcmCompressor.enabled());
+        SmartDashboard.putBoolean("Pressure Switch", pcmCompressor.getPressureSwitchValue());
+        SmartDashboard.putBoolean("Solonoid", grabber.get());
     }
 }

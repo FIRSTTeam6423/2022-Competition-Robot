@@ -134,9 +134,9 @@ public class CargoUtil extends SubsystemBase{
     public boolean detectLowerBall(){
         boolean ball = false;
         if (detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE){
-            ball = true;
+            //ball = true;
         } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE){
-            ball = true; 
+            //ball = true; 
         }
         return ball;
     }
@@ -161,15 +161,17 @@ public class CargoUtil extends SubsystemBase{
         double rpm = getShooterRPM();
         switch(state){
             case INTAKE:
-                if (detectLowerBall()){
-                    setState(CargoState.IDLE);
-                }
+                //TODO: Fix color sensor   
+                //if (detectLowerBall()){
+                    //setState(CargoState.IDLE);
+                //}
                 operateBallMagnet();
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
                 break;
             case INDEX:
+                //TODO: Fix limit switch
                 if (detectUpperBall()){
                     setState(CargoState.IDLE);
                 }
@@ -217,6 +219,7 @@ public class CargoUtil extends SubsystemBase{
         SmartDashboard.putNumber("RPM", getShooterRPM());
         showLowerBallColor();
         showUpperBall();
+        SmartDashboard.putBoolean("Digital Input", limitSwitch.get());
     }
 }
 
