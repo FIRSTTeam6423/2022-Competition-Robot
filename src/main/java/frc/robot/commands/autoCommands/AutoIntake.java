@@ -3,8 +3,8 @@ package frc.robot.commands.autoCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.util.CargoState;
 import frc.robot.RobotContainer;
-import frc.robot.enums.CargoState;
 
 public class AutoIntake extends CommandBase{
     CargoUtil cu;

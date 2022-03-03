@@ -3,8 +3,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.util.CargoState;
 import frc.robot.RobotContainer;
-import frc.robot.enums.CargoState;
 import frc.robot.Constants;
 
 

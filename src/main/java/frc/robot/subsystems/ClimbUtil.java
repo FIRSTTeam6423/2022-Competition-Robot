@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.enums.ClimbState;
+import frc.robot.util.ClimbState;
 
 public class ClimbUtil extends SubsystemBase{
     //Solenoid
@@ -27,7 +27,7 @@ public class ClimbUtil extends SubsystemBase{
     private ClimbState state = ClimbState.ARM_BACK;
 
     public ClimbUtil(){
-        grabber = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        grabber = new Solenoid(10, PneumaticsModuleType.CTREPCM, 0);
         pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
         pcmCompressor.enableDigital();
     }
@@ -50,6 +50,10 @@ public class ClimbUtil extends SubsystemBase{
         }else{
             state = ClimbState.ARM_BACK;
         }
+    }
+
+    public void setState(ClimbState input){
+        state = input;
     }
 
     /**

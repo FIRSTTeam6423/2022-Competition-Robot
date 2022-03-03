@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.enums.CargoState;
+import frc.robot.util.CargoState;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
@@ -26,6 +26,11 @@ public class CargoUtil extends SubsystemBase{
     private CANSparkMax shooter;
     private RelativeEncoder shooterEncoder;
     private SparkMaxPIDController shooterPIDController; 
+    
+    private double shooterP;
+    private double shooterI;
+    private double shooterD;
+    private double shooterF;
 
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -48,10 +53,10 @@ public class CargoUtil extends SubsystemBase{
         shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
 
-        shooterPIDController.setP(Constants.SHOOTER_P);
-        shooterPIDController.setI(Constants.SHOOTER_I);
-        shooterPIDController.setD(Constants.SHOOTER_D);
-        shooterPIDController.setFF(Constants.SHOOTER_F);
+        shooterPIDController.setP(shooterP);
+        shooterPIDController.setI(shooterI);
+        shooterPIDController.setD(shooterD);
+        shooterPIDController.setFF(shooterF);
 
         limitSwitch = new DigitalInput(Constants.LIMIT_SWTICH);
     }
@@ -86,10 +91,9 @@ public class CargoUtil extends SubsystemBase{
 
 
     public void operateShooter(){
-        //shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
-        shooter.set(0.5);
+        shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
     }
-    
+
     public double getShooterRPM(){
         return shooterEncoder.getVelocity();
     }
@@ -171,7 +175,6 @@ public class CargoUtil extends SubsystemBase{
                 stopShooter();
                 break;
             case INDEX:
-                //TODO: Fix limit switch
                 if (detectUpperBall()){
                     setState(CargoState.IDLE);
                 }
@@ -217,6 +220,15 @@ public class CargoUtil extends SubsystemBase{
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
         SmartDashboard.putNumber("RPM", getShooterRPM());
+        SmartDashboard.getNumber("P", shooterP);
+        SmartDashboard.getNumber("I", shooterI);
+        SmartDashboard.getNumber("D", shooterD);
+        SmartDashboard.getNumber("F", shooterF);
+        SmartDashboard.putNumber("P", shooterP);
+        SmartDashboard.putNumber("I", shooterI);
+        SmartDashboard.putNumber("D", shooterD);
+        SmartDashboard.putNumber("F", shooterF);
+
         showLowerBallColor();
         showUpperBall();
         SmartDashboard.putBoolean("Digital Input", limitSwitch.get());

@@ -5,8 +5,8 @@
 package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.enums.CargoState;
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.util.CargoState;
 
 public class AutoSpinUp extends CommandBase {
   /** Creates a new AutoSpinUp. */

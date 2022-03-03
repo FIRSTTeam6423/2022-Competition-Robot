@@ -19,11 +19,13 @@ import frc.robot.commands.OperateClimb;
 import frc.robot.commands.autoCommands.GrabAndShoot;
 import frc.robot.commands.autoCommands.ShootThenLeave;
 import frc.robot.subsystems.DriveUtil;
+import frc.robot.util.DPadButton;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
 import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
 import frc.robot.commands.autoCommands.TurnForAngle;
-import frc.robot.enums.CargoState;
+import frc.robot.util.CargoState;
+import frc.robot.util.ClimbState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -55,6 +57,8 @@ public class RobotContainer {
   private JoystickButton indexButton;
   private JoystickButton idleButton;
   private JoystickButton spitButton;
+  private DPadButton climbUp;
+  private DPadButton climbDown;
 
   public static SendableChooser<Byte> driveType;
   public static SendableChooser<Byte> noobMode;
@@ -112,12 +116,15 @@ public class RobotContainer {
      * Careful what you choose!
      * 
      */
-    toggleClimb = new JoystickButton(operator, Button.kLeftBumper.value);
-    shootButton = new JoystickButton(operator, Button.kRightBumper.value);
-    intakeButton =  new JoystickButton(operator, Button.kX.value);
-    indexButton = new JoystickButton(operator, Button.kA.value);
-    spitButton = new JoystickButton(operator, Button.kB.value);
-    idleButton = new JoystickButton(operator, Button.kY.value);
+    //toggleClimb = new JoystickButton(operator, Button.kLeftBumper.value);
+    climbUp = new DPadButton(operator, 0);
+    climbDown = new DPadButton(operator, 180);
+
+    shootButton = new JoystickButton(operator, Button.kY.value);
+    intakeButton =  new JoystickButton(operator, Button.kA.value);
+    indexButton = new JoystickButton(operator, Button.kX.value);
+    spitButton = new JoystickButton(operator, Button.kStart.value);
+    idleButton = new JoystickButton(operator, Button.kB.value);
     
     /**
      * Could have done this any number of ways, a real command or an instant command.
@@ -128,12 +135,16 @@ public class RobotContainer {
      * not needed in the case of an InstantCommand().
      * 
      */
-    toggleClimb.whenPressed(new InstantCommand(() -> climbUtil.toggleArmState(), climbUtil));
+    // toggleClimb.whenPressed(new InstantCommand(() -> climbUtil.toggleArmState(), climbUtil));
+    climbUp.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_OUT), climbUtil));
+    climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
+
     shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
     indexButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INDEX), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
+    
   }
 
   /**
