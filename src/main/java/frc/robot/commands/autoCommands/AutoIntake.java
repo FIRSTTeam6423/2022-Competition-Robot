@@ -36,11 +36,13 @@ public class AutoIntake extends CommandBase{
             cu.setState(CargoState.IDLE);
             done = true;
         }
+        cu.OperateCargo();
     }
 
     @Override
     public void end(boolean interrupted) {
         cu.setState(CargoState.IDLE);
+        cu.OperateCargo();
     }
 
     @Override

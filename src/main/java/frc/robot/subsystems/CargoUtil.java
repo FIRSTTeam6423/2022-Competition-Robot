@@ -38,6 +38,7 @@ public class CargoUtil extends SubsystemBase{
 
     
     Color detectedColor = m_colorSensor.getColor();
+    Integer detectedLength = m_colorSensor.getProximity();
 
     //Limit switch
     private DigitalInput limitSwitch;
@@ -135,21 +136,19 @@ public class CargoUtil extends SubsystemBase{
         return color;
     }
 
-    public boolean detectLowerBall(){
-        boolean ball = false;
-        if (detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE){
-            //ball = true;
-        } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE){
-            //ball = true; 
+    public void detectLowerBall(){
+        if (detectedLength > Constants.BALL_DISTANCE ){
+            SmartDashboard.putString("Lower", "LOWER BALL DETECTED");
+        } else {
+            SmartDashboard.putString("Lower", "NO LOWER BALL DETECTED");
         }
-        return ball;
     }
 
     public void showUpperBall(){
         if (limitSwitch.get()){
-            SmartDashboard.putString("ball detected", "BALL DETECTED");
+            SmartDashboard.putString("Upper", "UPPER BALL DETECTED");
         } else {
-            SmartDashboard.putString("ball detected", "NO BALLs DETECTED");
+            SmartDashboard.putString("Upper", "NO UPPER BALL DETECTED");
         }
     }
 
@@ -195,8 +194,8 @@ public class CargoUtil extends SubsystemBase{
                 }
                 break;
             case SHOOT:
-                stopLowIndexer();
-                stopBallMagent();
+                operateLowIndexer();
+                operateBallMagnet();
                 operateHighIndexer();
                 operateShooter();
                 break;
@@ -218,16 +217,27 @@ public class CargoUtil extends SubsystemBase{
     public void periodic() {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
+        Integer detectedLength = m_colorSensor.getProximity();
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
         SmartDashboard.putNumber("RPM", getShooterRPM());
-        SmartDashboard.getNumber("P", shooterP);
-        SmartDashboard.getNumber("I", shooterI);
-        SmartDashboard.getNumber("D", shooterD);
-        SmartDashboard.getNumber("F", shooterF);
+        shooterP = SmartDashboard.getNumber("P", shooterP);
+        shooterI = SmartDashboard.getNumber("I", shooterI);
+        shooterD = SmartDashboard.getNumber("D", shooterD);
+        shooterF = SmartDashboard.getNumber("F", shooterF);
         SmartDashboard.putNumber("P", shooterP);
         SmartDashboard.putNumber("I", shooterI);
         SmartDashboard.putNumber("D", shooterD);
         SmartDashboard.putNumber("F", shooterF);
+
+        shooterPIDController.setP(shooterP);
+        shooterPIDController.setI(shooterI);
+        shooterPIDController.setD(shooterD);
+        shooterPIDController.setFF(shooterF);
+
+        SmartDashboard.putNumber("Red", detectedColor.red);
+        SmartDashboard.putNumber("Blue", detectedColor.blue);
+        SmartDashboard.putNumber("Green", detectedColor.green);
+        SmartDashboard.putNumber("Distance", detectedLength);
 
         showLowerBallColor();
         showUpperBall();

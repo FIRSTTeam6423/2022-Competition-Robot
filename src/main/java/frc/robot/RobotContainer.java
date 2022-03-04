@@ -84,8 +84,8 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    autoChooser.setDefaultOption("Drive 40 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 40));
-    autoChooser.addOption("Drive 40 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -40));
+    autoChooser.setDefaultOption("Drive 45 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 45));
+    autoChooser.addOption("Drive 45 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -45));
     autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
     autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
     autoChooser.addOption("Turn 90 Degrees", new TurnForAngle(driveUtil, 180));
