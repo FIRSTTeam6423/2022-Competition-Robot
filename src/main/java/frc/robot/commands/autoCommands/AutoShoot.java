@@ -7,7 +7,6 @@ package frc.robot.commands.autoCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.util.CargoState;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Timer;
 
 public class AutoShoot extends CommandBase {

@@ -26,11 +26,6 @@ public class CargoUtil extends SubsystemBase{
     private CANSparkMax shooter;
     private RelativeEncoder shooterEncoder;
     private SparkMaxPIDController shooterPIDController; 
-    
-    private double shooterP;
-    private double shooterI;
-    private double shooterD;
-    private double shooterF;
 
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -38,7 +33,6 @@ public class CargoUtil extends SubsystemBase{
 
     
     Color detectedColor = m_colorSensor.getColor();
-    Integer detectedLength = m_colorSensor.getProximity();
 
     //Limit switch
     private DigitalInput limitSwitch;
@@ -54,10 +48,10 @@ public class CargoUtil extends SubsystemBase{
         shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
 
-        shooterPIDController.setP(shooterP);
-        shooterPIDController.setI(shooterI);
-        shooterPIDController.setD(shooterD);
-        shooterPIDController.setFF(shooterF);
+        shooterPIDController.setP(Constants.SHOOTER_P);
+        shooterPIDController.setI(Constants.SHOOTER_I);
+        shooterPIDController.setD(Constants.SHOOTER_D);
+        shooterPIDController.setFF(Constants.SHOOTER_F);
 
         limitSwitch = new DigitalInput(Constants.LIMIT_SWTICH);
     }
@@ -70,7 +64,7 @@ public class CargoUtil extends SubsystemBase{
         ballMagnet.set(ControlMode.PercentOutput, -Constants.BALL_MAGNET_OUTPUT);
     }
 
-    public void stopBallMagent(){
+    public void stopBallMagnet(){
         ballMagnet.set(ControlMode.PercentOutput, 0);
     }
 
@@ -137,9 +131,10 @@ public class CargoUtil extends SubsystemBase{
     }
 
     public void detectLowerBall(){
-        if (detectedLength > Constants.BALL_DISTANCE ){
+        if ((detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE) || 
+        (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE)){
             SmartDashboard.putString("Lower", "LOWER BALL DETECTED");
-        } else {
+        } else{
             SmartDashboard.putString("Lower", "NO LOWER BALL DETECTED");
         }
     }
@@ -164,10 +159,6 @@ public class CargoUtil extends SubsystemBase{
         double rpm = getShooterRPM();
         switch(state){
             case INTAKE:
-                //TODO: Fix color sensor   
-                //if (detectLowerBall()){
-                    //setState(CargoState.IDLE);
-                //}
                 operateBallMagnet();
                 stopLowIndexer();
                 stopHighIndexer();
@@ -179,13 +170,13 @@ public class CargoUtil extends SubsystemBase{
                 }
                 operateLowIndexer();
                 stopHighIndexer();
-                stopBallMagent();
+                stopBallMagnet();
                 stopShooter();
                 break;
             case SPINUP:
                 stopLowIndexer();
                 stopHighIndexer();
-                stopBallMagent();
+                stopBallMagnet();
                 operateShooter();
                 if(rpm >= Constants.SHOOTER_RPM - Constants.SHOOTER_RPM_DEADBAND && 
                 rpm <= Constants.SHOOTER_RPM + Constants.SHOOTER_RPM_DEADBAND)
@@ -203,7 +194,7 @@ public class CargoUtil extends SubsystemBase{
                 stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
-                stopBallMagent();
+                stopBallMagnet();
                 break;
             case SPIT:
                 stopLowIndexer();
@@ -217,31 +208,10 @@ public class CargoUtil extends SubsystemBase{
     public void periodic() {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
-        Integer detectedLength = m_colorSensor.getProximity();
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
-        SmartDashboard.putNumber("RPM", getShooterRPM());
-        shooterP = SmartDashboard.getNumber("P", shooterP);
-        shooterI = SmartDashboard.getNumber("I", shooterI);
-        shooterD = SmartDashboard.getNumber("D", shooterD);
-        shooterF = SmartDashboard.getNumber("F", shooterF);
-        SmartDashboard.putNumber("P", shooterP);
-        SmartDashboard.putNumber("I", shooterI);
-        SmartDashboard.putNumber("D", shooterD);
-        SmartDashboard.putNumber("F", shooterF);
-
-        shooterPIDController.setP(shooterP);
-        shooterPIDController.setI(shooterI);
-        shooterPIDController.setD(shooterD);
-        shooterPIDController.setFF(shooterF);
-
-        SmartDashboard.putNumber("Red", detectedColor.red);
-        SmartDashboard.putNumber("Blue", detectedColor.blue);
-        SmartDashboard.putNumber("Green", detectedColor.green);
-        SmartDashboard.putNumber("Distance", detectedLength);
 
         showLowerBallColor();
         showUpperBall();
-        SmartDashboard.putBoolean("Digital Input", limitSwitch.get());
     }
 }
 

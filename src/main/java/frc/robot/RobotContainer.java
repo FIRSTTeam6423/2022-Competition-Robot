@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateCargoIntake;
+import frc.robot.commands.OperateCargo;
 import frc.robot.commands.OperateClimb;
 import frc.robot.commands.autoCommands.GrabAndShoot;
 import frc.robot.commands.autoCommands.ShootThenLeave;
@@ -42,7 +42,7 @@ public class RobotContainer {
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
   private final OperateClimb operateClimb = new OperateClimb(climbUtil);
-  private final OperateCargoIntake operateCargoIntake = new OperateCargoIntake(cargoUtil);
+  private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
 
   private static XboxController driver;
   private static XboxController operator;
@@ -51,7 +51,6 @@ public class RobotContainer {
    * Added a new object - JoystickButton
    * This one is used to Toggle the Climb Arm out and back.
    */
-  private JoystickButton toggleClimb;
   private JoystickButton shootButton;
   private JoystickButton intakeButton;
   private JoystickButton indexButton;
@@ -116,7 +115,6 @@ public class RobotContainer {
      * Careful what you choose!
      * 
      */
-    //toggleClimb = new JoystickButton(operator, Button.kLeftBumper.value);
     climbUp = new DPadButton(operator, 0);
     climbDown = new DPadButton(operator, 180);
 
@@ -135,7 +133,6 @@ public class RobotContainer {
      * not needed in the case of an InstantCommand().
      * 
      */
-    // toggleClimb.whenPressed(new InstantCommand(() -> climbUtil.toggleArmState(), climbUtil));
     climbUp.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_OUT), climbUtil));
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
 
@@ -159,7 +156,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoUtil.setDefaultCommand(operateCargoIntake);
+    cargoUtil.setDefaultCommand(operateCargo);
     climbUtil.setDefaultCommand(operateClimb);
   }
 
