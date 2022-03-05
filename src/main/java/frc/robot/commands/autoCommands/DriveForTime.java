@@ -31,7 +31,7 @@ public class DriveForTime extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        driveUtil.tankDrive(speed/2, -speed/2);
+        driveUtil.tankDrive(speed, -speed);
         System.out.println("Drive for time works");
     }
 

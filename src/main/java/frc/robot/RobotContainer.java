@@ -83,11 +83,11 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    autoChooser.setDefaultOption("Drive 45 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 45));
-    autoChooser.addOption("Drive 45 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -45));
+    autoChooser.setDefaultOption("Drive 45 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 45, true));
+    autoChooser.addOption("Drive 45 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -45, true));
     autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
     autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
-    autoChooser.addOption("Turn 90 Degrees", new TurnForAngle(driveUtil, 180));
+    autoChooser.addOption("Turn 180 Degrees", new TurnForAngle(driveUtil, 180));
 
     teamColorChooser = new SendableChooser<String>();
     teamColorChooser.addOption("Red", "RED");
@@ -120,7 +120,7 @@ public class RobotContainer {
 
     shootButton = new JoystickButton(operator, Button.kY.value);
     intakeButton =  new JoystickButton(operator, Button.kA.value);
-    indexButton = new JoystickButton(operator, Button.kX.value);
+    //indexButton = new JoystickButton(operator, Button.kX.value);
     spitButton = new JoystickButton(operator, Button.kStart.value);
     idleButton = new JoystickButton(operator, Button.kB.value);
     
@@ -137,8 +137,9 @@ public class RobotContainer {
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
 
     shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
+    // shootButton.whenPressed(new InstantCommand(() -> cargoUtil.toggleShooter(), cargoUtil));
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
-    indexButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INDEX), cargoUtil));
+    //indexButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INDEX), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
     

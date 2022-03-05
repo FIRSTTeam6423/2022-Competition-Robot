@@ -12,21 +12,25 @@ import frc.robot.util.CargoState;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CargoUtil extends SubsystemBase{
+public class CargoUtil extends SubsystemBase {
     //Shooter controllers
     private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
     private CargoState state = CargoState.IDLE;
     private CANSparkMax shooter;
     private RelativeEncoder shooterEncoder;
+    // private boolean shoot;
     private SparkMaxPIDController shooterPIDController; 
-
+    //private PIDController pidController; 
     //Color detector
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -38,6 +42,9 @@ public class CargoUtil extends SubsystemBase{
     private DigitalInput limitSwitch;
 
     public CargoUtil() {
+        // super(new PIDController(Constants.SHOOTER_P, Constants.SHOOTER_I,  Constants.SHOOTER_D));
+        // shoot = false;
+
         ballMagnet = new WPI_TalonSRX(Constants.BALL_MAGNET);
         lowIndexer = new WPI_TalonSRX(Constants.LOW_INDEXER);
         highIndexer = new WPI_TalonSRX(Constants.HIGH_INDEXER);
@@ -86,7 +93,13 @@ public class CargoUtil extends SubsystemBase{
 
 
     public void operateShooter(){
-        shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
+        // if (!shoot){
+        //     enable();
+        //     shoot = true;
+        // }
+        // setSetpoint(Constants.SHOOTER_RPM);
+        // shooterPIDController.setReference(Constants.SHOOTER_RPM, CANSparkMax.ControlType.kVelocity);
+        shooter.set(Constants.SHOOTER_VALUE);
     }
 
     public double getShooterRPM(){
@@ -94,7 +107,12 @@ public class CargoUtil extends SubsystemBase{
     }
 
     public void stopShooter(){
-        shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
+        // if (shoot){
+        //     disable();
+        //     shoot = false;
+        // }
+        // shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
+        shooter.set(0);
     }
 
     public void setState(CargoState newState){
@@ -182,13 +200,16 @@ public class CargoUtil extends SubsystemBase{
                 rpm <= Constants.SHOOTER_RPM + Constants.SHOOTER_RPM_DEADBAND)
                 {
                     setState(CargoState.SHOOT);
+                    
                 }
                 break;
             case SHOOT:
-                operateLowIndexer();
-                operateBallMagnet();
                 operateHighIndexer();
                 operateShooter();
+                if (!detectUpperBall()){
+                    operateLowIndexer();
+                    operateBallMagnet();
+                }
                 break;
             case IDLE:
                 stopLowIndexer();
@@ -203,15 +224,39 @@ public class CargoUtil extends SubsystemBase{
                 reverseBallMagnet();
         }
     }
+
+    // public void toggleShooter(){
+    //     if (isEnabled()){
+    //         disable();
+    //     } else {
+    //         enable();
+    //         setSetpoint(Constants.SHOOTER_RPM);
+    //     }
+    // }
     
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
+        SmartDashboard.putNumber("RPM", getShooterRPM());
+        // SmartDashboard.putBoolean("PID Enabled", isEnabled());
+        // SmartDashboard.putBoolean("Shooter Enabled", shoot);
+        // SmartDashboard.putNumber("Setpoint", getSetpoint());
 
         showLowerBallColor();
         showUpperBall();
     }
+
+    // @Override
+    // protected void useOutput(double output, double setpoint) {
+    //     shooter.set(output);
+    //     System.out.println(setpoint + "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    // }
+
+    // @Override
+    // protected double getMeasurement() {
+    //     return getShooterRPM();
+    // }
 }
 

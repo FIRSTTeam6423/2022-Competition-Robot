@@ -16,13 +16,13 @@ public class DrivBoxPattern extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveForDistanceNoPID(du, sideLength),
+      new DriveForDistanceNoPID(du, sideLength, true),
       new TurnForAngle(du, -90),
-      new DriveForDistanceNoPID(du, sideLength),
+      new DriveForDistanceNoPID(du, sideLength, true),
       new TurnForAngle(du, -90),
-      new DriveForDistanceNoPID(du, sideLength),
+      new DriveForDistanceNoPID(du, sideLength, true),
       new TurnForAngle(du, -90),
-      new DriveForDistanceNoPID(du, sideLength)
+      new DriveForDistanceNoPID(du, sideLength, true)
     );
   }
 }

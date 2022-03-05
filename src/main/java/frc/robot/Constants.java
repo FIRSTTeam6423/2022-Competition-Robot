@@ -21,12 +21,12 @@ public final class Constants {
         public static final int RIGHT_PRIMARY = 4;
         public static final int RIGHT_SECONDARY = 5;
 
-        public static final double AUTO_TURN_SPEED = 0.3;
+        public static final double AUTO_TURN_SPEED = 0.4;
         public static final double AUTO_TURN_SPEED_DAMPENING = 0.5;
         public static final double AUTO_TURN_SLOWDOWN_RANGE = 30;
 
         public static final double TICKS_PER_INCH = 2267.4512;
-        public static final double AUTO_DRIVE_SPEED = 0.6;
+        public static final double AUTO_DRIVE_SPEED = 0.4;
         public static final double AUTO_DRIVE_SPEED_DAMPENING = 0.5;
         public static final double AUTO_DRIVE_SLOWDOWN_RANGE = 12;
 
@@ -47,14 +47,15 @@ public final class Constants {
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 1;
-        public static final double SHOOTER_RPM = 3500.0;
+        public static final double SHOOTER_RPM = 1000.0;
+        public static final double SHOOTER_VALUE = 0.75;
         public static final double SHOOTER_RPM_DEADBAND = 100.0;
         public static final double SHOOT_TIME = 0.5;
 
-        public static final double SHOOTER_P = 0.0;
-        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_P = 0.000675;
+        public static final double SHOOTER_I = 0.001649694501;
         public static final double SHOOTER_D = 0.0;
-        public static final double SHOOTER_F = 0.0003;
+        public static final double SHOOTER_F = 0.0;
 
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;

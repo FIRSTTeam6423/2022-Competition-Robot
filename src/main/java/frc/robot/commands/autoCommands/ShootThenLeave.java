@@ -18,7 +18,7 @@ public class ShootThenLeave extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new AutoShoot(cu),
-      new DriveForDistanceNoPID(du, -90)
+      new DriveForDistanceNoPID(du, -90, true)
     );
   }
 }

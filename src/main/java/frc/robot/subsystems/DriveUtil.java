@@ -76,6 +76,8 @@ public class DriveUtil extends SubsystemBase {
 
         // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
+        calibrateGyro();
+
     }
 
     /**

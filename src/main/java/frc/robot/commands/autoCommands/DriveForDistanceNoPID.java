@@ -10,9 +10,11 @@ public class DriveForDistanceNoPID extends CommandBase{
     private double encoderSetpoint;
     private boolean forward;
     private boolean done;
+    private boolean slowdown;
     
-    public DriveForDistanceNoPID(DriveUtil du, double distanceToDrive) {
+    public DriveForDistanceNoPID(DriveUtil du, double distanceToDrive, boolean slowdown) {
         this.driveUtil = du;
+        this.slowdown = slowdown;
         this.encoderSetpoint = distanceToDrive * Constants.TICKS_PER_INCH;
         addRequirements(this.driveUtil);
     }
@@ -45,7 +47,7 @@ public class DriveForDistanceNoPID extends CommandBase{
         SmartDashboard.putNumber("Position", Math.abs(driveUtil.getLeftPosition()));
 
         if (forward){
-            if (Math.abs(driveUtil.getLeftPosition()) >= (Math.abs(encoderSetpoint) - Math.abs(Constants.AUTO_DRIVE_SLOWDOWN_RANGE * Constants.TICKS_PER_INCH))){
+            if (slowdown && Math.abs(driveUtil.getLeftPosition()) >= (Math.abs(encoderSetpoint) - Math.abs(Constants.AUTO_DRIVE_SLOWDOWN_RANGE * Constants.TICKS_PER_INCH))){
                 driveUtil.tankDrive(Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING, -Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING);
                 SmartDashboard.putString("Drive States", "SLowing down");
             } else {
@@ -53,7 +55,7 @@ public class DriveForDistanceNoPID extends CommandBase{
                 SmartDashboard.putString("Drive States", "Full Speed");
             }
         } else {
-            if (Math.abs(driveUtil.getLeftPosition()) >= (Math.abs(encoderSetpoint) - Math.abs(Constants.AUTO_DRIVE_SLOWDOWN_RANGE * Constants.TICKS_PER_INCH))){
+            if (slowdown && Math.abs(driveUtil.getLeftPosition()) >= (Math.abs(encoderSetpoint) - Math.abs(Constants.AUTO_DRIVE_SLOWDOWN_RANGE * Constants.TICKS_PER_INCH))){
                 driveUtil.tankDrive(-Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING, Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING);
                 SmartDashboard.putString("Drive States", "SLowing down");
             } else {

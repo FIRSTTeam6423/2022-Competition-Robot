@@ -25,17 +25,18 @@ public class AutoIntake extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if ((cu.detectLowerBallColor().equals(RobotContainer.getTeamColor()))){
-            cu.setState(CargoState.INDEX);
-        } else if ((cu.detectLowerBallColor().equals(""))) {
-            cu.setState(CargoState.INTAKE);
-        } else {
-            cu.setState(CargoState.SPIT);
-        }
-        if (cu.detectUpperBall()){
-            cu.setState(CargoState.IDLE);
-            done = true;
-        }
+        // if ((cu.detectLowerBallColor().equals(RobotContainer.getTeamColor()))){
+        //     cu.setState(CargoState.INDEX);
+        // } else if ((cu.detectLowerBallColor().equals(""))) {
+        //     cu.setState(CargoState.INTAKE);
+        // } else {
+        //     cu.setState(CargoState.SPIT);
+        // }
+        // if (cu.detectUpperBall()){
+        //     cu.setState(CargoState.IDLE);
+        //     done = true;
+        // }
+        cu.setState(CargoState.INTAKE);
         cu.OperateCargo();
     }
 
