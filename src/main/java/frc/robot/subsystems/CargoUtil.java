@@ -126,13 +126,13 @@ public class CargoUtil extends SubsystemBase {
         boolean teamColorVsColor = false;
 
         if (detectedColor.red > Constants.RED_BALL_RED_VALUE && detectedColor.blue < Constants.RED_BALL_BLUE_VALUE){
-            SmartDashboard.putString("color detected", "RED");
+            SmartDashboard.putString("Color detected", "RED");
             color = "RED";
         } else if (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.red < Constants.BLUE_BALL_RED_VALUE){
-            SmartDashboard.putString("color detected", "BLUE");
+            SmartDashboard.putString("Color detected", "BLUE");
             color = "BLUE";
         } else {
-            SmartDashboard.putString("color detected", "NO COLOR DETECTED");
+            SmartDashboard.putString("Color detected", "NO COLOR DETECTED");
         }
         teamColorVsColor = color.equals(RobotContainer.getTeamColor());
         SmartDashboard.putBoolean("isTeamColor", teamColorVsColor);
@@ -177,8 +177,13 @@ public class CargoUtil extends SubsystemBase {
         double rpm = getShooterRPM();
         switch(state){
             case INTAKE:
+                if (detectUpperBall()){
+                    stopLowIndexer();
+                } else {
+                    operateLowIndexer();
+                }
                 operateBallMagnet();
-                stopLowIndexer();
+                // stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
                 break;
@@ -239,7 +244,7 @@ public class CargoUtil extends SubsystemBase {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
-        SmartDashboard.putNumber("RPM", getShooterRPM());
+        // SmartDashboard.putNumber("RPM", getShooterRPM());
         // SmartDashboard.putBoolean("PID Enabled", isEnabled());
         // SmartDashboard.putBoolean("Shooter Enabled", shoot);
         // SmartDashboard.putNumber("Setpoint", getSetpoint());

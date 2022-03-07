@@ -21,7 +21,7 @@ public class DriveForDistanceNoPID extends CommandBase{
 
     @Override
     public void initialize() {
-        SmartDashboard.putString("Drive States", "Resetting");
+        // SmartDashboard.putString("Drive States", "Resetting");
         done = false;
 
         driveUtil.resetEncoder();
@@ -38,29 +38,29 @@ public class DriveForDistanceNoPID extends CommandBase{
     public void execute() {
         if (Math.abs(driveUtil.getLeftPosition()) >= Math.abs(encoderSetpoint)){
             driveUtil.tankDrive(0, 0);
-            SmartDashboard.putString("Drive States", "Stopped");
+            // SmartDashboard.putString("Drive States", "Stopped");
             done = true;
             return;
         }
 
-        SmartDashboard.putNumber("Setpoint", encoderSetpoint);
-        SmartDashboard.putNumber("Position", Math.abs(driveUtil.getLeftPosition()));
+        // SmartDashboard.putNumber("Setpoint", encoderSetpoint);
+        // SmartDashboard.putNumber("Position", Math.abs(driveUtil.getLeftPosition()));
 
         if (forward){
             if (slowdown && Math.abs(driveUtil.getLeftPosition()) >= (Math.abs(encoderSetpoint) - Math.abs(Constants.AUTO_DRIVE_SLOWDOWN_RANGE * Constants.TICKS_PER_INCH))){
                 driveUtil.tankDrive(Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING, -Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING);
-                SmartDashboard.putString("Drive States", "SLowing down");
+                // SmartDashboard.putString("Drive States", "SLowing down");
             } else {
                 driveUtil.tankDrive(Constants.AUTO_DRIVE_SPEED, -Constants.AUTO_DRIVE_SPEED);
-                SmartDashboard.putString("Drive States", "Full Speed");
+                // SmartDashboard.putString("Drive States", "Full Speed");
             }
         } else {
             if (slowdown && Math.abs(driveUtil.getLeftPosition()) >= (Math.abs(encoderSetpoint) - Math.abs(Constants.AUTO_DRIVE_SLOWDOWN_RANGE * Constants.TICKS_PER_INCH))){
                 driveUtil.tankDrive(-Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING, Constants.AUTO_DRIVE_SPEED * Constants.AUTO_DRIVE_SPEED_DAMPENING);
-                SmartDashboard.putString("Drive States", "SLowing down");
+                // SmartDashboard.putString("Drive States", "SLowing down");
             } else {
                 driveUtil.tankDrive(-Constants.AUTO_DRIVE_SPEED, Constants.AUTO_DRIVE_SPEED);
-                SmartDashboard.putString("Drive States", "Full Speed");
+                // SmartDashboard.putString("Drive States", "Full Speed");
             }
         }
     }
@@ -68,7 +68,7 @@ public class DriveForDistanceNoPID extends CommandBase{
     @Override
     public void end(boolean interrupted) {
         driveUtil.tankDrive(0, 0);
-        SmartDashboard.putString("Drive States", "Stopped");
+        // SmartDashboard.putString("Drive States", "Stopped");
     }
 
     @Override

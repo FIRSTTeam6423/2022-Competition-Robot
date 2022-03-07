@@ -25,7 +25,6 @@ public class OperateClimb extends CommandBase {
   @Override
   public void execute() {
     cu.operateArm();
-    SmartDashboard.putString("On?", "yes!");
   }
 
   // Called once the command ends or is interrupted.

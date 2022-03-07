@@ -92,8 +92,8 @@ public class ClimbUtil extends SubsystemBase{
          */
         //operateArm();
         SmartDashboard.putString("Climb State :: ", getPistonState().toString());
-        SmartDashboard.putBoolean("Compressor", pcmCompressor.enabled());
-        SmartDashboard.putBoolean("Pressure Switch", pcmCompressor.getPressureSwitchValue());
-        SmartDashboard.putBoolean("Solonoid", grabber.get());
+        // SmartDashboard.putBoolean("Compressor", pcmCompressor.enabled());
+        // SmartDashboard.putBoolean("Pressure Switch", pcmCompressor.getPressureSwitchValue());
+        // SmartDashboard.putBoolean("Solonoid", grabber.get());
     }
 }
