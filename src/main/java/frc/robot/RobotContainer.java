@@ -53,7 +53,6 @@ public class RobotContainer {
    */
   private JoystickButton shootButton;
   private JoystickButton intakeButton;
-  private JoystickButton indexButton;
   private JoystickButton idleButton;
   private JoystickButton spitButton;
   private DPadButton climbUp;
@@ -61,7 +60,6 @@ public class RobotContainer {
 
   public static SendableChooser<Byte> driveType;
   public static SendableChooser<Byte> noobMode;
-  public static SendableChooser<String> teamColorChooser; 
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
@@ -89,11 +87,6 @@ public class RobotContainer {
     autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
     autoChooser.addOption("Turn 180 Degrees", new TurnForAngle(driveUtil, 180));
 
-    teamColorChooser = new SendableChooser<String>();
-    teamColorChooser.addOption("Red", "RED");
-    teamColorChooser.addOption("Blue", "BLUE");
-    SmartDashboard.putData("Team Color", teamColorChooser);
-
     SmartDashboard.putData("Autonomous Command", autoChooser);
   }
 
@@ -120,7 +113,6 @@ public class RobotContainer {
 
     shootButton = new JoystickButton(operator, Button.kY.value);
     intakeButton =  new JoystickButton(operator, Button.kA.value);
-    //indexButton = new JoystickButton(operator, Button.kX.value);
     spitButton = new JoystickButton(operator, Button.kStart.value);
     idleButton = new JoystickButton(operator, Button.kB.value);
     
@@ -137,9 +129,7 @@ public class RobotContainer {
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
 
     shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
-    // shootButton.whenPressed(new InstantCommand(() -> cargoUtil.toggleShooter(), cargoUtil));
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
-    //indexButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INDEX), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
     
@@ -273,8 +263,4 @@ public class RobotContainer {
   public static boolean getOperatorRightStickButton(){
     return operator.getRightStickButton();
   }  
-
-  public static String getTeamColor(){
-    return teamColorChooser.getSelected();
-  }
 }

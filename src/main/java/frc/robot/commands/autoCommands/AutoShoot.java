@@ -18,6 +18,7 @@ public class AutoShoot extends CommandBase {
     this.cu = cu;
     addRequirements(this.cu);
 
+    //Using a timer to make sure that balls are shot out
     timer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.

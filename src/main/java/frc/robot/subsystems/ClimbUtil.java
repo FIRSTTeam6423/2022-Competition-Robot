@@ -32,18 +32,6 @@ public class ClimbUtil extends SubsystemBase{
         pcmCompressor.enableDigital();
     }
 
-    /**
-     * We are doing the bulk of the work in the Util class which is 
-     * the right way to do this.  The Util class should manage its own
-     * state and give helper methods to commands and other classes so that they can 
-     * discover the state of the subsystem.
-     * 
-     * Here we are simply toggling between two states.  This can still 
-     * be done with more than one state but it becomes a tad more complicated to code.
-     * 
-     * You may want to try expressly setting the desired state at the Command
-     * and work from there in cases where you have 3+ plausible states for a subsystem.
-     */
     public void toggleArmState(){
         if(state != ClimbState.ARM_OUT){
             state = ClimbState.ARM_OUT;
@@ -56,25 +44,10 @@ public class ClimbUtil extends SubsystemBase{
         state = input;
     }
 
-    /**
-     * Simple helper class to determine the state of the subsystem.
-     * In this example we are just running it out to the SmartDashboard
-     * for folks to see.
-     * 
-     */
     public ClimbState getPistonState(){
         return state;
     }
 
-    /**
-     * This is where the actual action takes place.
-     * This method is called continuously from the 
-     * subsystem periodic() method.  It is checking the
-     * state and making sure it is so.
-     * 
-     * Although this repeats over and over again, when dealing
-     * with pneumatics it works and it is a no harm no foul approach.
-     */
     public void operateArm(){
         if(state == ClimbState.ARM_BACK){
             grabber.set(false);
@@ -86,14 +59,6 @@ public class ClimbUtil extends SubsystemBase{
 
     @Override
     public void periodic(){
-        /**
-         * Here is where we are checking the desired state and making sure it is so.
-         * Additionally, we are sending state to the SmartDashboard.
-         */
-        //operateArm();
         SmartDashboard.putString("Climb State :: ", getPistonState().toString());
-        // SmartDashboard.putBoolean("Compressor", pcmCompressor.enabled());
-        // SmartDashboard.putBoolean("Pressure Switch", pcmCompressor.getPressureSwitchValue());
-        // SmartDashboard.putBoolean("Solonoid", grabber.get());
     }
 }

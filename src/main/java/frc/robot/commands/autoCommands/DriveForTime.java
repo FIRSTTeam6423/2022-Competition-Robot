@@ -13,6 +13,7 @@ public class DriveForTime extends CommandBase {
     Timer timer;
     double timeToDrive;
     double speed;
+    boolean done;
     
     public DriveForTime(DriveUtil du, double timeToDrive, double speed) {
         this.timeToDrive = timeToDrive;
@@ -26,20 +27,26 @@ public class DriveForTime extends CommandBase {
     @Override
     public void initialize() {
         timer.start();
+        done = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        // Checks if the robot has fully turned
         driveUtil.tankDrive(speed, -speed);
-        System.out.println("Drive for time works");
+        if (timer.get() > timeToDrive){
+            done = true;
+        }
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        driveUtil.tankDrive(0, 0);
+    }
 
     @Override
     public boolean isFinished() {
-        return timer.get() > timeToDrive;
+        return done;
     }
 }

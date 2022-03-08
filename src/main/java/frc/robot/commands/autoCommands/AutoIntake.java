@@ -4,11 +4,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.util.CargoState;
-import frc.robot.RobotContainer;
 
 public class AutoIntake extends CommandBase{
     CargoUtil cu;
-    private boolean done;
 
     public AutoIntake(CargoUtil cu){
         this.cu = cu;
@@ -18,36 +16,25 @@ public class AutoIntake extends CommandBase{
     @Override
     public void initialize() {
         cu.setState(CargoState.INTAKE);
-
-        done = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // if ((cu.detectLowerBallColor().equals(RobotContainer.getTeamColor()))){
-        //     cu.setState(CargoState.INDEX);
-        // } else if ((cu.detectLowerBallColor().equals(""))) {
-        //     cu.setState(CargoState.INTAKE);
-        // } else {
-        //     cu.setState(CargoState.SPIT);
-        // }
-        // if (cu.detectUpperBall()){
-        //     cu.setState(CargoState.IDLE);
-        //     done = true;
-        // }
         cu.setState(CargoState.INTAKE);
         cu.OperateCargo();
     }
 
+    // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         cu.setState(CargoState.IDLE);
         cu.OperateCargo();
     }
 
+    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return done;
+        return false;
     }
 }
