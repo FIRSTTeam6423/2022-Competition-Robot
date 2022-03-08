@@ -11,10 +11,10 @@ import frc.robot.subsystems.DriveUtil;
 public class DriveForTime extends CommandBase {
     DriveUtil driveUtil;
     Timer timer;
-    int timeToDrive;
+    double timeToDrive;
     double speed;
     
-    public DriveForTime(DriveUtil du, int timeToDrive, double speed) {
+    public DriveForTime(DriveUtil du, double timeToDrive, double speed) {
         this.timeToDrive = timeToDrive;
         this.speed = speed;
         this.driveUtil = du;

@@ -16,17 +16,19 @@ public final class Constants {
         /** 
          * DriveUtil Constants
          */
-        public static final int LEFT_PRIMARY = 1;
-        public static final int LEFT_SECONDARY = 2;
-        public static final int RIGHT_PRIMARY = 3;
-        public static final int RIGHT_SECONDARY = 4;
+        public static final int LEFT_PRIMARY = 2;
+        public static final int LEFT_SECONDARY = 3;
+        public static final int RIGHT_PRIMARY = 4;
+        public static final int RIGHT_SECONDARY = 5;
 
-        public static final double AUTO_TURN_SPEED = 0.3;
-        public static final double AUTO_TURN_SPEED_DAMPENING = 0.6;
-        public static final double AUTO_TURN_SLOWDOWN_RANGE = 15;
+        public static final double AUTO_TURN_SPEED = 0.4;
+        public static final double AUTO_TURN_SPEED_DAMPENING = 0.5;
+        public static final double AUTO_TURN_SLOWDOWN_RANGE = 30;
 
         public static final double TICKS_PER_INCH = 2267.4512;
-        public static final double AUTO_DRIVE_SPEED = 0.3;
+        public static final double AUTO_DRIVE_SPEED = 0.4;
+        public static final double AUTO_DRIVE_SPEED_DAMPENING = 0.5;
+        public static final double AUTO_DRIVE_SLOWDOWN_RANGE = 12;
 
         public static final double DRIVER_P = 0.00075;
         public static final double DRIVER_I = 0.0;
@@ -41,27 +43,31 @@ public final class Constants {
         public static final int LOW_INDEXER = 7;
         public static final int HIGH_INDEXER = 8;
         public static final int SHOOTER = 9;
-        public static final int LIMIT_SWTICH = 1;
+        public static final int UPPER_LIMIT_SWTICH = 0;
+        public static final int LOWER_LIMIT_SWTICH = 1;
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
-        public static final double INDEXER_OUTPUT = 0.4;
-        public static final double SHOOTER_RPM = 3000.0;
+        public static final double INDEXER_OUTPUT = 1;
+        public static final double SHOOTER_RPM = 1000.0;
+        public static final double SHOOTER_VALUE = 0.75;
         public static final double SHOOTER_RPM_DEADBAND = 100.0;
         public static final double SHOOT_TIME = 0.5;
 
-        public static final double SHOOTER_P = 0.0;
-        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_P = 0.000675;
+        public static final double SHOOTER_I = 0.001649694501;
         public static final double SHOOTER_D = 0.0;
         public static final double SHOOTER_F = 0.0;
 
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;
 
-        public static final double RED_BALL_RED_VALUE = 0.38;
-        public static final double RED_BALL_BLUE_VALUE = 0.15;
+        public static final double RED_BALL_RED_VALUE = 0.31;
+        public static final double RED_BALL_BLUE_VALUE = 0.20;
 
-        public static final double BLUE_BALL_RED_VALUE = 0.35;
-        public static final double BLUE_BALL_BLUE_VALUE = 0.17;
+        public static final double BLUE_BALL_RED_VALUE = 0.29;
+        public static final double BLUE_BALL_BLUE_VALUE = 0.22;
+
+        public static final Integer BALL_DISTANCE = 15;
 
         /**
          * Controller Input Device Mapping

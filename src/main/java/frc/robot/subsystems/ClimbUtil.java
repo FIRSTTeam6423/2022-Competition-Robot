@@ -4,15 +4,17 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.enums.ClimbState;
+import frc.robot.util.ClimbState;
 
 public class ClimbUtil extends SubsystemBase{
     //Solenoid
     private Solenoid grabber;
+    private Compressor pcmCompressor;
 
     /**
      * I created an enum class because it is cleaner than using a boolean.
@@ -25,8 +27,9 @@ public class ClimbUtil extends SubsystemBase{
     private ClimbState state = ClimbState.ARM_BACK;
 
     public ClimbUtil(){
-        grabber = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-        
+        grabber = new Solenoid(10, PneumaticsModuleType.CTREPCM, 0);
+        pcmCompressor = new Compressor(10, PneumaticsModuleType.CTREPCM);
+        pcmCompressor.enableDigital();
     }
 
     /**
@@ -49,6 +52,10 @@ public class ClimbUtil extends SubsystemBase{
         }
     }
 
+    public void setState(ClimbState input){
+        state = input;
+    }
+
     /**
      * Simple helper class to determine the state of the subsystem.
      * In this example we are just running it out to the SmartDashboard
@@ -68,7 +75,7 @@ public class ClimbUtil extends SubsystemBase{
      * Although this repeats over and over again, when dealing
      * with pneumatics it works and it is a no harm no foul approach.
      */
-    private void operateArm(){
+    public void operateArm(){
         if(state == ClimbState.ARM_BACK){
             grabber.set(false);
         }
@@ -83,7 +90,10 @@ public class ClimbUtil extends SubsystemBase{
          * Here is where we are checking the desired state and making sure it is so.
          * Additionally, we are sending state to the SmartDashboard.
          */
-        operateArm();
+        //operateArm();
         SmartDashboard.putString("Climb State :: ", getPistonState().toString());
+        // SmartDashboard.putBoolean("Compressor", pcmCompressor.enabled());
+        // SmartDashboard.putBoolean("Pressure Switch", pcmCompressor.getPressureSwitchValue());
+        // SmartDashboard.putBoolean("Solonoid", grabber.get());
     }
 }

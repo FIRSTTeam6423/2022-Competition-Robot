@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,17 +14,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
-import frc.robot.commands.OperateCargoIntake;
-import frc.robot.commands.OperateCargoShoot;
-import frc.robot.commands.autoCommands.DriveForTime;
+import frc.robot.commands.OperateCargo;
+import frc.robot.commands.OperateClimb;
 import frc.robot.commands.autoCommands.GrabAndShoot;
 import frc.robot.commands.autoCommands.ShootThenLeave;
 import frc.robot.subsystems.DriveUtil;
+import frc.robot.util.DPadButton;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
-import frc.robot.commands.autoCommands.DrivBoxPattern;
-import frc.robot.commands.autoCommands.DriveForDistance;
 import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
+import frc.robot.commands.autoCommands.TurnForAngle;
+import frc.robot.util.CargoState;
+import frc.robot.util.ClimbState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,8 +41,8 @@ public class RobotContainer {
   private final ClimbUtil climbUtil = new ClimbUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
-  private final OperateCargoIntake operateCargoIntake = new OperateCargoIntake(cargoUtil);
-  private final OperateCargoShoot operateCargoShoot = new OperateCargoShoot(cargoUtil);
+  private final OperateClimb operateClimb = new OperateClimb(climbUtil);
+  private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
 
   private static XboxController driver;
   private static XboxController operator;
@@ -49,8 +51,13 @@ public class RobotContainer {
    * Added a new object - JoystickButton
    * This one is used to Toggle the Climb Arm out and back.
    */
-  private JoystickButton toggleClimb;
-
+  private JoystickButton shootButton;
+  private JoystickButton intakeButton;
+  private JoystickButton indexButton;
+  private JoystickButton idleButton;
+  private JoystickButton spitButton;
+  private DPadButton climbUp;
+  private DPadButton climbDown;
 
   public static SendableChooser<Byte> driveType;
   public static SendableChooser<Byte> noobMode;
@@ -76,10 +83,11 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
 
-    autoChooser.setDefaultOption("Drive 40 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 40));
-    autoChooser.addOption("Drive 40 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -40));
+    autoChooser.setDefaultOption("Drive 45 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 45, true));
+    autoChooser.addOption("Drive 45 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -45, true));
     autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
     autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
+    autoChooser.addOption("Turn 180 Degrees", new TurnForAngle(driveUtil, 180));
 
     teamColorChooser = new SendableChooser<String>();
     teamColorChooser.addOption("Red", "RED");
@@ -107,8 +115,15 @@ public class RobotContainer {
      * Careful what you choose!
      * 
      */
-    toggleClimb = new JoystickButton(operator, Button.kLeftBumper.value);
+    climbUp = new DPadButton(operator, 0);
+    climbDown = new DPadButton(operator, 180);
 
+    shootButton = new JoystickButton(operator, Button.kY.value);
+    intakeButton =  new JoystickButton(operator, Button.kA.value);
+    //indexButton = new JoystickButton(operator, Button.kX.value);
+    spitButton = new JoystickButton(operator, Button.kStart.value);
+    idleButton = new JoystickButton(operator, Button.kB.value);
+    
     /**
      * Could have done this any number of ways, a real command or an instant command.
      * I went with InstantCommand, just as an example.  It will work.  Much more lightweight
@@ -118,7 +133,16 @@ public class RobotContainer {
      * not needed in the case of an InstantCommand().
      * 
      */
-    toggleClimb.whenPressed(new InstantCommand(() -> climbUtil.toggleArmState(), climbUtil));
+    climbUp.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_OUT), climbUtil));
+    climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
+
+    shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
+    // shootButton.whenPressed(new InstantCommand(() -> cargoUtil.toggleShooter(), cargoUtil));
+    intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
+    //indexButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INDEX), cargoUtil));
+    spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
+    idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
+    
   }
 
   /**
@@ -133,8 +157,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     driveUtil.setDefaultCommand(operateDrive);
-    cargoUtil.setDefaultCommand(operateCargoIntake);
-    cargoUtil.setDefaultCommand(operateCargoShoot);
+    cargoUtil.setDefaultCommand(operateCargo);
+    climbUtil.setDefaultCommand(operateClimb);
   }
 
   public static double getDriverLeftXboxX(){

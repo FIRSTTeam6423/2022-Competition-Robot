@@ -76,6 +76,8 @@ public class DriveUtil extends SubsystemBase {
 
         // Initialize DifferentialDrive controller
         differentialDrive = new DifferentialDrive(leftPrimary, rightPrimary);
+        calibrateGyro();
+
     }
 
     /**
@@ -138,19 +140,19 @@ public class DriveUtil extends SubsystemBase {
         return sensorPosition;
     }
 
-    public double getleftPosition() {
+    public double getLeftPosition() {
         double leftSensorPosition = leftPrimaryEncoder.getPosition();
 
         return leftSensorPosition;
     }   
 
-    public double getrightPosition() {
+    public double getRightPosition() {
         double rightSensorPosition = rightPrimaryEncoder.getPosition();
 
         return rightSensorPosition;
     }   
 
-    public void resetEndconder(){
+    public void resetEncoder(){
         leftPrimaryEncoder.setPosition(0);
         leftSecondaryEncoder.setPosition(0);
         rightPrimaryEncoder.setPosition(0);

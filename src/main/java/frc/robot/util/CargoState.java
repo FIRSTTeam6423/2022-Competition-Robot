@@ -1,4 +1,4 @@
-package frc.robot.enums;
+package frc.robot.util;
 
 public enum CargoState {
     IDLE,INTAKE,INDEX,SPINUP,SHOOT, SPIT;
