@@ -39,7 +39,8 @@ public class CargoUtil extends SubsystemBase {
     Color detectedColor = m_colorSensor.getColor();
 
     //Limit switch
-    private DigitalInput limitSwitch;
+    private DigitalInput upperLimitSwitch;
+    private DigitalInput lowerLimitSwitch;
 
     public CargoUtil() {
         // super(new PIDController(Constants.SHOOTER_P, Constants.SHOOTER_I,  Constants.SHOOTER_D));
@@ -60,7 +61,8 @@ public class CargoUtil extends SubsystemBase {
         shooterPIDController.setD(Constants.SHOOTER_D);
         shooterPIDController.setFF(Constants.SHOOTER_F);
 
-        limitSwitch = new DigitalInput(Constants.LIMIT_SWTICH);
+        upperLimitSwitch = new DigitalInput(Constants.UPPER_LIMIT_SWTICH);
+        lowerLimitSwitch = new DigitalInput(Constants.LOWER_LIMIT_SWTICH);
     }
     
     public void operateBallMagnet(){
@@ -138,7 +140,7 @@ public class CargoUtil extends SubsystemBase {
         SmartDashboard.putBoolean("isTeamColor", teamColorVsColor);
     }
 
-    public String detectLowerBallColor(){
+    /*public String detectLowerBallColor(){
         String color = "";
         if (detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE){
             color = "RED";
@@ -146,19 +148,20 @@ public class CargoUtil extends SubsystemBase {
             color = "BLUE"; 
         }
         return color;
-    }
+    }*/
 
-    public void detectLowerBall(){
-        if ((detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE) || 
+    public boolean detectLowerBall(){
+        /*if ((detectedColor.red > Constants.RED_BALL_BLUE_VALUE && detectedColor.blue < Constants.RED_BALL_RED_VALUE) || 
         (detectedColor.blue > Constants.BLUE_BALL_BLUE_VALUE && detectedColor.blue < Constants.BLUE_BALL_RED_VALUE)){
             SmartDashboard.putString("Lower", "LOWER BALL DETECTED");
         } else{
             SmartDashboard.putString("Lower", "NO LOWER BALL DETECTED");
-        }
+        }*/
+        return lowerLimitSwitch.get();
     }
 
     public void showUpperBall(){
-        if (limitSwitch.get()){
+        if (upperLimitSwitch.get()){
             SmartDashboard.putString("Upper", "UPPER BALL DETECTED");
         } else {
             SmartDashboard.putString("Upper", "NO UPPER BALL DETECTED");
@@ -166,7 +169,7 @@ public class CargoUtil extends SubsystemBase {
     }
 
     public boolean detectUpperBall(){
-        return limitSwitch.get();
+        return upperLimitSwitch.get();
     }
 
     public CargoState returnState(){
@@ -182,7 +185,12 @@ public class CargoUtil extends SubsystemBase {
                 } else {
                     operateLowIndexer();
                 }
-                operateBallMagnet();
+                if (detectLowerBall()){
+                    stopBallMagnet();
+                } else {
+                    operateBallMagnet();
+                }
+                // operateBallMagnet();
                 // stopLowIndexer();
                 stopHighIndexer();
                 stopShooter();
