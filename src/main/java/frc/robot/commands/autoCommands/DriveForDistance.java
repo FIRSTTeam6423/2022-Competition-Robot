@@ -25,14 +25,16 @@ public class DriveForDistance extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (!driveUtil.getMoving() && driveUtil.getLeftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
+        if (!driveUtil.getMoving() && 
+            driveUtil.getLeftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
             driveUtil.getLeftPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND && 
             driveUtil.getRightPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
-            driveUtil.getRightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND){
+            driveUtil.getRightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND) {
                 driveUtil.stopDistance();
                 done = true;
                 return;
             }
+            
         driveUtil.operateDistance(encoderSetpoint);
     }
 

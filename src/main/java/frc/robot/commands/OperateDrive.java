@@ -26,7 +26,6 @@ public class OperateDrive extends CommandBase {
   @Override
   public void execute() {
     driveUtil.driveRobot();
-    driveUtil.detectGyro();
   }
 
   // Called once the command ends or is interrupted.

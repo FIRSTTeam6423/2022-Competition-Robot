@@ -41,7 +41,7 @@ public class TurnForAngle extends CommandBase {
         // we're done! Set `done = true` and turn the motors off.
         // We only need to check the left encoder since we're driving straight.
         // If you're turning, you would use the gyro to measure that properly.
-        angle = driveUtil.getHeading();
+        angle = driveUtil.getGyroYaw();
 
         if (right) {
             // Drive the robot using a constant speed set in Constants
