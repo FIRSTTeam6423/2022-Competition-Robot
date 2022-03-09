@@ -29,11 +29,12 @@ public class DriveForDistance extends CommandBase{
         if (driveUtil.getLeftPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
             driveUtil.getLeftPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND && 
             driveUtil.getRightPosition() > encoderSetpoint - Constants.DRIVER_DEADBAND && 
-            driveUtil.getRightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND){
+            driveUtil.getRightPosition() < encoderSetpoint + Constants.DRIVER_DEADBAND) {
                 driveUtil.stopDistance();
                 done = true;
                 return;
             }
+            
         driveUtil.operateDistance(encoderSetpoint);
     }
 
