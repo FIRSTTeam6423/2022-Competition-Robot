@@ -72,8 +72,6 @@ public final class Constants {
         /**
          * Controller Input Device Mapping
          */
-        //public static final int LEFT_STICK = 2;
-        //public static final int RIGHT_STICK = 1;
         public static final int XBOX_DRIVER = 0;
         public static final int XBOX_OPERATOR = 1;
 
