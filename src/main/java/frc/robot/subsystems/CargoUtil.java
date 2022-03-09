@@ -81,8 +81,16 @@ public class CargoUtil extends SubsystemBase {
         lowIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
+    public void reverseLowIndexer(){
+        lowIndexer.set(ControlMode.PercentOutput, -Constants.INDEXER_OUTPUT);
+    }
+
     public void operateHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
+    }
+
+    public void reverseHighIndexer(){
+        highIndexer.set(ControlMode.PercentOutput, -Constants.INDEXER_OUTPUT);
     }
 
     public void stopLowIndexer(){
@@ -182,12 +190,13 @@ public class CargoUtil extends SubsystemBase {
             case INTAKE:
                 if (detectUpperBall()){
                     stopLowIndexer();
+                    if (!detectLowerBall()){
+                        stopBallMagnet();
+                    } else {
+                        operateBallMagnet();
+                    }
                 } else {
                     operateLowIndexer();
-                }
-                if (detectLowerBall()){
-                    stopBallMagnet();
-                } else {
                     operateBallMagnet();
                 }
                 // operateBallMagnet();
@@ -222,7 +231,7 @@ public class CargoUtil extends SubsystemBase {
                 if (!detectUpperBall()){
                     operateLowIndexer();
                     operateBallMagnet();
-                }
+                }                                                                                                                        
                 break;
             case IDLE:
                 stopLowIndexer();
@@ -231,8 +240,8 @@ public class CargoUtil extends SubsystemBase {
                 stopBallMagnet();
                 break;
             case SPIT:
-                stopLowIndexer();
-                stopHighIndexer();
+                reverseLowIndexer();
+                reverseHighIndexer();
                 stopShooter();
                 reverseBallMagnet();
         }
