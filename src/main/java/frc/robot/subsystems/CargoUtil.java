@@ -67,14 +67,23 @@ public class CargoUtil extends SubsystemBase {
         lowIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
     }
 
+    public void reverseLowIndexer(){
+        lowIndexer.set(ControlMode.PercentOutput, -Constants.INDEXER_OUTPUT);
+    }
+
     public void operateHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, Constants.INDEXER_OUTPUT);
+    }
+
+    public void reverseHighIndexer(){
+        highIndexer.set(ControlMode.PercentOutput, -Constants.INDEXER_OUTPUT);
     }
 
     public void stopLowIndexer(){
         lowIndexer.set(ControlMode.PercentOutput, 0);
 
     }
+
     public void stopHighIndexer(){
         highIndexer.set(ControlMode.PercentOutput, 0);
     }
@@ -100,16 +109,16 @@ public class CargoUtil extends SubsystemBase {
     }
 
     public boolean detectLowerBall(){
-        return lowerLimitSwitch.get();
+        return !lowerLimitSwitch.get();
     }
 
-    public void showUpperBall(){
-        if (upperLimitSwitch.get()){
-            SmartDashboard.putString("Upper", "UPPER BALL DETECTED");
-        } else {
-            SmartDashboard.putString("Upper", "NO UPPER BALL DETECTED");
-        }
-    }
+    // public void showUpperBall(){
+    //     if (upperLimitSwitch.get()){
+    //         SmartDashboard.putString("Upper", "UPPER BALL DETECTED");
+    //     } else {
+    //         SmartDashboard.putString("Upper", "NO UPPER BALL DETECTED");
+    //     }
+    // }
 
     public boolean detectUpperBall(){
         return upperLimitSwitch.get();
@@ -125,12 +134,13 @@ public class CargoUtil extends SubsystemBase {
             case INTAKE:
                 if (detectUpperBall()){
                     stopLowIndexer();
+                    if (detectLowerBall()){
+                        stopBallMagnet();
+                    } else {
+                        operateBallMagnet();
+                    }
                 } else {
                     operateLowIndexer();
-                }
-                if (detectLowerBall()){
-                    stopBallMagnet();
-                } else {
                     operateBallMagnet();
                 }
                 // operateBallMagnet();
@@ -163,8 +173,8 @@ public class CargoUtil extends SubsystemBase {
                 stopBallMagnet();
                 break;
             case SPIT:
-                stopLowIndexer();
-                stopHighIndexer();
+                reverseLowIndexer();
+                reverseHighIndexer();
                 stopShooter();
                 reverseBallMagnet();
         }
@@ -177,7 +187,8 @@ public class CargoUtil extends SubsystemBase {
         /** This is normally where we send important values to the SmartDashboard */
         SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
 
-        showUpperBall();
+        SmartDashboard.putBoolean("High Ball", detectUpperBall());
+        SmartDashboard.putBoolean("Low Ball", detectLowerBall());
     }
 }
 

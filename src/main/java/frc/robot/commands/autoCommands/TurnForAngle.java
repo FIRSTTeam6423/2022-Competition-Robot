@@ -35,7 +35,7 @@ public class TurnForAngle extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        angle = driveUtil.getHeading();
+        angle = driveUtil.getGyroYaw();
 
         if (right) {
             // Converts the gyro angles to 0->360 instead of 0->180 & 0->-180

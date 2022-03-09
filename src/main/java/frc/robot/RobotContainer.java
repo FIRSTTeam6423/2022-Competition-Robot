@@ -85,7 +85,6 @@ public class RobotContainer {
     autoChooser.addOption("Drive 45 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -45, true));
     autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
     autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
-    autoChooser.addOption("Turn 180 Degrees", new TurnForAngle(driveUtil, 180));
 
     SmartDashboard.putData("Autonomous Command", autoChooser);
   }
