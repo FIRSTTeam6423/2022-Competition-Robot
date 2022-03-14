@@ -46,12 +46,20 @@ public class ShotUtil extends SubsystemBase {
     shooterPIDController.setReference(0.0, CANSparkMax.ControlType.kVelocity);
   }
 
+  public void setState(ShotState newState){
+    state = newState;
+  }
+
   public ShotState returnState(){
     return state;
   }
 
-  public void setState(ShotState newState){
-    state = newState;
+  public void toggleState(){
+    if (state == ShotState.SHOOT){
+      state = ShotState.IDLE;
+    } else {
+      state = ShotState.SHOOT;
+    }
   }
 
   public void operateShot(){

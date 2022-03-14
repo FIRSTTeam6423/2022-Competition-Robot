@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -60,6 +62,7 @@ public class RobotContainer {
   private JoystickButton intakeButton;
   private JoystickButton idleButton;
   private JoystickButton spitButton;
+  private JoystickButton spinUpButton;
   private DPadButton climbUp;
   private DPadButton climbDown;
 
@@ -116,6 +119,7 @@ public class RobotContainer {
     climbDown = new DPadButton(operator, 180);
 
     shootButton = new JoystickButton(operator, Button.kY.value);
+    spinUpButton = new JoystickButton(operator, Button.kX.value);
     intakeButton =  new JoystickButton(operator, Button.kA.value);
     spitButton = new JoystickButton(operator, Button.kStart.value);
     idleButton = new JoystickButton(operator, Button.kB.value);
@@ -131,11 +135,12 @@ public class RobotContainer {
      */
     climbUp.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_OUT), climbUtil));
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
-    shootButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.SHOOT), shotUtil));
-    shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP)));
+    shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SHOOT), cargoUtil));;
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
+    idleButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.IDLE), shotUtil));
+    spinUpButton.whenPressed(new InstantCommand(() -> shotUtil.toggleState()));
     
   }
 

@@ -7,5 +7,4 @@ package frc.robot.util;
 /** Add your docs here. */
 public enum ClimbState {
     ARM_OUT, ARM_BACK;
-
 }
