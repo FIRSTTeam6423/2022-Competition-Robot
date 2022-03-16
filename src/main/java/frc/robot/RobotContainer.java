@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,16 +13,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OperateDrive;
+import frc.robot.commands.OperateShot;
 import frc.robot.commands.OperateCargo;
 import frc.robot.commands.OperateClimb;
 import frc.robot.commands.autoCommands.GrabAndShoot;
 import frc.robot.commands.autoCommands.ShootThenLeave;
 import frc.robot.subsystems.DriveUtil;
+import frc.robot.subsystems.ShotUtil;
 import frc.robot.util.DPadButton;
+import frc.robot.util.ShotState;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.subsystems.ClimbUtil;
 import frc.robot.commands.autoCommands.DriveForDistanceNoPID;
-import frc.robot.commands.autoCommands.TurnForAngle;
 import frc.robot.util.CargoState;
 import frc.robot.util.ClimbState;
 
@@ -39,10 +40,12 @@ public class RobotContainer {
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
   private final ClimbUtil climbUtil = new ClimbUtil();
+  private final ShotUtil shotUtil = new ShotUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
   private final OperateClimb operateClimb = new OperateClimb(climbUtil);
   private final OperateCargo operateCargo = new OperateCargo(cargoUtil);
+  private final OperateShot operateShot = new OperateShot(shotUtil);
 
   private static XboxController driver;
   private static XboxController operator;
@@ -127,11 +130,10 @@ public class RobotContainer {
     climbUp.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_OUT), climbUtil));
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
 
-    shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
+    shootButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.RUN_MOTOR), shotUtil));
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
-    
   }
 
   /**
@@ -148,6 +150,7 @@ public class RobotContainer {
     driveUtil.setDefaultCommand(operateDrive);
     cargoUtil.setDefaultCommand(operateCargo);
     climbUtil.setDefaultCommand(operateClimb);
+    shotUtil.setDefaultCommand(operateShot);
   }
 
   public static double getDriverLeftXboxX(){
