@@ -38,8 +38,6 @@ public class ShotUtil extends PIDSubsystem {
 
   public void setState(ShotState newState){
     state = newState;
-    System.out.println(newState.toString());
-    System.out.println(state.toString());
   }
 
   public ShotState getState(){

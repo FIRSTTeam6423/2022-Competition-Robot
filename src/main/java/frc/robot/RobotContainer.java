@@ -134,6 +134,8 @@ public class RobotContainer {
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
+    idleButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.STOP_MOTOR), shotUtil));
+
   }
 
   /**

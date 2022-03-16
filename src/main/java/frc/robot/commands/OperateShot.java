@@ -23,7 +23,7 @@ public class OperateShot extends CommandBase {
   public void initialize() {
     // su.setState(ShotState.STOP_MOTOR);
     // su.operateShot();
-    su.setState(ShotState.STOP_MOTOR);
+    System.out.println(su.getState().toString());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
