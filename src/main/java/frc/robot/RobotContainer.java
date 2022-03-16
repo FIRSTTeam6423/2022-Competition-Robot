@@ -40,7 +40,7 @@ public class RobotContainer {
   private final DriveUtil driveUtil = new DriveUtil();
   private final CargoUtil cargoUtil = new CargoUtil();
   private final ClimbUtil climbUtil = new ClimbUtil();
-  private final ShotUtil shotUtil = new ShotUtil();
+  private final static ShotUtil shotUtil = new ShotUtil();
 
   private final OperateDrive operateDrive = new OperateDrive(driveUtil);
   private final OperateClimb operateClimb = new OperateClimb(climbUtil);
@@ -66,6 +66,8 @@ public class RobotContainer {
   public final static Byte arcade = 0;
   public final static Byte tank = 1;
   public final static Byte curvature = 2;
+
+  public static boolean shootState = false;
 
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -131,6 +133,7 @@ public class RobotContainer {
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
 
     shootButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.RUN_MOTOR), shotUtil));
+    shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
@@ -153,6 +156,14 @@ public class RobotContainer {
     cargoUtil.setDefaultCommand(operateCargo);
     climbUtil.setDefaultCommand(operateClimb);
     shotUtil.setDefaultCommand(operateShot);
+  }
+
+  public static void setShooter(){
+    shootState = shotUtil.atRPM();
+  }
+
+  public static boolean getShooter(){
+    return shootState;
   }
 
   public static double getDriverLeftXboxX(){

@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Constants;
 import frc.robot.util.CargoState;
+import frc.robot.RobotContainer;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -28,6 +29,8 @@ public class CargoUtil extends SubsystemBase {
 
         upperLimitSwitch = new DigitalInput(Constants.UPPER_LIMIT_SWTICH);
         lowerLimitSwitch = new DigitalInput(Constants.LOWER_LIMIT_SWTICH);
+
+        ballMagnet.setInverted(true);
     }
     
     public void operateBallMagnet(){
@@ -105,6 +108,9 @@ public class CargoUtil extends SubsystemBase {
                 stopLowIndexer();
                 stopHighIndexer();
                 stopBallMagnet();
+                if(RobotContainer.getShooter()){
+                    setState(CargoState.SHOOT);
+                }
                 break;
             case SHOOT:
                 operateHighIndexer();

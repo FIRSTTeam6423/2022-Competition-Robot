@@ -30,7 +30,7 @@ public class GrabAndShoot extends SequentialCommandGroup {
       //Instead of doing precise turns, driving into it for enough time will automatically line us up
       new DriveForTime(du, 3.5, Constants.AUTO_DRIVE_SPEED),
       //Get exact right positioning for shooting
-      new DriveForDistanceNoPID(du, -6, true),
+      new DriveForDistanceNoPID(du, 6, true),
       new AutoShoot(cu)
     );
   }

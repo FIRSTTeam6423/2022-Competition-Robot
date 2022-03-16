@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.util.ShotState;
 
 public class ShotUtil extends PIDSubsystem {
@@ -23,11 +24,13 @@ public class ShotUtil extends PIDSubsystem {
   private CANSparkMax shooter;
   private RelativeEncoder shooterEncoder;
   private ShotState state = ShotState.STOP_MOTOR;
+  private boolean atSetPoint = false;
 
   public ShotUtil() {
     super(new PIDController(Constants.SHOOTER_P, Constants.SHOOTER_I, Constants.SHOOTER_D));
 
     shooter = new CANSparkMax(Constants.SHOOTER, MotorType.kBrushless);
+    shooter.setInverted(true);
     shooter.setIdleMode(IdleMode.kCoast);
 
     shooterEncoder = shooter.getEncoder();
@@ -56,6 +59,14 @@ public class ShotUtil extends PIDSubsystem {
     }
   }
 
+  public boolean atRPM(){
+    atSetPoint = getController().atSetpoint();
+    if (getMeasurement() < Constants.SHOOTER_POSITION_TOLERANCE + 1){
+      atSetPoint = false;
+    }
+    return atSetPoint;
+  }
+
   @Override
   public void useOutput(double output, double setpoint) {
     // Ensure the output value from the PID Controller is between -1 to 1.
@@ -79,8 +90,9 @@ public class ShotUtil extends PIDSubsystem {
   public void periodic() {
     // This method will be called once per scheduler run
     super.periodic();
-    SmartDashboard.putBoolean("At RPM", getController().atSetpoint());
-
     SmartDashboard.putString("Shoot Mode", getState().toString());
+    SmartDashboard.putBoolean("At RPM?", atRPM());
+    SmartDashboard.putNumber("RPM", getMeasurement());
+    RobotContainer.setShooter();
   }
 }
