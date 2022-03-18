@@ -54,7 +54,8 @@ public class RobotContainer {
    * Added a new object - JoystickButton
    * This one is used to Toggle the Climb Arm out and back.
    */
-  private JoystickButton shootButton;
+  private JoystickButton shootHighButton;
+  private JoystickButton shootLowButton;
   private JoystickButton intakeButton;
   private JoystickButton idleButton;
   private JoystickButton spitButton;
@@ -88,8 +89,8 @@ public class RobotContainer {
 
     autoChooser.setDefaultOption("Drive 45 Inches Out of Tarmac Forwards", new DriveForDistanceNoPID(driveUtil, 45, true));
     autoChooser.addOption("Drive 45 Inches Out of Tarmac Backwards", new DriveForDistanceNoPID(driveUtil, -45, true));
-    autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil));
-    autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil));
+    autoChooser.addOption("Shoot Then Leave the Tarmac", new ShootThenLeave(driveUtil, cargoUtil, shotUtil));
+    autoChooser.addOption("Grab Ball Then Return to Shoot", new GrabAndShoot(driveUtil, cargoUtil, shotUtil));
 
     SmartDashboard.putData("Autonomous Command", autoChooser);
   }
@@ -115,7 +116,8 @@ public class RobotContainer {
     climbUp = new DPadButton(operator, 0);
     climbDown = new DPadButton(operator, 180);
 
-    shootButton = new JoystickButton(operator, Button.kY.value);
+    shootHighButton = new JoystickButton(operator, Button.kY.value);
+    shootLowButton = new JoystickButton(operator, Button.kX.value);
     intakeButton =  new JoystickButton(operator, Button.kA.value);
     spitButton = new JoystickButton(operator, Button.kStart.value);
     idleButton = new JoystickButton(operator, Button.kB.value);
@@ -132,8 +134,12 @@ public class RobotContainer {
     climbUp.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_OUT), climbUtil));
     climbDown.whenPressed(new InstantCommand(() -> climbUtil.setState(ClimbState.ARM_BACK), climbUtil));
 
-    shootButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.RUN_MOTOR), shotUtil));
-    shootButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
+    shootHighButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.RUN_MOTOR_HIGH_GOAL), shotUtil));
+    shootHighButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
+
+    shootLowButton.whenPressed(new InstantCommand(() -> shotUtil.setState(ShotState.RUN_MOTOR_LOW_GOAL), shotUtil));
+    shootLowButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPINUP), cargoUtil));
+
     intakeButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.INTAKE), cargoUtil));
     spitButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.SPIT), cargoUtil));
     idleButton.whenPressed(new InstantCommand(() -> cargoUtil.setState(CargoState.IDLE), cargoUtil));
@@ -162,7 +168,7 @@ public class RobotContainer {
     shootState = shotUtil.atRPM();
   }
 
-  public static boolean getShooter(){
+  public static boolean getIsReadyToShoot(){
     return shootState;
   }
 

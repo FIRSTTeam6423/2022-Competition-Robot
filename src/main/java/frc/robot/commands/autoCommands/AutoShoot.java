@@ -5,17 +5,22 @@
 package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ShotUtil;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.util.CargoState;
+import frc.robot.util.ShotState;
 import edu.wpi.first.wpilibj.Timer;
 
 public class AutoShoot extends CommandBase {
+  ShotUtil su;
   CargoUtil cu;
   Timer timer;
   boolean done;
   /** Creates a new AutoShoot. */
-  public AutoShoot(CargoUtil cu) {
+  public AutoShoot(ShotUtil su, CargoUtil cu) {
+    this.su = su;
     this.cu = cu;
+    addRequirements(this.su);
     addRequirements(this.cu);
 
     //Using a timer to make sure that balls are shot out
@@ -28,6 +33,7 @@ public class AutoShoot extends CommandBase {
   @Override
   public void initialize() {
     done = false;
+    su.setState(ShotState.RUN_MOTOR_LOW_GOAL);
     cu.setState(CargoState.SPINUP);
     timer.start();
   }
@@ -35,15 +41,18 @@ public class AutoShoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (timer.get() > 5){
+    if (su.atRPM()){
       done = true;
     }
+    su.operateShot();
     cu.OperateCargo();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    su.setState(ShotState.STOP_MOTOR);
+    su.operateShot();
     cu.setState(CargoState.IDLE);
     cu.OperateCargo();
   }

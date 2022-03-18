@@ -8,6 +8,7 @@ import frc.robot.util.CargoState;
 import frc.robot.RobotContainer;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +17,7 @@ public class CargoUtil extends SubsystemBase {
     //Shooter controllers
     private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
     private CargoState state = CargoState.IDLE;
+    private Timer timer;
 
     //Limit switch
     private DigitalInput upperLimitSwitch;
@@ -29,6 +31,9 @@ public class CargoUtil extends SubsystemBase {
 
         upperLimitSwitch = new DigitalInput(Constants.UPPER_LIMIT_SWTICH);
         lowerLimitSwitch = new DigitalInput(Constants.LOWER_LIMIT_SWTICH);
+
+        timer = new Timer();
+        timer.reset();
 
         ballMagnet.setInverted(true);
     }
@@ -101,20 +106,21 @@ public class CargoUtil extends SubsystemBase {
                     operateLowIndexer();
                     operateBallMagnet();
                 }
-                // operateBallMagnet();
                 stopHighIndexer();
                 break;
             case SPINUP:
+                timer.reset();
                 stopLowIndexer();
                 stopHighIndexer();
                 stopBallMagnet();
-                if(RobotContainer.getShooter()){
+                if(RobotContainer.getIsReadyToShoot()){
+                    timer.start();
                     setState(CargoState.SHOOT);
                 }
                 break;
             case SHOOT:
                 operateHighIndexer();
-                if (!detectUpperBall()){
+                if (timer.get() > Constants.SHOOT_TIME_INTERVAL && !detectUpperBall()){
                     operateLowIndexer();
                     operateBallMagnet();
                 }

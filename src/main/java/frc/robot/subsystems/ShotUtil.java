@@ -48,14 +48,22 @@ public class ShotUtil extends PIDSubsystem {
   }
 
   public void operateShot(){
-    if (state == ShotState.RUN_MOTOR){
-      if(!isEnabled()){
-        enable();
-      }
-      setSetpoint(Constants.SHOOTER_RPM);
-    } else {
-      disable();
-      setSetpoint(0);
+    switch(state){
+      case RUN_MOTOR_HIGH_GOAL:        
+        if(!isEnabled()){
+          enable();
+        }
+        setSetpoint(Constants.HIGH_GOAL_SHOOTER_RPM);
+        break;
+      case RUN_MOTOR_LOW_GOAL:
+        if(!isEnabled()){
+          enable();
+        }
+        setSetpoint(Constants.LOW_GOAL_SHOOTER_RPM);
+        break;
+      case STOP_MOTOR:
+        disable();
+        setSetpoint(0);
     }
   }
 
@@ -94,5 +102,6 @@ public class ShotUtil extends PIDSubsystem {
     SmartDashboard.putBoolean("At RPM?", atRPM());
     SmartDashboard.putNumber("RPM", getMeasurement());
     RobotContainer.setShooter();
+    
   }
 }

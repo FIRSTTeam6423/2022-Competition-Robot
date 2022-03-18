@@ -146,6 +146,7 @@ public class DriveUtil extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
+        SmartDashboard.putNumber("Yaw", getGyroYaw());
     }
 }
 

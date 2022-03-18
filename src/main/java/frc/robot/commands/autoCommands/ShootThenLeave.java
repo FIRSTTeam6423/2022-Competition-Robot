@@ -4,21 +4,23 @@
 
 package frc.robot.commands.autoCommands;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveUtil;
 import frc.robot.subsystems.CargoUtil;
+import frc.robot.subsystems.ShotUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootThenLeave extends SequentialCommandGroup {
   /** Creates a new ShootThenLeave. */
-  public ShootThenLeave(DriveUtil du, CargoUtil cu) {
+  public ShootThenLeave(DriveUtil du, CargoUtil cu, ShotUtil su) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new AutoShoot(cu),
-      new DriveForDistanceNoPID(du, -90, true)
+      new AutoShoot(su, cu), 
+      new DriveForDistanceNoPID(du, -95, true)
     );
   }
 }

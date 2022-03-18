@@ -7,7 +7,10 @@ package frc.robot.commands.autoCommands;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveUtil;
+import frc.robot.util.ShotState;
+import frc.robot.subsystems.ShotUtil;
 import frc.robot.Constants;
+import frc.robot.commands.OperateCargo;
 import frc.robot.subsystems.CargoUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -15,7 +18,7 @@ import frc.robot.subsystems.CargoUtil;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class GrabAndShoot extends SequentialCommandGroup {
   /** Creates a new GrabNShoot. */
-  public GrabAndShoot(DriveUtil du, CargoUtil cu) {
+  public GrabAndShoot(DriveUtil du, CargoUtil cu, ShotUtil su) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -28,10 +31,9 @@ public class GrabAndShoot extends SequentialCommandGroup {
       new TurnForAngle(du, 170),
       new DriveForDistanceNoPID(du, 80, false),
       //Instead of doing precise turns, driving into it for enough time will automatically line us up
-      new DriveForTime(du, 3.5, Constants.AUTO_DRIVE_SPEED),
+      new DriveForTime(du, 2, Constants.AUTO_DRIVE_SPEED),
       //Get exact right positioning for shooting
-      new DriveForDistanceNoPID(du, 6, true),
-      new AutoShoot(cu)
+        new AutoShoot(su, cu)
     );
   }
 }

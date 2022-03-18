@@ -48,17 +48,18 @@ public final class Constants {
 
         public static final double BALL_MAGNET_OUTPUT = 0.4;
         public static final double INDEXER_OUTPUT = 1;
-        public static final double SHOOTER_RPM = 2500.0;
+        public static final double HIGH_GOAL_SHOOTER_RPM = 2000.0;
+        public static final double LOW_GOAL_SHOOTER_RPM = 1550.0;
         public static final double SHOOTER_VALUE = 0.75;
-        public static final double SHOOT_TIME = 0.5;
+        public static final double SHOOT_TIME_INTERVAL = 0.37;
 
         public static final double SHOOTER_P = 0.000495;
-        public static final double SHOOTER_I = 0.001;
+        public static final double SHOOTER_I = 0.00045;
         public static final double SHOOTER_D = 0.0;
         public static final double SHOOTER_F = 0.0;
 
         public static final double SHOOTER_POSITION_TOLERANCE = 25;
-        public static final double SHOOTER_VELOCITY_TOLERANCE = 20;
+        public static final double SHOOTER_VELOCITY_TOLERANCE = 500;
 
         public static final int ARCADE_LEFT_DAMPENING = 60;
         public static final int ARCADE_RIGHT_DAMPENING = 60;

@@ -21,9 +21,6 @@ public class OperateShot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // su.setState(ShotState.STOP_MOTOR);
-    // su.operateShot();
-    System.out.println(su.getState().toString());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,8 +32,6 @@ public class OperateShot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // su.setState(ShotState.STOP_MOTOR);
-    // su.operateShot();
   }
 
   // Returns true when the command should end.
