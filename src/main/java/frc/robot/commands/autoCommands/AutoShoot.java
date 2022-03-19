@@ -15,7 +15,7 @@ public class AutoShoot extends CommandBase {
   CargoUtil cu;
   Timer timer;
   boolean done;
-  
+
   /** Creates a new AutoShoot. */
   public AutoShoot(ShotUtil su) {
     this.su = su;
@@ -29,15 +29,13 @@ public class AutoShoot extends CommandBase {
   @Override
   public void initialize() {
     done = false;
+    su.enable();
+    su.setSetpoint(Constants.LOW_GOAL_SHOOTER_RPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!su.isEnabled()){
-      su.enable();
-    }
-    su.setSetpoint(Constants.LOW_GOAL_SHOOTER_RPM);
     if(su.atRPM()){
       done = true;
     }
