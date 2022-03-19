@@ -7,6 +7,7 @@ import frc.robot.util.CargoState;
 
 public class AutoIntake extends CommandBase{
     CargoUtil cu;
+    boolean done = false;
 
     public AutoIntake(CargoUtil cu){
         this.cu = cu;
@@ -15,26 +16,28 @@ public class AutoIntake extends CommandBase{
 
     @Override
     public void initialize() {
-        cu.setState(CargoState.INTAKE);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        cu.setState(CargoState.INTAKE);
-        cu.OperateCargo();
+        cu.operateBallMagnet();
+        cu.operateLowIndexer();
+        if (cu.detectLowerBall()){
+            cu.stopBallMagnet();
+            cu.stopLowIndexer();
+            done = true;
+        }
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        cu.setState(CargoState.SPINUP);
-        cu.OperateCargo();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return done;
     }
 }

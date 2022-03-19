@@ -5,12 +5,15 @@
 package frc.robot.commands.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.OperateCargo;
 import frc.robot.subsystems.CargoUtil;
 import frc.robot.util.CargoState;
 
 public class AutoSpinUp extends CommandBase {
   /** Creates a new AutoSpinUp. */
   CargoUtil cu;
+  boolean done = false;
+
   public AutoSpinUp(CargoUtil cu) {
     this.cu = cu;
     addRequirements(this.cu);
@@ -20,25 +23,26 @@ public class AutoSpinUp extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    cu.setState(CargoState.SPINUP);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    cu.OperateCargo();
+    cu.operateHighIndexer();
+    if (!cu.detectUpperBall()){
+      cu.operateLowIndexer();
+      cu.operateBallMagnet();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cu.setState(CargoState.SPINUP);
-    cu.OperateCargo();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return done;
   }
 }

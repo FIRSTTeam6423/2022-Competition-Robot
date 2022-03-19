@@ -4,6 +4,9 @@
 
 package frc.robot.commands.autoCommands;
 
+import javax.naming.PartialResultException;
+
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveUtil;
@@ -22,18 +25,21 @@ public class GrabAndShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
         //Drives forward while intaking ball
+      new ParallelDeadlineGroup( 
         new DriveForDistanceNoPID(du, 60, true),
         new AutoIntake(cu)
       ),
       //Turns to face the goal
       new TurnForAngle(du, 170),
       new DriveForDistanceNoPID(du, 80, false),
-      //Instead of doing precise turns, driving into it for enough time will automatically line us up
-      new DriveForTime(du, 2, Constants.AUTO_DRIVE_SPEED),
-      //Get exact right positioning for shooting
-        new AutoShoot(su, cu)
+      // // //Instead of doing precise turns, driving into it for enough time will automatically line us up
+      new ParallelCommandGroup(
+        new DriveForTime(du, 2, Constants.AUTO_DRIVE_SPEED),
+        new AutoShoot(su)
+      ),
+      // // //Get exact right positioning for shooting
+      new AutoSpinUp(cu)
     );
   }
 }

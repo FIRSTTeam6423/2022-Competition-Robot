@@ -148,4 +148,3 @@ public class CargoUtil extends SubsystemBase {
         SmartDashboard.putBoolean("Low Ball", detectLowerBall());
     }
 }
-

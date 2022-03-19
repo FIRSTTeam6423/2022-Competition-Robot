@@ -73,6 +73,7 @@ public class DriveUtil extends SubsystemBase {
 
         CameraServer.startAutomaticCapture();
         gyro.calibrate();
+        gyro.reset();
     }
 
     
@@ -147,6 +148,7 @@ public class DriveUtil extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putString("Drive Type   ::  ", RobotContainer.driveType.getSelected().toString());
         SmartDashboard.putNumber("Yaw", getGyroYaw());
+        SmartDashboard.putNumber("Encoder", getLeftPosition());
     }
 }
 

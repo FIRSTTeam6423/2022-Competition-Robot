@@ -4,6 +4,7 @@
 
 package frc.robot.commands.autoCommands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveUtil;
@@ -19,7 +20,10 @@ public class ShootThenLeave extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new AutoShoot(su, cu), 
+      new ParallelDeadlineGroup(
+        new AutoShoot(su), 
+        new AutoSpinUp(cu)
+      ),
       new DriveForDistanceNoPID(du, -95, true)
     );
   }
