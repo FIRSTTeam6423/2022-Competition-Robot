@@ -22,10 +22,10 @@ public class AutoIntake extends CommandBase{
     @Override
     public void execute() {
         cu.operateBallMagnet();
-        cu.operateLowIndexer();
+        // cu.operateLowIndexer();
         if (cu.detectLowerBall()){
             cu.stopBallMagnet();
-            cu.stopLowIndexer();
+            // cu.stopLowIndexer();
             done = true;
         }
     }

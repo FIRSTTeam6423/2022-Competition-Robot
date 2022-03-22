@@ -20,10 +20,8 @@ public class ShootThenLeave extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
         new AutoShoot(su), 
-        new AutoSpinUp(cu)
-      ),
+        new AutoSpinUp(cu),
       new DriveForDistanceNoPID(du, -95, true)
     );
   }

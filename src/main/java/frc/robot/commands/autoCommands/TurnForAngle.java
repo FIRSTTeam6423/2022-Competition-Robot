@@ -37,16 +37,16 @@ public class TurnForAngle extends CommandBase {
     public void execute() {
         angle = driveUtil.getGyroYaw();
 
-        if (right) {
-            // Converts the gyro angles to 0->360 instead of 0->180 & 0->-180
-            if (angle < 0){
-                angle += 360;
-            }
-        } else {
-            if (angle > 0){
-                angle -= 360;
-            }
-        }
+        // if (right) {
+        //     // Converts the gyro angles to 0->360 instead of 0->180 & 0->-180
+        //     if (angle < 0){
+        //         angle += 360;
+        //     }
+        // } else {
+        //     if (angle > 0){
+        //         angle -= 360;
+        //     }
+        // }
 
         if (Math.abs(angle) >= Math.abs(targetAngle)) {
             driveUtil.tankDrive(0, 0);

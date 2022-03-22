@@ -32,6 +32,7 @@ public class AutoSpinUp extends CommandBase {
     if (!cu.detectUpperBall()){
       cu.operateLowIndexer();
       cu.operateBallMagnet();
+      done = true;
     }
   }
 

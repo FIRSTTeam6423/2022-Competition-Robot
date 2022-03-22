@@ -17,7 +17,9 @@ public class CargoUtil extends SubsystemBase {
     //Shooter controllers
     private WPI_TalonSRX ballMagnet, lowIndexer, highIndexer;
     private CargoState state = CargoState.IDLE;
-    private Timer timer;
+    private Timer delay_between_shots_timer;
+    private Timer first_delay_timer;
+
 
     //Limit switch
     private DigitalInput upperLimitSwitch;
@@ -32,8 +34,8 @@ public class CargoUtil extends SubsystemBase {
         upperLimitSwitch = new DigitalInput(Constants.UPPER_LIMIT_SWTICH);
         lowerLimitSwitch = new DigitalInput(Constants.LOWER_LIMIT_SWTICH);
 
-        timer = new Timer();
-        timer.reset();
+        delay_between_shots_timer = new Timer();
+        delay_between_shots_timer.reset();
 
         ballMagnet.setInverted(true);
     }
@@ -109,18 +111,20 @@ public class CargoUtil extends SubsystemBase {
                 stopHighIndexer();
                 break;
             case SPINUP:
-                timer.reset();
+                delay_between_shots_timer.reset();
                 stopLowIndexer();
                 stopHighIndexer();
                 stopBallMagnet();
                 if(RobotContainer.getIsReadyToShoot()){
-                    timer.start();
+                    delay_between_shots_timer.start();
                     setState(CargoState.SHOOT);
                 }
                 break;
             case SHOOT:
-                operateHighIndexer();
-                if (timer.get() > Constants.SHOOT_TIME_INTERVAL && !detectUpperBall()){
+                if (delay_between_shots_timer.get() > Constants.SHOOT_TIME_INTERVAL){
+                    operateHighIndexer();
+                }
+                if (delay_between_shots_timer.get() > (Constants.SHOOT_TIME_INTERVAL + Constants.SHOOT_DELAY ) && !detectUpperBall()){
                     operateLowIndexer();
                     operateBallMagnet();
                 }
@@ -142,9 +146,9 @@ public class CargoUtil extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         /** This is normally where we send important values to the SmartDashboard */
-        SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
+        // SmartDashboard.putString("Shooter Mode  ::  ", state.toString());
 
-        SmartDashboard.putBoolean("High Ball", detectUpperBall());
-        SmartDashboard.putBoolean("Low Ball", detectLowerBall());
+        SmartDashboard.putBoolean("1 Ball Loaded", detectLowerBall() ^ detectUpperBall());
+        SmartDashboard.putBoolean("2 Balls Loaded", detectUpperBall() && detectLowerBall());
     }
 }

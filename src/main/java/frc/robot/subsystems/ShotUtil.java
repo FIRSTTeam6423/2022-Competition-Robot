@@ -68,8 +68,9 @@ public class ShotUtil extends PIDSubsystem {
   }
 
   public boolean atRPM(){
-    atSetPoint = getController().atSetpoint();
-    if (getMeasurement() < Constants.SHOOTER_POSITION_TOLERANCE + 1){
+    atSetPoint = getController().atSetpoint() && getController().getSetpoint() != 0;
+    // TO DO: Make the 2000 and constant pls 
+    if (getMeasurement() < 2000){
       atSetPoint = false;
     }
     return atSetPoint;
@@ -98,9 +99,10 @@ public class ShotUtil extends PIDSubsystem {
   public void periodic() {
     // This method will be called once per scheduler run
     super.periodic();
-    SmartDashboard.putString("Shoot Mode", getState().toString());
+    // SmartDashboard.putString("Shoot Mode", getState().toString());
     SmartDashboard.putBoolean("At RPM?", atRPM());
     SmartDashboard.putNumber("RPM", getMeasurement());
+    SmartDashboard.putNumber("setpoint", getController().getSetpoint());
     RobotContainer.setShooter();
     
   }

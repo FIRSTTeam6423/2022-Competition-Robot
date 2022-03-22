@@ -27,17 +27,15 @@ public class GrabAndShoot extends SequentialCommandGroup {
     addCommands(
         //Drives forward while intaking ball
       new ParallelDeadlineGroup( 
-        new DriveForDistanceNoPID(du, 60, true),
+        new DriveForDistanceNoPID(du, 60, false),
         new AutoIntake(cu)
       ),
       //Turns to face the goal
       new TurnForAngle(du, 170),
       new DriveForDistanceNoPID(du, 80, false),
       // // //Instead of doing precise turns, driving into it for enough time will automatically line us up
-      new ParallelCommandGroup(
-        new DriveForTime(du, 2, Constants.AUTO_DRIVE_SPEED),
-        new AutoShoot(su)
-      ),
+      new DriveForTime(du, 2, Constants.AUTO_DRIVE_SPEED),
+      new AutoShoot(su),
       // // //Get exact right positioning for shooting
       new AutoSpinUp(cu)
     );

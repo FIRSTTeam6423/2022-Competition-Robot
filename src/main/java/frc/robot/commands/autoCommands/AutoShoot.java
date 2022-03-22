@@ -30,7 +30,7 @@ public class AutoShoot extends CommandBase {
   public void initialize() {
     done = false;
     su.enable();
-    su.setSetpoint(Constants.LOW_GOAL_SHOOTER_RPM);
+    su.setSetpoint(Constants.HIGH_GOAL_SHOOTER_RPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
